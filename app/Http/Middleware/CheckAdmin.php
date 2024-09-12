@@ -4,6 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class CheckAdmin
 {
@@ -16,6 +19,12 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next)
     {
+        if(!Auth::check()){ //ถ้าไม่login
+            return redirect()->route('error');
+        }
+        if(auth()->user()->checkAdmin()){
         return $next($request);
+    }
+    return redirect()->route('error');
     }
 }
