@@ -122,16 +122,20 @@
         @foreach($users as $user)
         <tr>
             <td style="padding: 0 0 0 15px;">
-                <button type="button" class="btn btn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+                <button type="button" class="btn btn" data-bs-toggle="modal" data-bs-target="#UserModal{{$user->id}}" data-bs-whatever="@mdo">
                     <img src="/images/ไอคอนคน.png" alt="">
                 </button>
             </td>
             <td>{{$user->id}} </td>
             <td>{{ $user->fristname . ' ' . $user->lastname }}</td>
             <td>{{$user->email}} </td>
-            <td>{{$user->created_at}} </td>
+            <td>
+                <?php
+                    $date = \DateTime::createFromFormat('Y-m-d H:i:s', $user->created_at);
+                    echo $date ? $date->format('d/m/Y') : '-';
+                ?>
+            </td>
             </tr>
-
         </tr>
         @endforeach
         </tr>
@@ -141,54 +145,86 @@
 </div>
 
 <!-- ป๊อปอัพขึ้น -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@foreach($users as $user)
+<div class="modal fade" id="UserModal{{$user->id}}" tabindex="-1" aria-labelledby="userModalLabel{{$user->id}}" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">บัญชีผู้ใช้งาน</h1>
+        <h1 class="modal-title fs-5" id="UserModal{{$user->id}}">บัญชีผู้ใช้งาน</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-
             <table>
+                <thead>
                 <tr>
                     <th>อีเมลของผู้ใช้</th>
                     <th style="width: 10px; background-color: white;"></th>
                     <th>เบอร์โทรศัพท์</th>
                 </tr>
+                </thead>
+                <tbody>
                 <tr>
-                    <!-- @endfoeach -->
-                    <td>nuchsara@kkumail.com</td>
+                    <td>{{$user->email}}</td>
                     <th style="width: 10px; background-color: white;"></th>
-                    <td>0953470633</td>
-                    <!-- @endfoeach -->
+                    <td>
+                        @if(isset($user->phone) && !empty($user->phone))
+                            {{$user->phone}}
+                        @else
+                            -
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>ชื่อ</th>
                     <th style="width: 10px; background-color: white;"></th>
                     <th>นามสกุล</th>
                 </tr>
-                <!-- @endfoeach -->
                 <tr>
-                    <td>นุสรา</td>
+                    <td>{{$user->fristname}}</td>
                     <th style="width: 10px; background-color: white;"></th>
-                    <td>สารธิราช</td>
+                    <td>{{$user->lastname}}</td>
                 </tr>
-                <!-- @endfoeach -->
                 <tr>
-                    <th colspan="3" style="text-align: center;">รายละเอียดเพิ่มเติม</th>
-                </tr>
-                <!-- @endfoeach -->
                 <tr>
-                    <td colspan="3" style="text-align: center;">ชอบตกปลาบึงศรีฐาน</td>
+                    <th>วันเกิด</th>
+                    <th style="width: 10px; background-color: white;"></th>
+                    <th>เพศ</th>
                 </tr>
-                <!-- @endfoeach -->
+                <tr>
+                    <td> @if(isset($user->birthday) && !empty($user->birthday))
+                            {{$user->birthday}}
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <th style="width: 10px; background-color: white;"></th>
+                    <td> @if(isset($user->gender) && !empty($user->gender))
+                            {{$user->gender}}
+                        @else
+                            -
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="3" style="text-align: center;">เกี่ยวกับฉัน</th>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: center;">
+                    @if(isset($user->Introduction) && !empty($user->Introduction))
+                            {{$user->Introduction}}
+                        @else
+                            -
+                        @endif
+                    
+                    </td>
+                </tr>
+                </tbody>
             </table>
-
         </div>
     </div>
     </div>
 </div>
+@endforeach
 
 </body>
 </html>

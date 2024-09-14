@@ -37,9 +37,6 @@ Route::match(['get', 'post'],'/admin/create-party', [AdminController::class, 'cr
 Route::post('/admin/create', [AdminController::class, 'create']);
 Route::match(['get', 'post'],'/admin/dashboard', [AdminController::class, 'showUser']);
 Route::match(['get', 'post'], '/admin/edit', [AdminController::class, 'edit']);
-
-
-// แสดงและค้นหาผู้ใช้
 Route::get('/admin/showUser', [AdminController::class, 'showUser'])->name('showUser.users');
 
 });

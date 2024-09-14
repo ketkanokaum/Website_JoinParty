@@ -43,10 +43,8 @@ class AdminController extends Controller
         return view("admin.edit", compact('party'));
     }
 
-    public function showUser(Request $request)
-{
+    public function showUser(Request $request){
     $query = $request->input('query'); // รับค่าคำค้นหาจาก input
-
     if ($query) {
         // ค้นหาผู้ใช้ตาม fristname หรือ lastname
         $users = DB::table('users')
@@ -61,12 +59,10 @@ class AdminController extends Controller
             ->limit(10)
             ->get();
     }
-
     // เช็คว่า request เป็นแบบ AJAX หรือไม่ และส่งผลลัพธ์เป็น JSON
     if ($request->ajax()) {
         return response()->json($users);
     }
-
     // ส่งผลลัพธ์ไปยัง view สำหรับแสดงผลครั้งแรก
     return view('admin.showUser', compact('users'));
 }
