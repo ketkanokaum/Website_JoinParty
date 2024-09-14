@@ -35,7 +35,7 @@ Route::middleware('admin')->group(function () {
 Route::get('/admin-dashboard', [AdminController::class, 'dashboard']);
 Route::match(['get', 'post'],'/admin/create-party', [AdminController::class, 'createParty']);
 Route::post('/admin/create', [AdminController::class, 'create']);
-Route::match(['get', 'post'],'/admin/show-user', [AdminController::class, 'showUser']);
+Route::match(['get', 'post'],'/admin/dashboard', [AdminController::class, 'showUser']);
 Route::match(['get', 'post'], '/admin/edit', [AdminController::class, 'edit']);
 });
 
