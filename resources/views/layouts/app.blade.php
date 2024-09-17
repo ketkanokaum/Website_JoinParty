@@ -19,7 +19,7 @@
     </head>
     <body class="font-sans antialiased">
         <x-banner />
-
+        
         <div class="min-h-screen bg-gray-100">
             @livewire('navigation-menu')
 
@@ -31,7 +31,15 @@
                     </div>
                 </header>
             @endif
+            <!-- <form method="POST" action="{{ route('logout') }}">
+                            @csrf
 
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </x-dropdown-link>
+                        </form> -->
             <!-- Page Content -->
             <main>
             @yield('content')

@@ -19,12 +19,17 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!Auth::check()){ //ถ้าไม่login
+       
+        if (!Auth::check()) { // ตรวจสอบการเข้าสู่ระบบ
             return redirect()->route('error');
         }
-        if(auth()->user()->checkAdmin()){
-        return $next($request);
-    }
-    return redirect()->route('error');
+
+        // ตรวจสอบว่าผู้ใช้เป็นแอดมิน
+        if (Auth::user()->usertype === 'admin') {
+            return $next($request);
+        }
+
+        return redirect()->route('error');
     }
 }
+

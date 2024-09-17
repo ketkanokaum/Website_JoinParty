@@ -6,20 +6,24 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Party;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
 
 class AdminController extends Controller
 {
     public function dashboard(){
         return view('admin.dashboard');
         }
+        
+
 
     public function createParty()
     {
         $parties = Party::all();
-        return view('admin.create', compact('parties'));
+        return view('admin/create', compact('parties'));
     }
 
-    public function create(Request $request)
+    public function insert(Request $request)
     {
         $newParty = new Party();
         $newParty->party_name = $request->party_name;
@@ -36,12 +40,49 @@ class AdminController extends Controller
         return redirect('admin/create');
     }
 
-
-    public function edit($id)
+    public function showEditPage()
     {
-        $party = Party::where('id', $id)->first();
-        return view("admin.edit", compact('party'));
+        $parties = Party::all(); // ดึงรายการปาร์ตี้ทั้งหมดจากฐานข้อมูล
+        return view('admin.edit', compact('parties'));
     }
+    
+
+    public function update(Request $request, $id){
+
+    $party = Party::find($id);
+    if ($request->has('party_name')) {
+        $party->party_name = $request->party_name;
+    }
+    if ($request->has('date')) {
+        $party->date = $request->date;
+    }
+    if ($request->has('start_time')) {
+        $party->start_time = $request->start_time;
+    }
+    if ($request->has('end_time')) {
+        $party->end_time = $request->end_time;
+    }
+    if ($request->has('location')) {
+        $party->location = $request->location;
+    }
+    if ($request->has('type_party')) {
+        $party->type_party = $request->type_party;
+    }
+    if ($request->has('detail')) {
+        $party->detail = $request->detail;
+}
+    if ($request->has('numpeople')) {
+        $party->numpeople = $request->numpeople;
+    }
+    if ($request->hasFile('img')) {
+        $image = $request->file('img');
+        $imagePath = $image->store('public/party_images');
+        $party->img = basename($imagePath); // เก็บชื่อไฟล์ภาพ
+    }
+    $party->save();
+    return redirect('admin/edit');
+}
+
 
     public function showUser(Request $request){
     $query = $request->input('query'); // รับค่าคำค้นหาจาก input
