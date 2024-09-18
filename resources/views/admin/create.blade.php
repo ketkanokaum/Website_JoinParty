@@ -44,15 +44,18 @@
         <tbody>
           <tr>
           @foreach($parties as $party)
-            <td> </td>
+            <td style="padding: 0;">
+                <button type="button" class="btn btn" data-bs-toggle="modal" data-bs-target="#exampleModal{{$party->id}}" data-bs-whatever="@mdo">
+                    <img src="/images/ปะแจ.png" alt="Edit Party">
+                </button>
+            </td>
             <td>{{$party->id}}</td>
             <td>{{$party->party_name}}</td>
             <td>{{$party->created_at}}</td>
             <td>{{$party->numpeople}}</td>
           </tr>
-        </button>
-            @endforeach
           </tr>
+          @endforeach
         </tbody>
       </table>
     </section>
@@ -130,6 +133,88 @@
       </div>
     </div>
   </div>
+
+  <!-- แก้ไขปาร์ตี้!-->
+  @foreach($parties as $party)
+  <div class="modal fade" id="exampleModal{{$party->id}}" tabindex="-1" aria-labelledby="exampleModal{{$party->id}}" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModal{{$party->id}}">แก้ไขปาร์ตี้</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <form action="{{ route('admin.update', $party->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+          <div class="form-group">
+                <label for="party-name">ชื่อปาร์ตี้:</label>
+                <input type="text" id="party-name" name="party_name"  value="{{$party->party_name}}" placeholder="กรอกชื่อปาร์ตี้">
+            </div>
+
+            <div class="form-group">
+                <label for="party-date">วันที่จัดปาร์ตี้:</label>
+                <input type="date" id="party-date" name="date" value="{{$party->date}}">
+            </div>
+
+            <div class="form-group">
+                <label for="party-date">เวลาที่เริ่ม:</label>
+                <input type="Time" id="start" name="start_time" value="{{$party->start_time}}">
+            </div>
+
+            <div class="form-group">
+                <label for="party-date">เวลาที่สิ้นสุด:</label>
+                <input type="Time" id="end" name="end_time" value="{{$party->end_time}}">
+            </div>
+
+            <div class="form-group">
+                <label for="party-location">สถานที่จัด:</label>
+                <input type="text" id="party-location" name="location" value="{{$party->location}}" placeholder="กรอกสถานที่จัดปาร์ตี้">
+            </div>
+
+            <div class="form-group">
+                <label for="party-description">รายละเอียด:</label>
+                <textarea id="party-description" name="detail" placeholder="รายละเอียดเพิ่มเติม">{{$party->detail}}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="party-type">ประเภทปาร์ตี้:</label>
+                <select id="party-type" name="type_party" value="{{$party->type_party}}">
+                <option value="travel">การท่องเที่ยว</option>
+                <option value="volunteer">จิตอาสา</option>
+                <option value="social">สังสรรค์</option>
+                <option value="skill_development">พัฒนาทักษะ</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="party-guests">จำนวนผู้เข้าร่วม:</label>
+                <input type="number" id="party-guests" name="numpeople" value="{{$party->numpeople}}" placeholder="จำนวนผู้เข้าร่วม">
+            </div>
+
+            <div class="form-img">
+              <label for="party-guests">รูปภาพกิจกรรม:</label><br>
+              <input type="file" id="party-img" name="img" >
+                @if ($party->img)
+                <img src="{{ asset('storage/' . $party->img) }}" alt="Party Image" style="width: 100px;">
+                        @endif
+                </div>
+
+            <div class="form-buttons">
+                <button type="submit">ยืนยัน</button>
+            </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  
+        </tbody>
+      </table>
+    </section>
+  </div>
+  </div> 
+  @endforeach
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
