@@ -45,16 +45,16 @@
 
             if(query.length > 0) {
                 $.ajax({
-                    url: "{{ route('showUser.users') }}",  // เส้นทางที่เชื่อมต่อไปยังฟังก์ชันการค้นหา
+                    url: "{{ route('showUser.users') }}",  // Path to your search function
                     method: 'GET',
                     data: { query: query },
                     success: function(data) {
-                        // เคลียร์ตารางเดิม
                         $('tbody').empty();
 
                         if(data.length > 0) {
-                            // แสดงผลลัพธ์ในตาราง
+                            // Append results to table
                             $.each(data, function(index, user) {
+                                var formattedDate = new Date(user.created_at).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
                                 $('tbody').append(`
                                     <tr>
                                         <td style="padding: 0 0 0 15px;">
@@ -65,7 +65,7 @@
                                         <td>${user.id}</td>
                                         <td>${user.fristname} ${user.lastname}</td>
                                         <td>${user.email}</td>
-                                        <td>${user.created_at}</td>
+                                        <td>${formattedDate}</td>
                                     </tr>
                                 `);
                             });
@@ -75,37 +75,37 @@
                     }
                 });
             } else {
-
                 $.ajax({
-                url: "{{ route('showUser.users') }}",
-                method: 'GET',
-                success: function(data) {
-                    $('tbody').empty();
-                    $.each(data, function(index, user) {
-                        $('tbody').append(`
-                            <tr>
-                                <td style="padding: 0 0 0 15px;">
-                                    <button type="button" class="btn btn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-                                        <img src="/images/ไอคอนคน.png" alt="">
-                                    </button>
-                                </td>
-                                <td>${user.id}</td>
-                                <td>${user.fristname} ${user.lastname}</td>
-                                <td>${user.email}</td>
-                                <td>${user.created_at}</td>
-                            </tr>
+                    url: "{{ route('showUser.users') }}",
+                    method: 'GET',
+                    success: function(data) {
+                        $('tbody').empty();
+                        $.each(data, function(index, user) {
+                            var formattedDate = new Date(user.created_at).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                            $('tbody').append(`
+                                <tr>
+                                    <td style="padding: 0 0 0 15px;">
+                                        <button type="button" class="btn btn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+                                            <img src="/images/ไอคอนคน.png" alt="">
+                                        </button>
+                                    </td>
+                                    <td>${user.id}</td>
+                                    <td>${user.fristname} ${user.lastname}</td>
+                                    <td>${user.email}</td>
+                                    <td>${formattedDate}</td>
+                                </tr>
                             `);
                         });
                     }
                 });
             }
         });
+
         $('#search-btn').on('click', function() {
             $('#search-input').trigger('keyup');
         });
     });
 </script>
-
 
 
     <table>
@@ -129,16 +129,9 @@
             <td>{{$user->id}} </td>
             <td>{{ $user->fristname . ' ' . $user->lastname }}</td>
             <td>{{$user->email}} </td>
-            <td>
-                <?php
-                    $date = \DateTime::createFromFormat('Y-m-d H:i:s', $user->created_at);
-                    echo $date ? $date->format('d/m/Y') : '-';
-                ?>
-            </td>
+            <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }} </td>
             </tr>
-        </tr>
         @endforeach
-        </tr>
         </tbody>
     </table>
     </section>
@@ -215,7 +208,7 @@
                         @else
                             -
                         @endif
-                    
+
                     </td>
                 </tr>
                 </tbody>

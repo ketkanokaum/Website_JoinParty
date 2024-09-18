@@ -11,6 +11,13 @@ $(document).ready(function() {
                     $('tbody').empty();
                     if (data.length > 0) {
                         $.each(data, function(index, user) {
+                            // แปลงวันที่ให้เป็นฟอร์แมตที่ต้องการ (d/m/Y)
+                            var createdAt = user.created_at ? new Date(user.created_at).toLocaleDateString('th-TH', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit'
+                            }) : '-';
+
                             $('tbody').append(`
                                 <tr>
                                     <td style="padding: 0 0 0 15px;">
@@ -21,7 +28,7 @@ $(document).ready(function() {
                                     <td>${user.id}</td>
                                     <td>${user.fristname} ${user.lastname}</td>
                                     <td>${user.email}</td>
-                                    <td>${user.created_at}</td>
+                                    <td>${createdAt}</td> <!-- แสดงวันที่ที่แปลงแล้ว -->
                                 </tr>
                             `);
                         });
@@ -31,13 +38,20 @@ $(document).ready(function() {
                 }
             });
         } else {
-            // Display all users when no query is present
+            // แสดงผู้ใช้ทั้งหมดเมื่อไม่มีการค้นหา
             $.ajax({
                 url: "{{ route('showUser.users') }}",
                 method: 'GET',
                 success: function(data) {
                     $('tbody').empty();
                     $.each(data, function(index, user) {
+                        // แปลงวันที่ให้เป็นฟอร์แมตที่ต้องการ (d/m/Y)
+                        var createdAt = user.created_at ? new Date(user.created_at).toLocaleDateString('th-TH', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit'
+                        }) : '-';
+
                         $('tbody').append(`
                             <tr>
                                 <td style="padding: 0 0 0 15px;">
@@ -48,7 +62,7 @@ $(document).ready(function() {
                                 <td>${user.id}</td>
                                 <td>${user.fristname} ${user.lastname}</td>
                                 <td>${user.email}</td>
-                                <td>${user.created_at}</td>
+                                <td>${createdAt}</td> <!-- แสดงวันที่ที่แปลงแล้ว -->
                             </tr>
                         `);
                     });
@@ -57,16 +71,16 @@ $(document).ready(function() {
         }
     }
 
-    // When typing in the search input
+    // เมื่อมีการพิมพ์ใน input
     $('#search-input').on('keyup', function() {
         performSearch();
     });
 
-    // When clicking the GO button
+    // เมื่อคลิกปุ่ม GO
     $('#search-btn').on('click', function() {
         performSearch();
     });
 
-    // Display all users on page load
+    // แสดงผู้ใช้ทั้งหมดเมื่อโหลดหน้า
     performSearch();
 });
