@@ -17,7 +17,6 @@
       <ul>
       <a href="{{url('/admin/showUser')}}"><li class="unuser"><img src="/images/ไอคอนคน.png" alt="" style="width: 15px; height: 25px;">User</li></a>
         <a href="{{url('/admin/create')}}"><li class="unuser"><img src="/images/38.png" alt="">Created party</li></a>
-        <a href="{{url('/admin/edit')}}"><li class="unuser"><img src="/images/ปะแจ.png"" alt="">Edit party</li></a>
         <a href="/reveiw.html"><li class="unuser"><img src="/images/รีวิว.png" alt="">Review</li></a>
         <li class="unuser">
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">

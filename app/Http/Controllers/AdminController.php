@@ -43,7 +43,7 @@ class AdminController extends Controller
     public function showEditPage()
     {
         $parties = Party::all(); // ดึงรายการปาร์ตี้ทั้งหมดจากฐานข้อมูล
-        return view('admin.edit', compact('parties'));
+        return view('admin/create', compact('parties'));
     }
     
 
@@ -80,7 +80,7 @@ class AdminController extends Controller
         $party->img = basename($imagePath); // เก็บชื่อไฟล์ภาพ
     }
     $party->save();
-    return redirect('admin/edit');
+    return redirect('admin/create');
 }
 
 
