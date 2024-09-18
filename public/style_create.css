@@ -10,7 +10,7 @@
 /* เมนูด้านข้าง */
 aside {
     width: 25%;
-    height: 600px;
+    height: 1000px;
     background: linear-gradient(180deg, #f7f1f3, #e7d7e7);
 }
 aside ul {
@@ -56,8 +56,8 @@ aside ul .unuser {
 
 /* เนื้อหา */
 section {
-    width: 400%;
-    padding: 100x;
+    width: 150%;
+    padding: 100px;
     background: linear-gradient(180deg, #e7d7e7,#e7d7e7,#e7d7e7,#e7d7e7, #ffffff);
     background-color: #faf8fc;
 }
@@ -68,10 +68,10 @@ section h1 {
 section table img{
     width: 20px;
 }
-.btn {
-    width: 50px;
-    margin-left: 1px;
-    padding: 0;
+button.btn {
+    width: 40px;
+    padding: 6px 5px ;
+    margin-left: 20px;
 }
 
 /* ค้นหา */
@@ -81,8 +81,6 @@ section table img{
 .search #search-input {
     width: 90%;
     height: 40px;
-    padding: 0 0 0 20px;
-    border: none;
     border-radius: 5px;
     margin-right: 10px;
 }
@@ -96,8 +94,7 @@ section table img{
     font-weight: bold;
 }
 .search #submit-input:hover {
-    background-color: rgb(231, 190, 190);
-    color: #000;
+    background-color: #6d6d6d;
 }
 
 /* ตารางข้อมูล */
@@ -117,27 +114,48 @@ table th {
     font-weight: bold;
 }
 table .btn:hover {
-background-color: rgb(242,199,199);
+  background-color: rgb(242,199,199);
 }
 
 
 /* ป๊อปอัพขึ้น */
 .modal-header {
-    background-color: #e7d7e7;
+    background-color: #999;
 }
 
 /* ตารางป๊อปอัพขึ้น */
-#exampleModal table tr td {
-  padding: 15px;
-    text-align: left;
-}
-#exampleModal table tr th{
-  padding: 15px;
-  text-align: left;
-  background-color: #999;
-  border-radius: 10px;
+#exampleModal table {
+  text-align: right !important;
 }
 #exampleModal table th {
     background-color: #ffffff;
     font-weight: bold;
+}
+
+/* แบบฟอร์มสร้างปาร์ตี้ */
+label {
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+input[type="text"],input[type="date"],input[type="number"],textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+textarea {
+    height: 100px;
+}
+.form-buttons button{
+    width: 100%;
+    background-color: #999;
+    padding: 10px 20px;
+    border: none;
+    margin-top: 30px;
+    border-radius: 10px;
+}
+.form-buttons button:hover {
+    background-color: #6d6d6d;
 }

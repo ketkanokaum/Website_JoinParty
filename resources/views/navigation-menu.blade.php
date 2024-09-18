@@ -5,10 +5,11 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-mark class="block h-9 w-auto" />
-                    </a>
-                </div>
+                        <a href="{{ route('dashboard') }}">
+                            <img src="/images/logo.png" alt="logo" style="width: 100px; height: auto;">
+                        </a>
+                    </div>
+
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -96,9 +97,12 @@
                                 {{ __('Manage Account') }}
                             </div>
 
-                            <x-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
+                                                    <!-- In the navigation menu -->
+                        <x-dropdown-link href="{{ route('profile.show') }}">
+                            {{ __('Profile') }}
+                        </x-dropdown-link>
+
+                
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                 <x-dropdown-link href="{{ route('api-tokens.index') }}">

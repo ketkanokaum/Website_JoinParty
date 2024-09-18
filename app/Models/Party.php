@@ -10,4 +10,17 @@ class Party extends Model
 {
     use HasFactory;
     use softDeletes;
+
+    public function attendances(){
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function attendees(){  //ปาร์ตี้กับuser
+        return $this->belongsToMany(User::class, 'attendances')
+                    ->withTimestamps();
+    }
+
+    public function reviews() {
+        return $this->hasMany(Review::class);
+    }
 }

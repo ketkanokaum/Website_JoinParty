@@ -1,3 +1,4 @@
+@extends('layouts.myadmin')
 @section('content')
 <!DOCTYPE html>
 <html lang="en">
@@ -19,16 +20,7 @@
 </head>
 <body>
   <div class="wrapper">
-    <!-- Manu -->
-    <aside>
-        <img src="/images/logo.png" alt="logo">
-      <ul>
-        <a href="./reveiw.html"><li class="unuser"><img src="/images/รีวิว.png" alt="">Review</li></a>
-        <a href="./user.html"><li class="user"><img src="/images/ไอคอนคน.png" alt="" style="width: 15px; height: 25px;"><b>User</b></li></a>
-        <a href="./created.html"><li class="unuser"><img src="/images/38.png" alt="">Created party</li></a>
-      </ul>
-    </aside>
-
+   
     <!-- Main content -->
     <section>
     <h1>User</h1>
@@ -221,3 +213,4 @@
 
 </body>
 </html>
+@endsection
