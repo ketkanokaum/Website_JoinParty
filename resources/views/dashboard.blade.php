@@ -1,13 +1,43 @@
-@extends('layouts.myapp')
-@section('content')
 
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>หน้าแรก</title>
-    <link rel="stylesheet" href="/style_home.css">
+    <link rel="stylesheet" href="style_home.css">
 
-<section class="head">
+</head>
+<body>
+<nav>
+<div class="container-nav">
+        <ul>
+            <li><a href="{{ url('/dashboard') }}"><img src="/images/logo.png" alt=""></a></li>
+
+            @auth
+                <!-- เมื่อผู้ใช้เข้าสู่ระบบ -->
+                <li><a href="{{ url('/dashboard') }}" style="margin-left: 100px;">หน้าแรก</a></li>
+                <li><a href="#">กิจกรรมของของฉัน</a></li>
+                <li><a href="#">รายการโปรด</a></li>
+                <li><a href="{{ url('/user/profile') }}">โปรไฟล์ของฉัน</a></li>
+                <li class="unuser">
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                        @csrf
+                        <button type="submit" style="background: none; border: none; padding: 0;">ออกจากระบบ</button>
+                    </form>
+                </li>
+            @else
+                <!-- < เมื่อผู้ใช้ยังไม่เข้าสู่ระบบ  -->
+                <li><a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">เข้าสู่ระบบ</a></li>
+                @if (Route::has('register'))
+                    <li><a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">ลงชื่อเข้าใช้</a></li>
+                @endif
+            @endauth
+        </ul>
+    </div>
+</nav>
+
+    <section class="head">
         <div class="head-text">
             <h2>Find joy in the journey.</h2>
             <p>ความสุขไม่ใช่จุดหมายปลายทาง แต่เป็นการเดินทางที่เราเริ่มต้นใหม่ในทุกๆ วัน มันซ่อนอยู่ในช่วงเวลาที่เราอาจมองข้ามไป<br> 
@@ -123,7 +153,7 @@
                 <td class="catagory">
                     <div class="catagorys">
                     <ul>
-                        <li class="all">กิจกรรมทั้งหมด<span>{{isset($parties) ? count($parties) :0 }}</span></li>
+                        <li class="all">กิจกรรมทั้งหมด<span>{{count($parties)}}</span></li>
                         <li>ท่องเที่ยว<span>9</span></li>
                         <li>จิตอาสา<span>2</span></li>
                         <li>สังสรรค์<span>8</span></li>
@@ -132,28 +162,30 @@
                     </div>
                 </td>
                 <td class="partys">
-                @if(isset($parties))
-                @foreach($parties as $party)
-                    <div class="party">
-                        <div class="image">
-                            <img src="/images/a2df086-dd63.jpg" alt="Event Image">
-                        </div>
-                        <div class="data">
-                            <h2>{{$party->party_name}}</h2>
-                            <p><b>เวลา : </b> {{ date('d F Y', strtotime($party->date)) }} </p>
-                            <p><b>เวลาที่เหลือ : </b> {{ (strtotime($party->date) - time()) / 86400 }} วัน </p>
-                            <p><b>สถานที่ : </b> {{$party->location}} </p>
-                            <p class="description">
-                            {{$party->detail}}
-                            </p>
-                            <div class="buttons">
-                                <button class="join">เข้าร่วม</button>
-                                <button class="more">ข้อมูลเพิ่มเติม</button>
+                @if(isset($parties) && count($parties) > 0)
+                    @foreach($parties as $party)
+                        <div class="party">
+                            <div class="image">
+                                <img src="/images/a2df086-dd63.jpg" alt="Event Image">
+                            </div>
+                            <div class="data">
+                                <h2>{{ $party->party_name }}</h2>
+                                <p><b>เวลา : </b> {{ date('d F Y', strtotime($party->date)) }}</p>
+                                <p><b>เวลาที่เหลือ : </b> {{ floor((strtotime($party->date) - time()) / 86400) }} วัน</p>
+                                <p><b>สถานที่ : </b> {{ $party->location }}</p>
+                                <p class="description">{{ $party->detail }}</p>
+                                <div class="buttons">
+                                    @auth
+                                        <!-- แสดงปุ่ม "เข้าร่วม" เฉพาะเมื่อผู้ใช้เข้าสู่ระบบ -->
+                                        <button class="join">เข้าร่วม</button>
+                                    @endauth
+                                    <button class="more">ข้อมูลเพิ่มเติม</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endforeach
-                    @endif
+            
+                @endif
                 </td>
             </tr>
         </table>
@@ -162,4 +194,5 @@
     <footer>
         <p>&copy; 2024 Join Party. All rights reserved.</p>
     </footer>
-@endsection
+</body>
+</html>

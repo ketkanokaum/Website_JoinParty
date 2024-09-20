@@ -17,7 +17,7 @@ use App\Http\Controllers\DashboardController;
 */
 
 Route::get('/', function () {
-    return view('home');
+    return view('dashboard');
 });
 
 Route::middleware([
@@ -25,7 +25,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/dashboard', [dashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 Route::get('/error', function(){
     return view('error_page');
@@ -45,7 +45,8 @@ Route::post('/admin/update/{id}', [AdminController::class, 'update'])->name('adm
 
 });
 
-Route::get('/party', [ManageController::class, 'showParty'])->name('party.show');
+Route::get('/', [ManageController::class, 'showParty'])->name('party.show');
+
 Route::get('/user/profile', [ManageController::class, 'showProfile'])->name('profile.show');
 Route::get('/user/editProfile/', [ManageController::class, 'showEditProfile']);
 Route::post('/user/edit-profile/{id}', [ManageController::class, 'updateProfile'])->name('profile.update');
