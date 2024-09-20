@@ -123,7 +123,7 @@
                 <td class="catagory">
                     <div class="catagorys">
                     <ul>
-                        <li class="all">กิจกรรมทั้งหมด<span>{{ count($parties) }}</span></li>
+                        <li class="all">กิจกรรมทั้งหมด<span>{{isset($parties) ? count($parties) :0 }}</span></li>
                         <li>ท่องเที่ยว<span>9</span></li>
                         <li>จิตอาสา<span>2</span></li>
                         <li>สังสรรค์<span>8</span></li>
@@ -132,7 +132,7 @@
                     </div>
                 </td>
                 <td class="partys">
-       
+                @if(isset($parties))
                 @foreach($parties as $party)
                     <div class="party">
                         <div class="image">
@@ -140,8 +140,8 @@
                         </div>
                         <div class="data">
                             <h2>{{$party->party_name}}</h2>
-                            <p><b>เวลา : </b> วันพฤหัสบดี ที่ 5 กันยายน 2567 </p>
-                            <p><b>เวลาที่เหลือ : </b> วลาคงเหลือ 20 วัน </p>
+                            <p><b>เวลา : </b> {{ date('d F Y', strtotime($party->date)) }} </p>
+                            <p><b>เวลาที่เหลือ : </b> {{ (strtotime($party->date) - time()) / 86400 }} วัน </p>
                             <p><b>สถานที่ : </b> {{$party->location}} </p>
                             <p class="description">
                             {{$party->detail}}
@@ -153,7 +153,7 @@
                         </div>
                     </div>
                     @endforeach
-
+                    @endif
                 </td>
             </tr>
         </table>

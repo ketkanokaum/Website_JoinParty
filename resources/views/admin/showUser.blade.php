@@ -121,7 +121,7 @@
             <td>{{$user->id}} </td>
             <td>{{ $user->fristname . ' ' . $user->lastname }}</td>
             <td>{{$user->email}} </td>
-            <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }} </td>
+            <td>{{ strftime('%d %B %Y', strtotime($user->created_at)) }}</td>
             </tr>
         @endforeach
         </tbody>

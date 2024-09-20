@@ -50,10 +50,11 @@ class ManageController extends Controller
     return redirect()->route('profile.show');
 }
 
-    public function showParty()
+    public function showParty($id)
         {
+            $party = Party::find($id);
             $parties = Party::all();
-            return view('dashboard', compact('parties'));
+            return view('dashboard', compact('party','parties'));
         }
     }
 
