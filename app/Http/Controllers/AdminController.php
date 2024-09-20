@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Party;
+use App\Models\PartyType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -37,6 +38,7 @@ class AdminController extends Controller
         $newParty->img = $request->img;
         $newParty->save();
         $parties = Party::all();
+        // session(['party_id' => $newParty->id]);
         return redirect('admin/create');
     }
 
@@ -65,20 +67,18 @@ class AdminController extends Controller
     if ($request->has('location')) {
         $party->location = $request->location;
     }
-    if ($request->has('type_party')) {
-        $party->type_party = $request->type_party;
-    }
+    $partyTypes = PartyType::all();
+    
     if ($request->has('detail')) {
         $party->detail = $request->detail;
 }
     if ($request->has('numpeople')) {
         $party->numpeople = $request->numpeople;
     }
-    if ($request->hasFile('img')) {
-        $image = $request->file('img');
-        $imagePath = $image->store('public/party_images');
-        $party->img = basename($imagePath); // เก็บชื่อไฟล์ภาพ
+    if ($request->has('img')) {
+        $party->img = $request->img;
     }
+    
     $party->save();
     return redirect('admin/create');
 }

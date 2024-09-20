@@ -62,7 +62,7 @@
                                 `);
                             });
                         } else {
-                            $('tbody').append('<tr><td colspan="5">No results found</td></tr>');
+                            $('tbody').append('<tr><td colspan="5">ไม่พบบัญชีผู้ใช้</td></tr>');
                         }
                     }
                 });
@@ -105,9 +105,9 @@
         <tr>
             <th></th>
             <th>ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Created date</th>
+            <th>ชื่อผู้ใช้</th>
+            <th>อีเมล</th>
+            <th>วันที่ลงชื่อเข้าใช้</th>
         </tr>
         </thead>
         <tbody>

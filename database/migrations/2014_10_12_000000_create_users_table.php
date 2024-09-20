@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('birthday')->nullable();
             $table->string('phone')->nullable();
             $table->string('Introduction')->nullable();
+            $table->string('images')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();

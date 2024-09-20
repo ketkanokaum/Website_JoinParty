@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Party extends Model
 {
     use HasFactory;
-    use softDeletes;
+    use SoftDeletes;
+
+    protected $table = 'parties';
 
     public function attendances(){
         return $this->hasMany(Attendance::class);
@@ -22,5 +24,10 @@ class Party extends Model
 
     public function reviews() {
         return $this->hasMany(Review::class);
+    }
+
+    public function parties()
+    {
+        return $this->hasMany(Party::class);
     }
 }

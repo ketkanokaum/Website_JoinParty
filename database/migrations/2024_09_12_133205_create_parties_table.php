@@ -20,10 +20,10 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->string('location');
-            $table->string('type_party');
             $table->string('detail');
             $table->integer('numpeople');
             $table->string('img');
+            $table->foreignId('party_type_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

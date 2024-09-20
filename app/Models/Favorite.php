@@ -9,4 +9,17 @@ class Favorite extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = [
+        'user_id',
+        'party_id',
+    ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function party(){
+        return $this->belongsTo(Party::class);
+    }
 }

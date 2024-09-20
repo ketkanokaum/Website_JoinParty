@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\CheckAdmin;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ManageController;
 use App\Http\Controllers\DashboardController;
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +17,7 @@ use App\Http\Controllers\DashboardController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::middleware([
@@ -45,6 +45,7 @@ Route::post('/admin/update/{id}', [AdminController::class, 'update'])->name('adm
 
 });
 
-Route::get('/user/profile', [UserController::class, 'showProfile'])->name('profile.show');
-
-
+Route::get('/party', [ManageController::class, 'showParty'])->name('party.show');
+Route::get('/user/profile', [ManageController::class, 'showProfile'])->name('profile.show');
+Route::get('/user/editProfile/', [ManageController::class, 'showEditProfile']);
+Route::post('/user/edit-profile/{id}', [ManageController::class, 'updateProfile'])->name('profile.update');

@@ -1,222 +1,112 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
+<!-- @extends('layouts.myapp')-->
+<!-- @section('content') -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>โปรไฟล์ของคุณ</title>
     <link rel="stylesheet" href="/profile.css">
+    <link rel="stylesheet" href="/style_create.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/bootstrap.min.js"></script>
 
-    <input type="file" id="profilePicInput" style="display: none;">
 
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary rounded" aria-label="Thirteenth navbar example">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample11" aria-controls="navbarsExample11" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-  
-          <div class="collapse navbar-collapse d-lg-flex" id="navbarsExample11">
-            <a class="navbar-brand col-lg-1 me-0" href="#">
-            <img src="/images/logo.png" alt="logo">
-            </a>
-            <ul class="navbar-nav col-lg-10 justify-content-lg-center">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href=home.html><b>หน้าแรก</b></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"><b>ปาร์ตี้ของฉัน</b></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"><b>รายการโปรด</b></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href=Profile.html><b>โปรไฟล์ของฉัน</b></a>
-              </li>
-            </ul>
-          </div>
-        </div>
-    </nav>
     
-    <h3 class="bold" style="color: #595858;"><b>โปรไฟล์ของฉัน</b></h3>
-        <div class="profile-card">
-            <img src="{{$user->profile_photo_path ? asset('storage/' . $user->profile_photo_path) : asset('images/user-default.png')}}"  class="profile-image">
-            <div class="profile-info">
-                <h2>{{$user->username}}</h2>
-                <p><b>{{ $user->fristname . ' ' . $user->lastname }}</b></p>
-                <p><b>อีเมล : {{$user->email}} </b></p>
-                <p><b>เพศ : {{$user->gender}}</b></p>
-                <p><b>วันเกิด : {{$user->birthday}}</b></p>
-            </div>
-            <div class="profile-bio"><br><br>อธิบายเกี่ยวกับตัวเอง</div>
-            <div class="bio-content">{{$user->Introduction}}</div>
-        
-            <!-- ปุ่มแก้ไขและออกจากระบบ -->
-            <div class="buttons">
-                <a href="/editProfile_user.blade.php"><button style="background-color: #ffd28c;"><b>แก้ไข</b></button></a>
-                <button onclick="alert('ออกจากระบบ!')" style="background-color: #d9d9d9;"><b>ออกจากระบบ</b></button>
-            </div>
+    <div class="profile-card">
+    <h3 class="bold"><b>โปรไฟล์ของฉัน</b></h3>
+        <img src="{{$user->images ? asset('storage/' . $user->images) : asset('images/user-default.png')}}" class="profile-image">
+        <div class="profile-info">
+            <h2>{{$user->username}}</h2>
+            <p><b>{{ $user->fristname . ' ' . $user->lastname }}</b></p>
+            <p><b>อีเมล : {{$user->email}} </b></p>
+            <p><b>เพศ : {{$user->gender}}</b></p>
+            <p><b>วันเกิด : {{$user->birthday}}</b></p>
+            <p><b>เบอร์โทรศัพท์: {{$user->phone}}</b></p>
         </div>
+        <div class="profile-bio"><br><br>อธิบายเกี่ยวกับตัวเอง</div>
+        <div class="bio-content">{{$user->Introduction}}</div>
 
-   <!-- หน้าจอป๊อปอัปสำหรับแก้ไขโปรไฟล์ -->
-   <div class="overlay" id="editProfileOverlay">
-                <div class="edit-profile-card">
-                    <div class="profile-pic-wrapper">
-                    <h3><b>แก้ไขโปรไฟล์<b></h3>
-                    <img src="css/user.jpg" alt="โปรไฟล์">
-            </div>
-
-            <!-- ฟอร์มสำหรับเลือกไฟล์รูปภาพ -->
-            <input type="file" id="imageInput" accept="image/*">
-            <!-- แท็ก img สำหรับแสดงรูปภาพ -->
-            <img id="displayImage" style="display:none; max-width: 300px; margin-top: 20px;"/>
-            <div class="input-group">
-                <label for="firstName">ชื่อ</label>
-                <input type="text" id="firstName" value="ไก่ชน">
-            </div>
-            
-            <div class="input-group">
-                <label for="lastName">นามสกุล</label>
-                <input type="text" id="lastName" value="เงินน้อยอยากรวย">
-            </div>
-
-            <div class="input-group">
-                <label for="email">อีเมล</label>
-                <input type="email" id="email" value="kainaja@kkumail.com">
-                <div id="emailError" class="error-message"></div> <!-- ข้อความแจ้งเตือน -->
-            </div>
-
-            <div class="input-group">
-                <label for="phone">เบอร์โทรศัพท์</label>
-                <input type="text" id="phone" value="0953470633">
-                <div id="phoneError" class="error-message"></div> <!-- ข้อความแจ้งเตือน -->
-            </div>
-
-            <div class="input-group">
-                <label for="bio">อธิบายเกี่ยวกับตัวเอง</label>
-                <textarea id="bio" rows="1">ชอบตกปลา!!</textarea>
-            </div>
-            
-            <!-- ปุ่มยืนยันและยกเลิก -->
-            <div class="buttons">
-                <button class="confirm-btn" id="confirm-btn" style="background-color: #ffd28c; "><b>ยืนยัน</b></button>
-                <button class="cancel-btn" id="cancel-btn" style="background-color: #d9d9d9;"><b>ยกเลิก</b></button>
-                <button class="change-password-btn" id="change-password-btn" style="background-color: #454444; color: white; float: right; padding: 5px 10px; font-size: 14px;" onclick="window.location.href='new-page.html';">
-                  <b>เปลี่ยนรหัสผ่าน</b>
-              </button>
-            </div>
+        <div class="buttons">
+        <button type="button" class="button" data-bs-toggle="modal" data-bs-target="#exampleModal{{$user->id}}" data-bs-whatever="@mdo" >
+            <img src="" alt="">แก้ไขโปรไฟล์
+        </button>
+            <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" style="background-color: #d9d9d9;">
+                            <img src="" alt="">ออกจากระบบ
+                        </button>
+                    </form>
         </div>
     </div>
 
-    <script>
-      // ฟังก์ชันยืนยันการแก้ไข
-  function confirmEdit() {
-      // ดึงค่าจากฟอร์มแก้ไข
-      const firstName = document.getElementById("firstName").value;
-      const lastName = document.getElementById("lastName").value;
-      const email = document.getElementById("email").value;
-      const phone = document.getElementById("phone").value;
-      const bio = document.getElementById("bio").value;
+  <div class="modal fade" id="exampleModal{{$user->id}}" tabindex="-1" aria-labelledby="exampleModal{{$user->id}}" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModal{{$user->id}}">แก้ไขโปรไฟล์</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <form action="{{ route('profile.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+          <div class="form-group">
+                <label for="username">ชื่อบัญชีผู้ใช้ :</label>
+                <input type="text" id="username" name="username" value="{{$user->username}}" placeholder="กรอกชื่อบัญชีผู้ใช้ใหม่">
+            </div>
 
-    function validateForm() {
-            // ลบข้อความแจ้งเตือนก่อน
-            document.getElementById('emailError').textContent = '';
-            document.getElementById('phoneError').textContent = '';
+            <div class="form-group">
+                <label for="fristname">ชื่อจริง :</label>
+                <input type="text" id="fristname" name="fristname" value="{{$user->fristname}}" placeholder="กรอกชื่อ">
+            </div>
 
-            const email = document.getElementById("email").value;
-            const phone = document.getElementById("phone").value;
-    }
-      // ตรวจสอบอีเมลที่ถูกต้อง (ใช้ regex)
-      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!emailPattern.test(email)) {
-        document.getElementById('emailError').textContent = "กรุณากรอกอีเมลให้ถูกต้อง";
-        return;  // หยุดการทำงานถ้าอีเมลไม่ถูกต้อง
-      }
+            <div class="form-group">
+                <label for="lastname">นามสกุล :</label>
+                <input type="text" id="lastname" name="lastname" value="{{$user->lastname}}" placeholder="กรอกนามสกุล">
+            </div>
 
-      // ตรวจสอบเบอร์โทรศัพท์ที่ถูกต้อง (ใช้ตัวเลข 10 หลัก)
-      const phonePattern = /^[0-9]{10}$/;
-      if (!phonePattern.test(phone)) {
-        document.getElementById('phoneError').textContent = "กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง ต้องมี 10 หลัก";
-        return;  // หยุดการทำงานถ้าเบอร์โทรไม่ถูกต้อง
-      }
-      
-      // อัปเดตข้อมูลในหน้าโปรไฟล์
-      document.querySelector(".profile-info h2").textContent = firstName + " " + lastName;
-      document.querySelector(".profile-info p:nth-child(2)").textContent = "ชื่อ: " + firstName + " " + lastName;
-      document.querySelector(".profile-info p:nth-child(3)").textContent = "อีเมล: " + email;
-      document.querySelector(".profile-info p:nth-child(4)").textContent = "เบอร์: " + phone;
-      document.querySelector(".bio-content").textContent = bio;
+            <div class="form-group">
+                <label for="gender">เพศ :</label>
+                <input type="radio" id="male" name="gender" value="ชาย">
+                <label for="male">ชาย</label><br>
+                <input type="radio" id="female" name="gender" value="หญิง" >
+                <label for="female">หญิง</label><br>
+                <input type="radio" id="other" name="gender" value="ไม่ระบุ" >
+                <label for="other">ไม่ระบุ</label><br>
+            </div>
 
-      // แสดงข้อความยืนยันและปิดหน้าต่างป๊อปอัป
-      alert("ข้อมูลโปรไฟล์ถูกบันทึกเรียบร้อยแล้ว!");
-      closeEdit();
-  }
-       
-      // ฟังก์ชันเปิดหน้าต่างแก้ไขโปรไฟล์
-        function openEdit() {
-        document.getElementById("editProfileOverlay").style.display = "block";
-        }
+            <div class="form-group">
+                <label for="birthday">วัน/เดือน/ปีเกิด :</label>
+                <input type="date" id="birthday" name="birthday" value="{{$user->birthday}}">
+            </div>
 
-    // ฟังก์ชันปิดหน้าต่างแก้ไขโปรไฟล์
-        function closeEdit() {
-        document.getElementById("editProfileOverlay").style.display = "none";
-        }   
+            <div class="form-group">
+                <label for="phone">เบอร์โทรศัพท์ :</label>
+                <input type="number" id="phone" name="phone" value="{{$user->phone}}" placeholder="กรอกเบอร์โทรศัพท์">
+            </div>
 
-    // ฟังก์ชันซ่อนหน้าต่างแก้ไขโปรไฟล์
-    function hideEditProfile() {
-    document.getElementById("editProfileOverlay").style.display = "none";
-    }
-// เพิ่ม event listener ให้กับปุ่มยืนยัน
-document.getElementById("confirm-btn").addEventListener("click", function() {
-      confirmEdit();
-  });
+            <div class="form-group">
+                <label for="Introduction">คำอธิบายตัวเอง :</label>
+                <input type="text" id="Introduction" name="Introduction" value="{{$user->Introduction}}" placeholder="กรอกคำอธิบายตัวเอง">
+            </div>
 
-    // เพิ่ม event listener ให้กับปุ่มยกเลิก
-    document.getElementById("cancel-btn").addEventListener("click", hideEditProfile);
- 
+            <div class="form-img">
+              <label for="images">เพิ่มรูปโปรไฟล์ :</label><br>
+              <input type="file" id="images" name="images">
+            </div>
 
-    // เมื่อคลิกที่ไอคอนกล้อง ให้เปิดหน้าต่างเลือกไฟล์
-    document.querySelector(".camera-icon").addEventListener("click", function() {
-    document.getElementById("profilePicInput").click();
-});
+            <div class="form-buttons">
+                <button type="submit">ยืนยัน</button>
+            </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    // เมื่อมีการเปลี่ยนแปลงไฟล์ที่เลือก (เช่น เมื่อผู้ใช้เลือกไฟล์รูปภาพใหม่) ให้ทำการอัพเดตภาพโปรไฟล์
-    document.getElementById("profilePicInput").addEventListener("change", function(event) {
-    // ดึงไฟล์ที่ถูกเลือกจาก input
-    const file = event.target.files[0];
-    // ตรวจสอบว่าไฟล์ที่เลือกไม่เป็นค่าว่าง
-    if (file) {
-        // สร้างอ็อบเจกต์ FileReader เพื่ออ่านไฟล์
-        const reader = new FileReader();
-        // เมื่ออ่านไฟล์เสร็จแล้ว (โหลดเสร็จ) ให้ทำการอัพเดตแหล่งที่มาของภาพโปรไฟล์
-        reader.onload = function(e) {
-            document.getElementById("profilePic").src = e.target.result;}
-        // อ่านไฟล์เป็น Data URL (ซึ่งสามารถใช้เป็นแหล่งที่มาของรูปภาพ)
-        reader.readAsDataURL(file);
-    }
-});
- // ฟังก์ชันแสดงรูปภาพหลังจากอัปโหลด
- document.getElementById('imageInput').addEventListener('change', function(event) {
-      const file = event.target.files[0];
+    
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 
-      if (file) {
-          const reader = new FileReader();
-
-          // เมื่อไฟล์โหลดเสร็จสิ้น
-          reader.onload = function(e) {
-              // ดึงรูปภาพจากไฟล์ที่เลือก
-              const imgElement = document.getElementById('displayImage');
-              imgElement.src = e.target.result;
-              imgElement.style.display = 'block';  // แสดงรูปภาพ
-          };
-
-          // อ่านข้อมูลไฟล์เป็น URL
-          reader.readAsDataURL(file);
-      }
-  });
-    </script>
-
-</body>
-</html>
+<!-- @endsection -->

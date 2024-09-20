@@ -13,7 +13,8 @@ body {
 /* ทำให้ข้อความตัวหนาและจัดตรงกลาง */
 .bold {
     text-align: center;
-    margin-top: 40px;
+    margin-top: 20px;
+    margin-bottom: 30px;
     font-weight: 50px;
     word-spacing: 10px;
 }
@@ -40,13 +41,13 @@ body {
 
 /* สไตล์ข้อมูลโปรไฟล์ */
 .profile-info {
-    margin-bottom: 15px; /* ระยะห่างด้านล่างของข้อมูล */
+    margin-bottom: 10px; /* ระยะห่างด้านล่างของข้อมูล */
     text-align: left; /* ขยับข้อความทั้งหมดไปทางขวา */
 }
 
 /* สไตล์ชื่อในข้อมูลโปรไฟล์ */
 .profile-info h2 {
-    margin: 30px; /* ระยะห่างรอบ ๆ ของชื่อ */
+    margin: 20px; /* ระยะห่างรอบ ๆ ของชื่อ */
     font-size: 22px; /* ขนาดของฟอนต์ */
     font-weight: bold; /* ทำให้ตัวอักษรหนา */
     color: #4f4f4f; /* สีของข้อความ */
@@ -57,7 +58,7 @@ body {
 
 /* สไตล์ข้อความอื่นๆ ในโปรไฟล์ */
 .profile-info p {
-    margin: 20px ; /* ระยะห่างด้านบนและล่างของข้อความ */
+    margin: 13px ; /* ระยะห่างด้านบนและล่างของข้อความ */
     color: #898686; /* สีข้อความ */
     margin-left: 50px; /* ปรับตำแหน่งจากด้านซ้าย */
 }
@@ -82,7 +83,7 @@ body {
 
 /* สไตล์สำหรับกลุ่มปุ่ม */
 .profile-buttons {
-    margin-top: 40px; /* ระยะห่างด้านบน */
+    margin-top: 10px; /* ระยะห่างด้านบน */
 }
 
 /* ใช้ Flexbox ในการจัดวางปุ่ม */
@@ -97,11 +98,18 @@ body {
     background-color: #ffd28c; /* สีพื้นหลังของปุ่ม */
     border: none; /* ลบขอบของปุ่ม */
     margin-top: 20px;
+    width: 150px;
     padding: 10px 20px; /* ขนาดของปุ่ม */
     border-radius: 25px; /* ทำให้ขอบปุ่มโค้งมน */
     color: rgb(94, 93, 93); /* สีของตัวอักษรบนปุ่ม */
     font-size: 16px; /* ขนาดตัวอักษรบนปุ่ม */
     cursor: pointer; /* เปลี่ยนรูปแบบเมาส์เมื่อชี้ปุ่ม */
+}
+
+button.btn {
+    width: 150px;
+    padding: 6px 5px ;
+    margin-left: 20px;
 }
 
 .overlay {
@@ -151,7 +159,7 @@ body {
 .edit-profile-card h3 {
     text-align: center; /* จัดข้อความหัวเรื่องให้อยู่กึ่งกลาง */
     font-size: 24px; /* กำหนดขนาดฟอนต์เป็น 24px */
-    margin-bottom: 20px; /* เพิ่มระยะห่างด้านล่าง 20px */
+    margin-bottom: 100px; /* เพิ่มระยะห่างด้านล่าง 20px */
 }
 
 .input-group {
@@ -174,10 +182,6 @@ body {
     border: 1px solid #ccc; /* เพิ่มเส้นขอบให้กับช่องกรอกข้อมูลด้วยสีเทาอ่อน */
 }
 
-.buttons .confirm-btn {
-    pointer-events: auto; /* ตรวจสอบว่าสามารถคลิกได้ */
-    z-index: 1003; /* ให้แน่ใจว่าปุ่มอยู่ข้างบนสุด */
-}
     
 .buttons .confirm-btn, .buttons .cancel-btn {
     padding: 10px 20px; /* ระยะห่างภายในปุ่ม */
@@ -192,3 +196,4 @@ body {
     color: rgb(194, 100, 100);
     font-size: 0.9em;
 }
+

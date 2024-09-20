@@ -12,17 +12,17 @@
   <div class="wrapper">
     <!-- Manu -->
     <aside>
-        <img src="/images/logo.png" alt="logo"> 
+         <img src="/images/logo.png" alt="logo"> 
         <span></span>
       <ul>
-      <a href="{{url('/admin/showUser')}}"><li class="unuser"><img src="/images/ไอคอนคน.png" alt="" style="width: 15px; height: 25px;">User</li></a>
-        <a href="{{url('/admin/create')}}"><li class="unuser"><img src="/images/38.png" alt="">Created party</li></a>
-        <a href="/reveiw.html"><li class="unuser"><img src="/images/รีวิว.png" alt="">Review</li></a>
+      <a href="{{url('/admin/showUser')}}"><li class="unuser"><img src="/images/ไอคอนคน.png" alt="" style="width: 15px; height: 25px;">บัญชีผู้ใช้งาน</li></a>
+        <a href="{{url('/admin/create')}}"><li class="unuser"><img src="/images/38.png" alt="">จัดการกิจกรรม</li></a>
+        <a href="/reveiw.html"><li class="unuser"><img src="/images/รีวิว.png" alt="">รีวิวการเข้าร่วมกิจกรรม</li></a>
         <li class="unuser">
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                         @csrf
                         <button type="submit" style="background: none; border: none; padding: 0;">
-                            <img src="" alt="">Logout
+                            <img src="" alt="">ออกจากระบบ
                         </button>
                     </form>
 </li>

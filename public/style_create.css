@@ -68,11 +68,6 @@ section h1 {
 section table img{
     width: 20px;
 }
-button.btn {
-    width: 40px;
-    padding: 6px 5px ;
-    margin-left: 20px;
-}
 
 /* ค้นหา */
 .search {
@@ -114,7 +109,7 @@ table th {
     font-weight: bold;
 }
 table .btn:hover {
-  background-color: rgb(242,199,199);
+  background-color: rgb(185, 94, 94);
 }
 
 

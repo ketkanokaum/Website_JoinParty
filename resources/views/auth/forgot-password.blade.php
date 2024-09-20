@@ -1,11 +1,11 @@
 <x-guest-layout>
     <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+    <x-slot name="logo">
+    <img src="/images/logo.png" alt="logo"  class="h-16 w-auto" > 
+</x-slot
 
         <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+            {{ __('ลืมรหัสผ่านใช่หรือไม่? ไม่มีปัญหา กรุณาแจ้งที่อยู่อีเมลของคุณให้เราทราบ เราจะส่งลิงก์สำหรับรีเซ็ตรหัสผ่านไปทางอีเมล เพื่อให้คุณสามารถเลือกรหัสผ่านใหม่ได้') }}
         </div>
 
         @if (session('status'))
@@ -20,13 +20,13 @@
             @csrf
 
             <div class="block">
-                <x-label for="email" value="{{ __('Email') }}" />
+                <x-label for="email" value="{{ __('อีเมล') }}" />
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
                 <x-button>
-                    {{ __('Email Password Reset Link') }}
+                    {{ __('รีเซ็ตรหัสผ่าน') }}
                 </x-button>
             </div>
         </form>
