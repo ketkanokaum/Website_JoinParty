@@ -52,11 +52,19 @@ class ManageController extends Controller
 
 public function showParty()
 {
-    $parties = Party::all();  
-   
-    return view('dashboard', compact('parties'));  
+    $time = time();
+        // ดึงปาร์ตี้ที่ยังไม่หมดเวลารับสมัคร (วันที่อยู่ในอนาคต)
+        $activeParties = Party::where('date', '>', date('Y-m-d H:i:s', $time))->get();
+        // ดึงปาร์ตี้ที่หมดเวลารับสมัครแล้ว (วันที่อยู่ในอดีต)
+        $pastParties= Party::where('date', '<=', date('Y-m-d H:i:s', $time))->get();
+
+    return view('dashboard', [ 'activeParties' => $activeParties, 'pastParties' => $pastParties ]);  
 }
 
+public function viewPartyDetails($id){
+    $parties = Party::find($id);
+    return view('detailparty', compact('parties'));
+}
 
     }
 

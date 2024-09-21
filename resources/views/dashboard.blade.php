@@ -153,7 +153,7 @@
                 <td class="catagory">
                     <div class="catagorys">
                     <ul>
-                        <li class="all">กิจกรรมทั้งหมด<span>{{count($parties)}}</span></li>
+                        <li class="all">กิจกรรมทั้งหมด<span>{{count($activeParties)}}</span></li>
                         <li>ท่องเที่ยว<span>9</span></li>
                         <li>จิตอาสา<span>2</span></li>
                         <li>สังสรรค์<span>8</span></li>
@@ -162,30 +162,55 @@
                     </div>
                 </td>
                 <td class="partys">
-                @if(isset($parties) && count($parties) > 0)
-                    @foreach($parties as $party)
+                @if(isset($activeParties) && count($activeParties) > 0)
+                    @foreach($activeParties as $party)
                         <div class="party">
                             <div class="image">
                                 <img src="/images/a2df086-dd63.jpg" alt="Event Image">
                             </div>
                             <div class="data">
+                                @php
+                                $daysLeft = floor((strtotime($party->date) - time()) / 86400);
+                                @endphp
+                                @if($daysLeft > 0)
+                                    <p style="color:red;"><b>เหลือเวลาอีก : </b> {{ $daysLeft }} วัน</p>
+                                @else
+                                    <p style="color:red;"><b>หมดเวลารับสมัคร</b></p>
+                                @endif
                                 <h2>{{ $party->party_name }}</h2>
-                                <p><b>เวลา : </b> {{ date('d F Y', strtotime($party->date)) }}</p>
-                                <p><b>เวลาที่เหลือ : </b> {{ floor((strtotime($party->date) - time()) / 86400) }} วัน</p>
                                 <p><b>สถานที่ : </b> {{ $party->location }}</p>
-                                <p class="description">{{ $party->detail }}</p>
+                                <p><b>เวลา : </b> {{ date('d F Y', strtotime($party->date)) }}</p>
+                                
+                                @if($daysLeft > 0)
                                 <div class="buttons">
                                     @auth
                                         <!-- แสดงปุ่ม "เข้าร่วม" เฉพาะเมื่อผู้ใช้เข้าสู่ระบบ -->
                                         <button class="join">เข้าร่วม</button>
                                     @endauth
-                                    <button class="more">ข้อมูลเพิ่มเติม</button>
+                                    <a href="{{ route('party.details', $party->id) }}" class="more">ข้อมูลเพิ่มเติม</a>
+                            
                                 </div>
+                                @endif
                             </div>
                         </div>
                     @endforeach
-            
                 @endif
+        @if(isset($pastParties) && count($pastParties) > 0)
+            @foreach($pastParties as $party)
+                <div class="party">
+                    <div class="image">
+                        <img src="/images/a2df086-dd63.jpg" alt="Event Image">
+                    </div>
+                    <div class="data">
+                    <p style="color:red;"><b>หมดเวลารับสมัคร</b></p>
+                        <h2>{{ $party->party_name }}</h2>
+                        <p><b>เวลา : </b> {{ date('d F Y', strtotime($party->date)) }}</p>
+                        <p><b>สถานที่ : </b> {{ $party->location }}</p>
+                    </div>
+                </div>
+            @endforeach
+        @endif
+
                 </td>
             </tr>
         </table>

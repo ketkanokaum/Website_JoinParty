@@ -9,7 +9,7 @@ class DashboardController extends Controller
     function index(){
         $user = Auth::user()->usertype;
         if($user=="user" ){
-            return redirect()->route('/');
+            return redirect()->route('party.show');
         }
         else if($user=="admin"){
             return view("admin/dashboard");

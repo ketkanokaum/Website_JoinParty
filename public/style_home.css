@@ -135,7 +135,7 @@ span {
     margin-left: 10px;
 }
 .image img {
-    width: 250px;
+    width: 200px;
     height: 100%;
     object-fit: cover;
     border-radius: 15px;
@@ -168,9 +168,14 @@ p {
 }
 .join,.more {
     padding: 5px 10px;
+    text-decoration: none;
+    color: inherit;
     border: none;
     border-radius: 10px;
     cursor: pointer;
+}
+.more:hover {
+    background-color: #cbb7b5;
 }
 .join {
     background-color: #ffcc666a;

@@ -13,8 +13,9 @@
     <!-- Manu -->
     <aside>
          <img src="/images/logo.png" alt="logo"> 
-        <span></span>
+         
       <ul>
+      <a href="{{ url('/') }}" >กลับสู่หน้าหลัก</a>
       <a href="{{url('/admin/showUser')}}"><li class="unuser"><img src="/images/ไอคอนคน.png" alt="" style="width: 15px; height: 25px;">บัญชีผู้ใช้งาน</li></a>
         <a href="{{url('/admin/create')}}"><li class="unuser"><img src="/images/38.png" alt="">จัดการกิจกรรม</li></a>
         <a href="/reveiw.html"><li class="unuser"><img src="/images/รีวิว.png" alt="">รีวิวการเข้าร่วมกิจกรรม</li></a>

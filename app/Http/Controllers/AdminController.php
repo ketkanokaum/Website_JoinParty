@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
-    public function dashboard(){
+    public function index(){
         return view('admin.dashboard');
         }
         

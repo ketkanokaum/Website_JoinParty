@@ -35,7 +35,7 @@ Route::middleware([
     'admin',
 ])->group(function () {
 //Route::get('/admin', [dashboardController::class, 'index'])->name('dashboard');
-Route::get('/admin-dashboard', [AdminController::class, 'dashboard'])->name('dashboard');;
+Route::get('/admin', [AdminController::class, 'index']);
 Route::match(['get', 'post'],'/admin/create', [AdminController::class, 'createParty']);
 Route::post('/admin/insert', [AdminController::class, 'insert']);
 Route::match(['get', 'post'],'/admin/dashboard', [AdminController::class, 'showUser']);
@@ -46,7 +46,7 @@ Route::post('/admin/update/{id}', [AdminController::class, 'update'])->name('adm
 });
 
 Route::get('/', [ManageController::class, 'showParty'])->name('party.show');
-
+Route::get('/detail-party/{id}', [ManageController::class, 'viewPartyDetails'])->name('party.details');
 Route::get('/user/profile', [ManageController::class, 'showProfile'])->name('profile.show');
 Route::get('/user/editProfile/', [ManageController::class, 'showEditProfile']);
 Route::post('/user/edit-profile/{id}', [ManageController::class, 'updateProfile'])->name('profile.update');
