@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Party;
+use App\Models\Favorite;
 class ManageController extends Controller
 {
     public function showProfile()
@@ -62,8 +63,11 @@ public function showParty()
 }
 
 public function viewPartyDetails($id){
-    $parties = Party::find($id);
-    return view('detailparty', compact('parties'));
+    $party = Party::find($id);
+    $isFavorite = Favorite::where('user_id', Auth::id())
+                            ->where('party_id', $id)
+                            ->exists(); //ตรวจสอบว่ามีรายการโปรดนี้หรือไม่
+    return view('detailparty', compact('party','isFavorite'));
 }
 
     }

@@ -23,7 +23,7 @@
                 <!-- เมื่อผู้ใช้เข้าสู่ระบบ -->
                 <li><a href="{{ url('/dashboard') }}" style="margin-left: 100px;">หน้าแรก</a></li>
                 <li><a href="#">กิจกรรมของของฉัน</a></li>
-                <li><a href="#">รายการโปรด</a></li>
+                <li><a href="{{ url('/favorites') }}">รายการโปรด</a></li>
                 <li><a href="{{ url('/user/profile') }}">โปรไฟล์ของฉัน</a></li>
                 <li class="unuser">
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
@@ -51,28 +51,48 @@
                     <img src="img-join-to-party/t8db9k4_home-decor-650_625x300_10_August_21.jpg" class="img-fluid rounded " alt="Party Image">
                 </div>
 
-                <!-- Details Section สำหรับ Back End!!!!!!!!!!!-->
+
                 <div class="col-md-6">
-                    <!-- ชื่อ Party -->
-                    <h2 class="mb-3">มาสิ มาปาร์ตี้</h2>
-                    <!-- จำนวนผู้เข้าร่วมใน Party -->
+                    <h2 class="mb-3">{{$party->party_name }}</h2>
                     <p>จำนวนผู้เข้าร่วม: <span class="text-muted">22/40 คน</span></p>
-                    <!-- เวลาคงเหลือของ Party  -->
-                    <p id="countdown" class="text-danger">เวลาคงเหลือ: ... วัน</p>
-                    
-                    <!-- ใส่ข้อมูลใน Party -->
+                    @php
+                                $daysLeft = floor((strtotime($party->date) - time()) / 86400);
+                                @endphp
+                                @if($daysLeft > 0)
+                                    <p style="color:red;"><b>เหลือเวลาอีก : </b> {{ $daysLeft }} วัน</p>
+                                @else
+                                    <p style="color:red;"><b>หมดเวลารับสมัคร</b></p>
+                                @endif
                     <ul class="list-unstyled">
-                        <li><strong>วันทื่จัด:</strong> วันพฤหัสบดี ที่ 5 ธันวาคม 2567</li>
-                        <li><strong>เวลา:</strong> ตั้งแต่เวลา 19:30 น. เป็นต้นไป</li>
-                        <li><strong>สถานที่:</strong> ร้าน Hashtag หลัง มหาวิทยาลัยขอนแก่น</li>
-                        <li><strong>คุณสมบัติ:</strong> อายุ 20 เป็นต้นไป</li>
-                        <li><strong>คำอธิบายกิจกรรม:</strong> คุณพร้อมสำหรับคืนสนุกสุดเหวี่ยงหรือยัง? ฉัน/ผมอยากเชิญคุณมาร่วมปาร์ตี้สุดมันที่กำลังจะจัดขึ้น เพื่อดื่มด่ำกับบรรยากาศแห่งความสุขสนานและเพลิดเพลิน</li>
+                        <li><strong>วันที่จัดกิจกรรม:</strong> {{ date('d F Y', strtotime($party->date)) }}</li>
+                        <li><strong>เวลา:</strong> ตั้งแต่เวลา{{$party->start_time}} ถึง {{$party->end_time}}</li>
+                        <li><strong>สถานที่:</strong> {{$party->location }}</li>
+                        <li><strong>รายละเอียดกิจกรรม : </strong>{{$party->detail}}</li>
                     </ul>
 
                     <div class="d-flex align-items-center mt-4">
                         <button class="btn btn-success me-3">เข้าร่วม</button>
-                        <a href="view-all-party.html" class="btn btn-outline-secondary me-4">ย้อนกลับ</a>
-                        <i id="favorite-icon" class="bi bi-heart " style="font-size: 1.5rem; cursor: pointer;"></i>
+                        <a href="{{ url('/dashboard') }}"class="btn btn-outline-secondary me-4">ย้อนกลับ</a>
+                @if($isFavorite)
+                <!-- แสดงหัวใจที่ถูกกดไว้ (เต็ม) -->
+                <form action="{{ route('remove.favorite', $party->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" style="background: none; border: none;">
+                        <i class="bi bi-heart-fill text-danger" style="font-size: 1.5rem;"></i>
+                    </button>
+                </form>
+            @else
+                <!-- แสดงหัวใจที่ยังไม่ได้กด (ว่าง) -->
+                <form action="{{ route('add.favorite') }}" method="POST">
+                    @csrf
+                    <!-- <input type="hidden" name="user_id" value="{{ Auth::id() }}"> -->
+                    <input type="hidden" name="party_id" value="{{ $party->id }}">
+                    <button type="submit" style="background: none; border: none;">
+                        <i class="bi bi-heart" style="font-size: 1.5rem;"></i>
+                    </button>
+                </form>
+            @endif
+                        </form>
                     </div>
                 </div>
             </div>
@@ -98,37 +118,7 @@
             this.classList.toggle("text-danger");  // เปลี่ยนสีไอคอนด้วย
         });
     </script>
-    <!-- นับถอยหลังจากวันจริงๆ -->
-    <script>
-        function calculateDaysLeft(endDate) {
-            const today = new Date();
-            const end = new Date(endDate);
-            const timeDifference = end - today;
-            const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-            return daysLeft;
-        }
-    
-        // กำหนดวันสิ้นสุดปาร์ตี้ (ปี-เดือน-วัน)
-        const partyEndDate = '2024-12-05';
-    
-        // คำนวณวันคงเหลือแล้วอัปเดตในหน้าเว็บ
-        function updateCountdown() {
-            const daysLeft = calculateDaysLeft(partyEndDate);
-            document.getElementById('countdown').textContent = `เวลาคงเหลือ: ${daysLeft} วัน`;
-        }
-    
-        // เรียกใช้ฟังก์ชันทันทีที่เปิดหน้าเว็บ
-        updateCountdown();
-    
-        // ฟังก์ชันสำหรับการกดปุ่ม "เข้าร่วม"
-        document.querySelector('.btn-success').addEventListener('click', function() {
-            // เปลี่ยนข้อความปุ่มเป็น "เข้าร่วมแล้ว"
-            this.textContent = 'เข้าร่วมแล้ว';
-    
-            // ปิดการใช้งานปุ่มหลังจากกด
-            this.disabled = true;
-        });
-    </script>
+
 
 </body>
 </html>

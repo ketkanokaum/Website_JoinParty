@@ -17,7 +17,7 @@
             @auth
                 <!-- เมื่อผู้ใช้เข้าสู่ระบบ -->
                 <li><a href="{{ url('/dashboard') }}" style="margin-left: 100px;">หน้าแรก</a></li>
-                <li><a href="#">กิจกรรมของของฉัน</a></li>
+                <li><a href="{{ url('/favorites') }}">กิจกรรมของของฉัน</a></li>
                 <li><a href="#">รายการโปรด</a></li>
                 <li><a href="{{ url('/user/profile') }}">โปรไฟล์ของฉัน</a></li>
                 <li class="unuser">

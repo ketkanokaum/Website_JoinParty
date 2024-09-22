@@ -18,19 +18,26 @@
 </head>
 <body>
 <div class="container mt-5">
-   
+
     <div class="container mt-5">
         <div class="row">
-            <!-- Card 1 -->
+        @foreach($favorites as $favorite)
             <div class="col-md-4">
                 <div class="card party-card">
                     <img src="img-join-to-party/t8db9k4_home-decor-650_625x300_10_August_21.jpg" class="card-img-top party-img" alt="Party Image">
                     <div class="card-body">
-                        <h5 class="card-title">มาสิ มาปาร์ตี้</h5>
-                        <p class="card-text">วันพฤหัสบดี ที่ 5 ธันวาคม 2567</p>
-                        <p class="countdown text-danger">เวลาคงเหลือ: ... วัน</p> 
-                        <p class="card-text">สถานที่: ร้าน Hashtag หลัง มหาวิทยาลัยขอนแก่น</p>
-                        <p class="card-text">เวลา: 19:30 น.</p>
+                        <h5 class="card-title">{{$favorite->party->party_name }}</h5>
+                        <p class="card-text">{{$favorite->party->date }}</p>
+                        @php
+                                $daysLeft = floor((strtotime($favorite->party->date) - time()) / 86400);
+                                @endphp
+                                @if($daysLeft > 0)
+                                    <p style="color:red;"><b>เหลือเวลาอีก : </b> {{ $daysLeft }} วัน</p>
+                                @else
+                                    <p style="color:red;"><b>หมดเวลารับสมัคร</b></p>
+                                @endif
+                        <p class="card-text">สถานที่:{{$favorite->party->location }}</p>
+                        <p class="card-text">เวลา: ตั้งแต่เวลา{{$favorite->party->start_time}} ถึง {{$favorite->party->end_time}}.</p>
                         <div class="d-flex justify-content-between">
                             <i id="favorite-icon" class="favorite-icon bi bi-heart" style="font-size: 1.5rem; cursor: pointer;"></i>
                             <div class="d-flex">
@@ -43,6 +50,7 @@
                     </div>
                 </div>
             </div>
+            @endforeach
             <!-- Modal สำหรับการ์ด 1 -->
             <!-- ต้องกำหนด id, aria-labelledby จะได้เปิดหน้าต่างย่อยของแต่ละ card -->
             <div class="modal fade" id="reviewModal1" tabindex="-1" aria-labelledby="reviewModalLabel1" aria-hidden="true">
@@ -290,122 +298,8 @@
         </div>
     </div>
 </div>
-    <script>
-        // ฟังก์ชันนับถอยหลังสำหรับแต่ละการ์ด
-        function calculateDaysLeft(endDate) {
-            const today = new Date();
-            const end = new Date(endDate);
-            const timeDifference = end - today;
-            const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
     
-            // ตรวจสอบว่ากิจกรรมสิ้นสุดแล้วหรือไม่
-            if (daysLeft <= 0) {
-                return "กิจกรรมสิ้นสุดแล้ว";
-            }
     
-            return `เวลาคงเหลือ: ${daysLeft} วัน`;
-        }
-    
-        // วันที่สิ้นสุดของแต่ละปาร์ตี้ (อาจต้องแก้)
-        const partyDates = [
-            '2024-12-05', 
-            '2024-12-05', 
-            '2023-08-31', 
-            '2023-12-31'
-        ];
-    
-        // อัปเดตเวลาคงเหลือในแต่ละการ์ดและจัดการการแสดงปุ่มรีวิว
-        document.querySelectorAll('.countdown').forEach((element, index) => {
-            // คำนวณเวลาคงเหลือสำหรับแต่ละปาร์ตี้โดยใช้ฟังก์ชัน calculateDaysLeft
-            const daysLeftText = calculateDaysLeft(partyDates[index]);
-            element.textContent = daysLeftText;
-    
-            // ตรวจสอบว่ากิจกรรมสิ้นสุดแล้วหรือไม่
-            const eventPassed = daysLeftText.includes('กิจกรรมสิ้นสุดแล้ว');
-            // เลือกปุ่มรีวิวตามลำดับการ์ด (ใช้ id ที่กำหนดตาม index)
-            const reviewButton = document.getElementById(`review-btn-${index + 1}`);
-            // เลือกปุ่ม "ข้อมูลเพิ่มเติม" และ "เข้าร่วมแล้ว" ของแต่ละการ์ด
-            const moreInfoButton = element.closest('.card-body').querySelector('.btn-warning');
-            const joinButton = element.closest('.card-body').querySelector('.btn-success');
-    
-            if (eventPassed) {
-                // แสดงปุ่มรีวิวเมื่อกิจกรรมสิ้นสุดแล้ว
-                reviewButton.style.display = 'inline-block';
-                // ซ่อนปุ่ม "ข้อมูลเพิ่มเติม" และ "เข้าร่วมแล้ว"
-                moreInfoButton.style.display = 'none';
-                joinButton.style.display = 'none';
-            } else {
-                // ซ่อนปุ่มรีวิวหากกิจกรรมยังไม่สิ้นสุด
-                reviewButton.style.display = 'none';
-            }
-        });
-    
-        // การกด favorite icon สำหรับการ์ด
-        document.querySelectorAll('.favorite-icon').forEach(icon => {
-            icon.addEventListener('click', function() {
-                this.classList.toggle("bi-heart");
-                this.classList.toggle("bi-heart-fill");
-                this.classList.toggle("text-danger");
-            });
-        });
-    
-        // เพิ่ม event listener ให้กับปุ่มที่มี class 'btn-success' ทุกปุ่ม (ปุ่ม "เข้าร่วม")
-        // ใช้ querySelectorAll เพื่อเลือกทุกปุ่มที่มี class 'btn-success'
-        document.querySelectorAll('.btn-success').forEach((button, index) => {
-            // เพิ่ม event listener ให้กับแต่ละปุ่ม เมื่อผู้ใช้คลิกปุ่ม
-            button.addEventListener('click', function() {
-                // เมื่อกดปุ่ม จะเปลี่ยนข้อความปุ่มเป็น "เข้าร่วมแล้ว"
-                button.textContent = 'เข้าร่วมแล้ว';
-                button.classList.remove('btn-success');
-                button.classList.add('btn-secondary');
-    
-                // ปิดการใช้งานปุ่มหลังจากกด
-                button.disabled = true;
-            });
-        });
-    </script>
-<script>
-    // เมื่อเอกสารโหลดเสร็จสมบูรณ์ (DOMContentLoaded) ฟังก์ชันนี้จะทำงาน
-    document.addEventListener('DOMContentLoaded', function() {
-    // เลือกทุกปุ่มที่มีคลาส 'review-btn' และเก็บไว้ในตัวแปร reviewButtons
-    const reviewButtons = document.querySelectorAll('.review-btn');
-    // ใช้ forEach เพื่อวนลูปผ่านปุ่มรีวิวแต่ละปุ่ม
-    reviewButtons.forEach((button, index) => {
-        // เพิ่ม event listener ให้กับแต่ละปุ่ม เมื่อผู้ใช้คลิกปุ่มนี้
-        button.addEventListener('click', function() {
-            // ค้นหา Modal ที่ตรงกับ index ของการ์ด
-            // โดยใช้ id ของ modal ที่ถูกสร้างตาม index เช่น 'reviewModal1', 'reviewModal2'
-            const reviewModal = new bootstrap.Modal(document.getElementById(`reviewModal${index + 1}`));
-            // แสดง modal ที่ตรงกับปุ่มรีวิวที่ถูกคลิก
-            reviewModal.show();
-        });
-    });
-});
-</script>
-<script>
-    // เพิ่ม event listener ให้กับ dropdown หรือ select ที่มี id 'rating'
-    // เมื่อผู้ใช้เลือกคะแนน (มีการเปลี่ยนแปลงค่าใน dropdown) ฟังก์ชันนี้จะถูกเรียกใช้
-    document.getElementById('rating').addEventListener('change', function() {
-        // ค้นหาปุ่ม submit ที่มี id 'submit-btn'
-        const submitButton = document.getElementById('submit-btn');
-        // ตรวจสอบว่าผู้ใช้ได้เลือกคะแนนใน dropdown หรือไม่
-        // ถ้ามีการเลือกค่า (this.value ไม่ว่างเปล่า)
-        if (this.value) {
-            // ลบคลาส 'btn-disabled' ออกจากปุ่มเพื่อให้สามารถคลิกได้
-            submitButton.classList.remove('btn-disabled');
-            // ปรับสถานะปุ่มเป็นสามารถใช้งานได้ (disabled = false)
-            submitButton.disabled = false;
-        } else {
-            // ถ้าผู้ใช้ยังไม่ได้เลือกค่าใน dropdown
-            // เพิ่มคลาส 'btn-disabled' เพื่อแสดงว่าปุ่มไม่สามารถกดได้
-            submitButton.classList.add('btn-disabled');
-            // ปรับสถานะปุ่มให้เป็นไม่สามารถใช้งานได้ (disabled = true)
-            submitButton.disabled = true;
-        }
-    });
-    // ตั้งค่าเริ่มต้นของปุ่ม submit ให้อยู่ในสถานะที่ไม่สามารถคลิกได้ (disabled = true)
-    document.getElementById('submit-btn').disabled = true;
-</script>
 </body>
 </html>
 @endsection

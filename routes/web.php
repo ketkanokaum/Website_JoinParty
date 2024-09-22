@@ -5,6 +5,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Controllers\ManageController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FavoriteController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,3 +52,6 @@ Route::get('/detail-party/{id}', [ManageController::class, 'viewPartyDetails'])-
 Route::get('/user/profile', [ManageController::class, 'showProfile'])->name('profile.show');
 Route::get('/user/editProfile/', [ManageController::class, 'showEditProfile']);
 Route::post('/user/edit-profile/{id}', [ManageController::class, 'updateProfile'])->name('profile.update');
+Route::post('/add-to-favorite', [FavoriteController::class, 'addToFavorite'])->name('add.favorite');
+Route::post('/remove-favorite{id}', [FavoriteController::class, 'addToFavorite'])->name('remove.favorite');
+Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites');

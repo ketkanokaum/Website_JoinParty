@@ -106,11 +106,10 @@
 
             <div class="form-group">
                 <label for="party-type">ประเภทของกิจกรรม:</label>
-                <select id="party-type" name="type_party">
-                <option value="travel">การท่องเที่ยว</option>
-                <option value="volunteer">จิตอาสา</option>
-                <option value="social">สังสรรค์</option>
-                <option value="skill_development">พัฒนาทักษะ</option>
+                <select id="party-type" name="party_type_id">
+                @foreach($partyTypes as $partyType)
+            <option value="{{ $partyType->id }}">{{ $partyType->type_name }}</option>
+              @endforeach
                 </select>
             </div>
 
@@ -178,11 +177,10 @@
 
             <div class="form-group">
                 <label for="party-type">ประเภทของกิจกรรม:</label>
-                <select id="party-type" name="type_party" value="{{$party->type_party}}">
-                <option value="travel">การท่องเที่ยว</option>
-                <option value="volunteer">จิตอาสา</option>
-                <option value="social">สังสรรค์</option>
-                <option value="skill_development">พัฒนาทักษะ</option>
+                <select id="party-type" name="party_type_id" value="{{$party->type_party}}">
+                @foreach($partyTypes as $partyType)
+              <option value="{{ $partyType->id }}">{{ $partyType->type_name }}</option>
+        @endforeach
                 </select>
             </div>
 

@@ -44,6 +44,20 @@ class DatabaseSeeder extends Seeder
             //         'usertype' => 'user',
             //     ]);
             // }
+
+            DB::table('party_types') ->insert ([
+                'type_name' => 'การท่องเที่ยว '
+            ]);
+
+            DB::table('party_types') ->insert ([
+                'type_name' => 'จิตอาสา '
+            ]);
+            DB::table('party_types') ->insert ([
+                'type_name' => 'สังสรรค์ '
+            ]);
+            DB::table('party_types') ->insert ([
+                'type_name' => 'พัฒนาทักษะ '
+            ]);
         }
     }
 

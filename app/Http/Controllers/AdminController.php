@@ -21,18 +21,21 @@ class AdminController extends Controller
     public function createParty()
     {
         $parties = Party::all();
-        return view('admin/create', compact('parties'));
+        $partyTypes = PartyType::all();
+        return view('admin/create', compact('parties','partyTypes'));
     }
 
     public function insert(Request $request)
     {
+        $partyType = PartyType::find($request->party_type_id);
+
         $newParty = new Party();
         $newParty->party_name = $request->party_name;
         $newParty->date = $request->date;
         $newParty->start_time = $request->start_time;
         $newParty->end_time = $request->end_time;
         $newParty->location = $request->location;
-        $newParty->type_party = $request->type_party;
+        $newParty->party_type_id = $partyType->id;
         $newParty->detail = $request->detail;
         $newParty->numpeople = $request->numpeople;
         $newParty->img = $request->img;
