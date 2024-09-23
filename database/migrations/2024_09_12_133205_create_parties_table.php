@@ -16,11 +16,13 @@ return new class extends Migration
         Schema::create('parties', function (Blueprint $table) {
             $table->id();
             $table->string('party_name');
-            $table->date('date');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->time('start_time');
             $table->time('end_time');
             $table->string('location');
             $table->string('detail');
+            $table->string('province');
             $table->integer('numpeople');
             $table->string('img');
             $table->foreignId('party_type_id')->constrained()->onDelete('cascade');
