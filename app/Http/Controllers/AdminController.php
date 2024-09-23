@@ -15,7 +15,7 @@ class AdminController extends Controller
     public function index(){
         return view('admin.dashboard');
         }
-        
+
 
 
     public function createParty()
@@ -31,10 +31,12 @@ class AdminController extends Controller
 
         $newParty = new Party();
         $newParty->party_name = $request->party_name;
-        $newParty->date = $request->date;
+        $newParty->start_date = $request->start_date;
+        $newParty->end_date = $request->end_date;
         $newParty->start_time = $request->start_time;
         $newParty->end_time = $request->end_time;
         $newParty->location = $request->location;
+        $newParty->province = $request->province;
         $newParty->party_type_id = $partyType->id;
         $newParty->detail = $request->detail;
         $newParty->numpeople = $request->numpeople;
@@ -50,7 +52,7 @@ class AdminController extends Controller
         $parties = Party::all(); // ดึงรายการปาร์ตี้ทั้งหมดจากฐานข้อมูล
         return view('admin/create', compact('parties'));
     }
-    
+
 
     public function update(Request $request, $id){
 
@@ -58,8 +60,11 @@ class AdminController extends Controller
     if ($request->has('party_name')) {
         $party->party_name = $request->party_name;
     }
-    if ($request->has('date')) {
-        $party->date = $request->date;
+    if ($request->has('start_date')) {
+        $party->start_date = $request->start_date;
+    }
+    if ($request->has('end_date')) {
+        $party->end_date = $request->end_date;
     }
     if ($request->has('start_time')) {
         $party->start_time = $request->start_time;
@@ -70,8 +75,11 @@ class AdminController extends Controller
     if ($request->has('location')) {
         $party->location = $request->location;
     }
+    if ($request->has('province')) {
+        $party->province = $request->province;
+    }
     $partyTypes = PartyType::all();
-    
+
     if ($request->has('detail')) {
         $party->detail = $request->detail;
 }
@@ -81,7 +89,7 @@ class AdminController extends Controller
     if ($request->has('img')) {
         $party->img = $request->img;
     }
-    
+
     $party->save();
     return redirect('admin/create');
 }

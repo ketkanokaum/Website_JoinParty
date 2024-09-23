@@ -17,7 +17,7 @@ class ManageController extends Controller
 
     public function showEditProfile()
     {
-        $users = User::all(); 
+        $users = User::all();
         return view('profile_user', compact('users'));
     }
 
@@ -54,13 +54,43 @@ class ManageController extends Controller
 public function showParty()
 {
     $time = time();
-        // ดึงปาร์ตี้ที่ยังไม่หมดเวลารับสมัคร (วันที่อยู่ในอนาคต)
-        $activeParties = Party::where('date', '>', date('Y-m-d H:i:s', $time))->get();
-        // ดึงปาร์ตี้ที่หมดเวลารับสมัครแล้ว (วันที่อยู่ในอดีต)
-        $pastParties= Party::where('date', '<=', date('Y-m-d H:i:s', $time))->get();
+    // ดึงปาร์ตี้ที่ยังไม่หมดเวลารับสมัคร (วันที่อยู่ในอนาคต)
+    $activeParties = Party::where('start_date', '>', date('Y-m-d H:i:s', $time))->get();
+    // ดึงปาร์ตี้ที่หมดเวลารับสมัครแล้ว (วันที่อยู่ในอดีต)
+    $pastParties = Party::where('start_date', '<=', date('Y-m-d H:i:s', $time))->get();
 
-    return view('dashboard', [ 'activeParties' => $activeParties, 'pastParties' => $pastParties ]);  
+    return view('dashboard', [
+        'activeParties' => $activeParties,
+        'pastParties' => $pastParties
+    ]);
 }
+
+public function searchParty(Request $request)
+{
+    $searchTerm = $request->input('query');
+    $province = $request->input('province');
+
+    $query = Party::query();
+
+    if ($searchTerm) {
+        $query->where('party_name', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('location', 'LIKE', "%{$searchTerm}%");
+    }
+
+    if ($province) {
+        $query->where('location', $province);
+    }
+
+    $parties = $query->get();
+
+    // ตรวจสอบว่า $parties มีข้อมูลหรือไม่
+    if ($parties->isEmpty()) {
+        return response()->json([]);
+    } else {
+        return response()->json($parties);
+    }
+}
+
 
 public function viewPartyDetails($id){
     $party = Party::find($id);

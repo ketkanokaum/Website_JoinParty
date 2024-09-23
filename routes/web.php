@@ -44,10 +44,11 @@ Route::match(['get', 'post'],'/admin/dashboard', [AdminController::class, 'showU
 Route::get('/admin/showUser', [AdminController::class, 'showUser'])->name('showUser.users');
 Route::get('/admin/edit/', [AdminController::class, 'showEditPage']);
 Route::post('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
-
 });
 
+
 Route::get('/', [ManageController::class, 'showParty'])->name('party.show');
+Route::get('/search-party', [ManageController::class, 'searchParty'])->name('searchParty');
 Route::get('/detail-party/{id}', [ManageController::class, 'viewPartyDetails'])->name('party.details');
 Route::get('/user/profile', [ManageController::class, 'showProfile'])->name('profile.show');
 Route::get('/user/editProfile/', [ManageController::class, 'showEditProfile']);
