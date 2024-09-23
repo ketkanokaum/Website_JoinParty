@@ -173,7 +173,7 @@
                                     @auth
                                         <button class="join">เข้าร่วม</button>
                                     @endauth
-                                    <a href="{{ route('party.details', $party->id) }}" class="more">ข้อมูลเพิ่มเติม</a>
+                                    <a href="/detail-party/${party.id}" class="more">ข้อมูลเพิ่มเติม</a>
 
                                 </div>
                                 @endif
@@ -213,31 +213,42 @@
             var query = $('#search-input').val();
             var province = $('#province').val();
 
-            if(query.length > 0) {
+            if (query.length > 0 || province.length > 0) {
                 // ส่งคำขอ AJAX เมื่อมีข้อความในช่องค้นหา
                 $.ajax({
                     url: "{{ route('searchParty') }}",  // Route ที่ไปยังฟังก์ชันค้นหาปาร์ตี้
                     method: 'GET',
-                    data: { query: query },
+                    data: { query: query, province: province },
                     success: function(data) {
                         $('#party-list').empty(); // ล้างข้อมูลปาร์ตี้เดิมออก
 
                         if(data.length > 0) {
                             // แสดงผลปาร์ตี้ที่ค้นพบ
                             $.each(data, function(index, party) {
-                                var formattedDate = new Date(party.start_date).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                                $('#party-list').append(`
+                                var daysLeft = Math.floor((new Date(party.start_date) - new Date()) / 86400000); // คำนวณวัน
+
+                                // สร้าง HTML เพื่อแสดงปาร์ตี้
+                                var partyHtml = `
                                     <div class="party">
                                         <div class="image">
-                                            <img src="/images/ไอคอนคน.png" alt="Event Image">
+                                            <img src="/images/a2df086-dd63.jpg" alt="Event Image">
                                         </div>
                                         <div class="data">
+                                            ${daysLeft > 0 ? `<p style="color:red;"><b>เหลือเวลาอีก : </b> ${daysLeft} วัน</p>` : `<p style="color:red;"><b>หมดเวลารับสมัคร</b></p>`}
                                             <h2>${party.party_name}</h2>
-                                            <p><b>สถานที่:</b> ${party.location}</p>
-                                            <p><b>วันที่:</b> ${formattedDate}</p>
+                                            <p><b>สถานที่ :</b> ${party.location}</p>
+                                            <p><b>เวลา :</b> ${new Date(party.start_date).toLocaleDateString('th-TH', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                                            ${daysLeft > 0 ? `
+                                            <div class="buttons">
+                                                @auth
+                                                    <button class="join">เข้าร่วม</button>
+                                                @endauth
+                                                <a href="/detail-party/${party.id}" class="more">ข้อมูลเพิ่มเติม</a>
+                                            </div>` : ''}
                                         </div>
                                     </div>
-                                `);
+                                `;
+                                $('#party-list').append(partyHtml);
                             });
                         } else {
                             // แสดงข้อความเมื่อไม่พบปาร์ตี้
@@ -253,19 +264,30 @@
                     success: function(data) {
                         $('#party-list').empty(); // ล้างข้อมูลปาร์ตี้เดิมออก
                         $.each(data, function(index, party) {
-                            var formattedDate = new Date(party.start_date).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                            $('#party-list').append(`
+                            var daysLeft = Math.floor((new Date(party.start_date) - new Date()) / 86400000); // คำนวณวัน
+
+                            // สร้าง HTML เพื่อแสดงปาร์ตี้ทั้งหมด
+                            var partyHtml = `
                                 <div class="party">
                                     <div class="image">
-                                        <img src="/images/ไอคอนคน.png" alt="Event Image">
+                                        <img src="/images/a2df086-dd63.jpg" alt="Event Image">
                                     </div>
                                     <div class="data">
+                                        ${daysLeft > 0 ? `<p style="color:red;"><b>เหลือเวลาอีก : </b> ${daysLeft} วัน</p>` : `<p style="color:red;"><b>หมดเวลารับสมัคร</b></p>`}
                                         <h2>${party.party_name}</h2>
-                                        <p><b>สถานที่:</b> ${party.location}</p>
-                                        <p><b>วันที่:</b> ${formattedDate}</p>
+                                        <p><b>สถานที่ :</b> ${party.location}</p>
+                                        <p><b>เวลา :</b> ${new Date(party.start_date).toLocaleDateString('th-TH', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                                        ${daysLeft > 0 ? `
+                                        <div class="buttons">
+                                            @auth
+                                                <button class="join">เข้าร่วม</button>
+                                            @endauth
+                                            <a href="/detail-party/${party.id}" class="more">ข้อมูลเพิ่มเติม</a>
+                                        </div>` : ''}
                                     </div>
                                 </div>
-                            `);
+                            `;
+                            $('#party-list').append(partyHtml);
                         });
                     }
                 });
@@ -278,6 +300,7 @@
         });
     });
 </script>
+
 
 </body>
 </html>
