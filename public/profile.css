@@ -1,16 +1,22 @@
 body {
-    font-family: 'Arial', sans-serif; /* ฟอนต์สำหรับหน้า */
-    background-color: #f4ecff; /* สีพื้นหลัง */
-    margin: 0; /* ลบค่าระยะขอบทั้งหมด */
-    padding: 0; /* ลบค่าการเยื้องภายในทั้งหมด */
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-/* สไตล์สำหรับเมนูการนำทาง (Navigation) */
-.nav-item {
-    padding: 20px; /* ระยะห่างรอบ ๆ ของรายการเมนู */
+.bg{
+    padding: 50px;
+    position: relative;
+    top: 0px;
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(to bottom, rgba(243, 218, 195, 0.637) 4%,rgba(98, 64, 190, 0.24) 90%);
 }
 
-/* ทำให้ข้อความตัวหนาและจัดตรงกลาง */
+nav {
+    position: relative !important;
+}
+
 .bold {
     text-align: center;
     margin-top: 20px;
@@ -20,54 +26,55 @@ body {
 }
 
 .profile-card{
-    background-color: white; /* พื้นหลังของกล่องแก้ไขโปรไฟล์เป็นสีขาว */
+    background-color: white;
     width: 800px; 
-    height: 500px;
-    padding: 20px; /* ระยะห่างภายในกล่อง (padding) รอบด้าน */
-    border-radius: 10px; /* มุมของกล่องเป็นมุมโค้ง 10px */
-    box-shadow: 0px 4px 12px #d9d9d9(0, 0, 0, 0.1); /* เพิ่มเงา */
-    margin: 40px auto; /* จัดกล่องให้อยู่กึ่งกลางหน้าจอ */
+    height: 670px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px #d9d9d9(0, 0, 0, 0.1);
+    margin: 40px auto;
 }
-/* สไตล์รูปภาพโปรไฟล์ */
+/* รูปภาพโปรไฟล์ */
 .profile-image {
-    width: 300px; /* ความกว้างของรูป */
-    height: 200px; /* ความสูงของรูป */
-    border-radius: 10%; /* มุมรูปโค้งมน */
-    object-fit: cover; /* จัดการรูปให้พอดีไม่ผิดสัดส่วน */
-    margin: 15px 70px 15px 30px; /* ระยะห่างรอบๆ รูป */
-    float: left; /* จัดรูปไว้ทางซ้าย */
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+    width: 300px;
+    height: 250px;
+    border-radius: 10%;
+    object-fit: cover;
+    margin: 15px 70px 15px 30px;
+    float: left;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* สไตล์ข้อมูลโปรไฟล์ */
+/* ข้อมูลโปรไฟล์ */
 .profile-info {
-    margin-bottom: 10px; /* ระยะห่างด้านล่างของข้อมูล */
-    text-align: left; /* ขยับข้อความทั้งหมดไปทางขวา */
+    margin-bottom: 10px;
+    text-align: left;
 }
 
-/* สไตล์ชื่อในข้อมูลโปรไฟล์ */
+/* ชื่อในข้อมูลโปรไฟล์ */
 .profile-info h2 {
-    margin: 20px; /* ระยะห่างรอบ ๆ ของชื่อ */
-    font-size: 22px; /* ขนาดของฟอนต์ */
-    font-weight: bold; /* ทำให้ตัวอักษรหนา */
-    color: #4f4f4f; /* สีของข้อความ */
-    padding-left: 30px; /* การเยื้องซ้ายของชื่อ */
-    margin-left: 50px; /* ปรับตำแหน่งจากด้านซ้าย */
+    margin: 20px; 
+    font-size: 22px;
+    font-weight: bold;
+    color: #4f4f4f;
+    padding-left: 30px;
+    margin-left: 50px;
 
 }
 
 /* สไตล์ข้อความอื่นๆ ในโปรไฟล์ */
 .profile-info p {
-    margin: 13px ; /* ระยะห่างด้านบนและล่างของข้อความ */
-    color: #898686; /* สีข้อความ */
-    margin-left: 50px; /* ปรับตำแหน่งจากด้านซ้าย */
+    margin: 13px ;
+    color: #898686;
+    margin-left: 50px;
 }
 
 /* สไตล์สำหรับคำบรรยายของโปรไฟล์ */
 .profile-bio {
-    font-weight: bold; /* ทำให้ข้อความหนา */
-    margin: 0px 0px 10px 30px; /* ระยะห่างของคำบรรยาย */
-    color: #333; /* สีข้อความ */
+    font-weight: bold;
+    margin: 0px 0px 10px 30px;
+    color: #333;
+    clear: both;
 }
 
 /* สไตล์เนื้อหาในคำบรรยาย */
@@ -110,18 +117,6 @@ button.btn {
     width: 150px;
     padding: 6px 5px ;
     margin-left: 20px;
-}
-
-.overlay {
-    display: none; /* ซ่อนหน้าต่างป๊อปอัปในตอนแรก */
-    position: fixed; /* กำหนดให้ป๊อปอัปอยู่ในตำแหน่งที่แน่นอนบนหน้าจอ */
-    top: 0; /* จัดตำแหน่งด้านบนให้ตรงกับขอบบนสุดของหน้าจอ */
-    left: 0; /* จัดตำแหน่งด้านซ้ายให้ตรงกับขอบซ้ายของหน้าจอ */
-    width: 100%; /* ทำให้ป๊อปอัปครอบคลุมความกว้างทั้งหมดของหน้าจอ */
-    height: 100%; /* ทำให้ป๊อปอัปครอบคลุมความสูงทั้งหมดของหน้าจอ */
-    background-color: rgba(0, 0, 0, 0.5); /* สีพื้นหลังเป็นสีดำโปร่งแสง (50% ความโปร่งแสง) */
-    z-index: 1005; /* กำหนดลำดับซ้อนทับสูง ป๊อปอัปจะอยู่บนสุด */
-    overflow-y: auto; /* เลื่อนเฉพาะในแนวตั้ง */
 }
 
 .edit-profile-card {
@@ -196,4 +191,65 @@ button.btn {
     color: rgb(194, 100, 100);
     font-size: 0.9em;
 }
+
+div.modal-content {
+    width: 800px;
+    position: relative;
+    top: 100px;
+    left: -150px;
+}
+div.modal-header {
+    background-color: #ffd28c;
+}
+
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    width: 100%;
+}
+.form-left, .form-right {
+    width: 48%;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+input[type="text"], input[type="date"], input[type="tell"], input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+  
+.form-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+button {
+    background-color: #ffd28c;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 15px !important;
+    cursor: pointer;
+}
+input[type="radio"] {
+    margin-right: 10px;
+}
+.form-img {
+    margin-top: 10px;
+}
+
 

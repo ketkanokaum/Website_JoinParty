@@ -10,7 +10,7 @@
 /* เมนูด้านข้าง */
 aside {
     width: 25%;
-    height: 600px;
+    height: 1000px;
     background: linear-gradient(180deg, #f7f1f3, #e7d7e7);
 }
 aside ul {
@@ -56,8 +56,8 @@ aside ul .unuser {
 
 /* เนื้อหา */
 section {
-    width: 400%;
-    padding: 100x;
+    width: 1100px;
+    padding: 100px;
     background: linear-gradient(180deg, #e7d7e7,#e7d7e7,#e7d7e7,#e7d7e7, #ffffff);
     background-color: #faf8fc;
 }

@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>โปรไฟล์ของคุณ</title>
     <link rel="stylesheet" href="/profile.css">
-    <link rel="stylesheet" href="/style_create.css">
-    <link rel="stylesheet" href="/style_home.css">
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
@@ -14,7 +13,7 @@
     <script src="js/bootstrap.min.js"></script>
 
 
-
+<div class="bg">
     <div class="profile-card">
     <h3 class="bold"><b>โปรไฟล์ของฉัน</b></h3>
         <img src="{{$user->images ? asset('storage/' . $user->images) : asset('images/user-default.png')}}" class="profile-image">
@@ -52,58 +51,70 @@
         <div class="modal-body">
         <form action="{{ route('profile.update', $user->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
-          <div class="form-group">
-                <label for="username">ชื่อบัญชีผู้ใช้ :</label>
-                <input type="text" id="username" name="username" value="{{$user->username}}" placeholder="กรอกชื่อบัญชีผู้ใช้ใหม่">
-            </div>
-
-            <div class="form-group">
-                <label for="fristname">ชื่อจริง :</label>
-                <input type="text" id="fristname" name="fristname" value="{{$user->fristname}}" placeholder="กรอกชื่อ">
-            </div>
-
-            <div class="form-group">
-                <label for="lastname">นามสกุล :</label>
-                <input type="text" id="lastname" name="lastname" value="{{$user->lastname}}" placeholder="กรอกนามสกุล">
-            </div>
-
-            <div class="form-group">
-                <label for="gender">เพศ :</label>
-                <input type="radio" id="male" name="gender" value="ชาย">
-                <label for="male">ชาย</label><br>
-                <input type="radio" id="female" name="gender" value="หญิง" >
-                <label for="female">หญิง</label><br>
-                <input type="radio" id="other" name="gender" value="ไม่ระบุ" >
-                <label for="other">ไม่ระบุ</label><br>
-            </div>
-
-            <div class="form-group">
-                <label for="birthday">วัน/เดือน/ปีเกิด :</label>
-                <input type="date" id="birthday" name="birthday" value="{{$user->birthday}}">
-            </div>
-
-            <div class="form-group">
-                <label for="phone">เบอร์โทรศัพท์ :</label>
-                <input type="number" id="phone" name="phone" value="{{$user->phone}}" placeholder="กรอกเบอร์โทรศัพท์">
-            </div>
-
-            <div class="form-group">
-                <label for="Introduction">คำอธิบายตัวเอง :</label>
-                <input type="text" id="Introduction" name="Introduction" value="{{$user->Introduction}}" placeholder="กรอกคำอธิบายตัวเอง">
-            </div>
-
-            <div class="form-img">
-              <label for="images">เพิ่มรูปโปรไฟล์ :</label><br>
-              <input type="file" id="images" name="images">
-            </div>
-
-            <div class="form-buttons">
-                <button type="submit">ยืนยัน</button>
-            </div>
-        </form>
-        </div>
+  <div class="container">
+  <form action="" method="post" enctype="multipart/form-data">
+    <div class="form-left">
+      <div class="form-group">
+        <label for="username">ชื่อบัญชีผู้ใช้ :</label>
+        <input type="text" id="username" name="username" value="{{$user->username}}" placeholder="กรอกชื่อบัญชีผู้ใช้ใหม่">
       </div>
+
+      <div class="form-group">
+        <label for="fristname">ชื่อจริง :</label>
+        <input type="text" id="fristname" name="fristname" value="{{$user->fristname}}" placeholder="กรอกชื่อ">
+      </div>
+
+      <div class="form-group">
+        <label for="lastname">นามสกุล :</label>
+        <input type="text" id="lastname" name="lastname" value="{{$user->lastname}}" placeholder="กรอกนามสกุล">
+      </div>
+
+      <div class="form-group">
+        <label for="gender">เพศ :</label><br>
+        <input type="radio" id="male" name="gender" value="ชาย">
+        <label for="male">ชาย</label><br>
+        <input type="radio" id="female" name="gender" value="หญิง">
+        <label for="female">หญิง</label><br>
+        <input type="radio" id="other" name="gender" value="ไม่ระบุ">
+        <label for="other">ไม่ระบุ</label><br>
+      </div>
+
+      <!-- <div class="form-buttons">
+        <button type="submit">ยืนยัน</button>
+      </div> -->
+
     </div>
+
+    <div class="form-right">
+      <div class="form-group">
+        <label for="birthday">วัน/เดือน/ปีเกิด :</label>
+        <input type="date" id="birthday" name="birthday" value="{{$user->birthday}}">
+      </div>
+
+      <div class="form-group">
+        <label for="phone">เบอร์โทรศัพท์ :</label>
+        <input type="tell" id="phone" name="phone" value="{{$user->phone}}" placeholder="กรอกเบอร์โทรศัพท์">
+      </div>
+
+  <div class="form-group">
+    <label for="Introduction">คำอธิบายตัวเอง :</label><br>
+    <textarea id="Introduction" name="Introduction" placeholder="กรอกคำอธิบายตัวเอง" style="height: 100px;">{{$user->Introduction}}</textarea>
+  </div>
+
+
+      <div class="form-img">
+        <label for="images">เพิ่มรูปโปรไฟล์ :</label><br>
+        <input type="file" id="images" name="images">
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit">ยืนยัน</button>
+      </div>
+
+    </div>
+  </form>
+</div>
+
   </div>
 
     
