@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Party;
+use App\Models\Review;
 use App\Models\PartyType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -27,8 +28,6 @@ class AdminController extends Controller
 
     public function insert(Request $request)
     {
-        $partyType = PartyType::find($request->party_type_id);
-
         $newParty = new Party();
         $newParty->party_name = $request->party_name;
         $newParty->start_date = $request->start_date;
@@ -37,15 +36,30 @@ class AdminController extends Controller
         $newParty->end_time = $request->end_time;
         $newParty->location = $request->location;
         $newParty->province = $request->province;
-        $newParty->party_type_id = $partyType->id;
+        $newParty->party_type_id = $request->party_type_id;
         $newParty->detail = $request->detail;
         $newParty->numpeople = $request->numpeople;
-        $newParty->img = $request->img;
+        $newParty->contact = $request->contact; // ตั้งค่าการติดต่อ
+    
+        // อัปโหลดไฟล์ img
+        if ($request->hasFile('img')) {
+            $imageName = time() . '.' . $request->img->extension();
+            $request->img->move(public_path('party_images'), $imageName);
+            $newParty->img = $imageName; // ตั้งค่า img
+        }
+    
+        // อัปโหลดไฟล์ img_contact
+        if ($request->hasFile('img_contact')) {
+            $imageName = time() . '.' . $request->img_contact->extension();
+            $request->img_contact->move(public_path('contact_images'), $imageName);
+            $newParty->img_contact = $imageName; // ตั้งค่า img_contact
+        }
+    
         $newParty->save();
         $parties = Party::all();
-        // session(['party_id' => $newParty->id]);
         return redirect('admin/create');
     }
+    
 
     public function showEditPage()
     {
@@ -54,9 +68,10 @@ class AdminController extends Controller
     }
 
 
-    public function update(Request $request, $id){
-
-    $party = Party::find($id);
+    public function update(Request $request, $id)
+    {
+    
+        $party = Party::find($id);
     if ($request->has('party_name')) {
         $party->party_name = $request->party_name;
     }
@@ -86,14 +101,39 @@ class AdminController extends Controller
     if ($request->has('numpeople')) {
         $party->numpeople = $request->numpeople;
     }
-    if ($request->has('img')) {
-        $party->img = $request->img;
+    if ($request->has('contact')) {
+        $party->contact = $request->contact;
     }
+        // อัปโหลดไฟล์ img
+        if ($request->hasFile('img')) {
+            $imageName = time() . '.' . $request->img->extension();
+            $request->img->move(public_path('party_images'), $imageName);
+            $party->img = $imageName; // ตั้งค่า img
+        }
+    
+        // อัปโหลดไฟล์ img_contact
+        if ($request->hasFile('img_contact')) {
+            $imageName = time() . '.' . $request->img_contact->extension();
+            $request->img_contact->move(public_path('contact_images'), $imageName);
+            $party->img_contact = $imageName; // ตั้งค่า img_contact
+        }
+    
+        $party->save();
+        return redirect('admin/create');
+    }
+    
+public function delete($id){
+    $party= Party::find($id);
+    if($party){
+        $party->delete();
+        return redirect('admin/create');
+    }
+}  
 
-    $party->save();
-    return redirect('admin/create');
-}
-
+    public function showReview(){
+        $reviews = Review::all();
+        return view('admin/review', compact('reviews'));
+    }
 
     public function showUser(Request $request){
     $query = $request->input('query'); // รับค่าคำค้นหาจาก input

@@ -1,3 +1,5 @@
+@extends('layouts.myadmin')
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,35 +9,25 @@
   <link rel="stylesheet" href="/style_review.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <style>
-  </style>
+
+
 </head>
 <body>
   <div class="wrapper">
-    <!-- Manu -->
-    <aside>
-        <img src="/images/logo.png" alt="logo"> 
-        <span></span>
-      <ul>
-        <a href="{{url('/admin/showUser')}}"><li class="unuser"><img src="/images/ไอคอนคน.png" alt="" style="width: 15px; height: 25px;">User</li></a>
-        <a href="{{url('/admin/create)}}"><li class="user"><img src="/images/38.png" alt=""><b>Created party</b></li></a>
-        <a href="./reveiw.html"><li class="unuser"><img src="/images/รีวิว.png" alt="">Review</li></a>
-      </ul>
-    </aside>
+
 
     <!-- Main content -->
     <section>
     <h1>Reviews</h1>
-        
-        <!-- รายชื่อรีวิว -->
-        <!-- @foeach -->
+    @foreach($reviews as $review)
+    
             <table>
                 <tr>
                     <td class="profile">
                         <div class="img">
                             <img src="" alt="">
                         </div>
-                        <span class="name">ไก่จ๋า</span><br>
+                        <span class="name">{{ $attendance->users->username }}</span><br>
                         <span class="email">Kaija@kkumail.com</span>
                     </td>
                     <td class="text">
@@ -44,7 +36,7 @@
                     </td>
                 </tr>
             </table>
-        <!-- @endfoeach -->
+      @endforeach
 
     <!-- หน้าปาร์ตี้ขึึ้น -->
     <div class="card" style="width: 18rem; margin-right: 10px;">
@@ -59,3 +51,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
 </html>
+@endsection

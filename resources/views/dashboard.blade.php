@@ -7,36 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>หน้าแรก</title>
     <link rel="stylesheet" href="style_home.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <body>
-<nav>
-<div class="container-nav">
-        <ul>
-            <li><a href="{{ url('/dashboard') }}"><img src="/images/logo.png" alt=""></a></li>
 
-            @auth
-                <!-- เมื่อผู้ใช้เข้าสู่ระบบ -->
-                <li><a href="{{ url('/dashboard') }}" style="margin-left: 100px;">หน้าแรก</a></li>
-                <li><a href="{{ url('/favorites') }}">กิจกรรมของของฉัน</a></li>
-                <li><a href="#">รายการโปรด</a></li>
-                <li><a href="{{ url('/user/profile') }}">โปรไฟล์ของฉัน</a></li>
-                <li class="unuser">
-                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                        @csrf
-                        <button type="submit" style="background: none; border: none; padding: 0;">ออกจากระบบ</button>
-                    </form>
-                </li>
-            @else
-                <!-- < เมื่อผู้ใช้ยังไม่เข้าสู่ระบบ  -->
-                <li><a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">เข้าสู่ระบบ</a></li>
-                @if (Route::has('register'))
-                    <li><a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">ลงชื่อเข้าใช้</a></li>
-                @endif
-            @endauth
-        </ul>
-    </div>
-</nav>
 
     <section class="head">
         <div class="head-text">
@@ -45,7 +20,7 @@
                 ความอบอุ่นจากแสงแดดยามเช้า เสียงหัวเราะที่แบ่งปันกับเพื่อนๆ และความพึงพอใจจากการทำงานที่สำเร็จลุล่วง</p>
                 <div class="search-bar">
                 <form action="{{ route('searchParty') }}" method="GET">
-                <input type="text" id="search-input" name="search" placeholder="ค้นหา party ...">
+                <input type="text" id="search-input" name="search" placeholder="ค้นหา กิจกรรม ...">
                     <select id="province" name="province">
                         <option value="">จังหวัด</option>
                         <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
@@ -148,51 +123,71 @@
                     </div>
                 </td>
                 <td class="partys" id="party-list">
-                <!-- รายการปาร์ตี้จะถูกแสดงที่นี่ -->
-                @if(isset($activeParties) && count($activeParties) > 0)
-                    @foreach($activeParties as $party)
-                        <div class="party">
-                            <div class="image">
-                                <img src="/images/a2df086-dd63.jpg" alt="Event Image">
-                            </div>
-                            <div class="data">
-                                @php
-                                $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
-                                @endphp
-                                @if($daysLeft > 0)
-                                    <p style="color:red;"><b>เหลือเวลาอีก : </b> {{ $daysLeft }} วัน</p>
+    @if(isset($activeParties) && count($activeParties) > 0)
+        @foreach($activeParties as $party)
+            <div class="party">
+                <div class="image">
+                    <img src="{{ asset('party_images/' . $party->img) }}" alt="Event Image" width="200px">
+                </div>
+                <div class="data">
+                    <p>จำนวนผู้เข้าร่วมกิจกรรม: {{ $partiesCount[$party->id] ?? 0 }} / {{ $party->numpeople }} คน</p>
+
+                    @php
+                        $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
+                    @endphp
+
+                    @if($daysLeft > 0)
+                        <p style="color: #ee6464;">เหลือเวลารับสมัครอีก : {{ $daysLeft }} วัน</p>
+                    @else
+                        <p style="color: #ee6464;">หมดเวลารับสมัคร</p>
+                    @endif
+
+                    <h2>{{ $party->party_name }}</h2>
+                    <p>วันที่จัดกิจกรรม: {{ date('d F', strtotime($party->start_date)) }} {{ date('Y', strtotime($party->start_date)) + 543 }}</p>
+                    <p>สถานที่: {{ $party->location }}</p>
+                    <p>จังหวัด: {{ $party->province }}</p>
+
+                    <div class="buttons">
+                        @if($daysLeft > 0)
+                            @if(in_array($party->id, $joinAttendances))
+                                <!-- กรณีที่ผู้ใช้เข้าร่วมแล้ว -->
+                                <a class="join2 joined" style="color: green; cursor: default;">เข้าร่วมแล้ว</a>
+                            @else
+                                @auth
+                                    <!-- กรณีผู้ใช้ล็อกอินและยังไม่ได้เข้าร่วม -->
+                                    <a class="join" onclick="join({{ $party->id }})" style="color: blue; cursor: pointer;">เข้าร่วม</a>
                                 @else
-                                    <p style="color:red;"><b>หมดเวลารับสมัคร</b></p>
-                                @endif
-                                <h2>{{ $party->party_name }}</h2>
-                                <p><b>สถานที่ : </b> {{ $party->location }}</p>
-                                <p><b>เวลา : </b> {{ date('d F Y', strtotime($party->start_date)) }}</p>
+                                    <!-- กรณีผู้ใช้ไม่ได้ล็อกอิน -->
+                                    <a class="expired disabled" style="color: gray; cursor: not-allowed;">หมดเขตรับสมัคร</a>
+                                @endauth
+                            @endif
+                        @else
+                            <!-- กรณีหมดเขตรับสมัครแล้ว -->
+                            <a class="expired disabled" style="color: gray; cursor: not-allowed;">หมดเขตรับสมัคร</a>
+                        @endif
 
-                                @if($daysLeft > 0)
-                                <div class="buttons">
-                                    @auth
-                                        <button class="join">เข้าร่วม</button>
-                                    @endauth
-                                    <a href="{{ route('party.details', $party->id) }}" class="more">ข้อมูลเพิ่มเติม</a>
+                        <!-- ปุ่มข้อมูลเพิ่มเติมที่แสดงเสมอ -->
+                        <a href="{{ route('party.details', $party->id) }}" class="more">ข้อมูลเพิ่มเติม</a>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    @else
+        <p>ไม่มีปาร์ตี้ที่เปิดรับสมัครในขณะนี้</p>
+    @endif
 
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
-
-                @if(isset($pastParties) && count($pastParties) > 0)
+        @if(isset($pastParties) && count($pastParties) > 0)
                     @foreach($pastParties as $party)
                         <div class="party">
                             <div class="image">
-                                <img src="/images/a2df086-dd63.jpg" alt="Event Image">
+                            <img src="{{ asset('party_images/' . $party->img) }}" alt="Even Image" width="200px">
                             </div>
                             <div class="data">
-                                <p style="color:red;"><b>หมดเวลารับสมัคร</b></p>
+                                <p style="color: #ee6464;">หมดเวลารับสมัคร</p>
                                 <h2>{{ $party->party_name }}</h2>
-                                <p><b>เวลา : </b> {{ date('d F Y', strtotime($party->start_date )) }}</p>
-                                <p><b>สถานที่ : </b> {{ $party->location }}</p>
+                                <p>วันที่จัดกิจกรรม :  {{ date('d F', strtotime($party->start_date)) }} {{ date('Y', strtotime($party->start_date)) + 543 }}</p>
+                                <p>สถานที่ : {{ $party->location }}</p>
+                                <p>จังหวัด :  {{ $party->province }}</p>
                             </div>
                         </div>
                     @endforeach
@@ -201,43 +196,63 @@
         </tr>
     </table>
 </section>
+<script>
+
+        function join(id){
+            if(confirm("คุณต้องการเข้าร่วมกิจกรรมนี้ใช่หรือไม่")){
+                window.location.href="/join/" +id;
+            }
+
+        }
 
 
-    <footer>
-        <p>&copy; 2024 Join Party. All rights reserved.</p>
-    </footer>
-    <script>
+
+
+
+
+
     $(document).ready(function() {
         // เมื่อพิมพ์ในช่องค้นหา
         $('#search-input, #province').on('input', function() {
             var query = $('#search-input').val();
             var province = $('#province').val();
 
-            if(query.length > 0) {
+            if (query.length > 0 || province.length > 0) {
                 // ส่งคำขอ AJAX เมื่อมีข้อความในช่องค้นหา
                 $.ajax({
                     url: "{{ route('searchParty') }}",  // Route ที่ไปยังฟังก์ชันค้นหาปาร์ตี้
                     method: 'GET',
-                    data: { query: query },
+                    data: { query: query, province: province },
                     success: function(data) {
                         $('#party-list').empty(); // ล้างข้อมูลปาร์ตี้เดิมออก
 
                         if(data.length > 0) {
                             // แสดงผลปาร์ตี้ที่ค้นพบ
                             $.each(data, function(index, party) {
-                                var formattedDate = new Date(party.start_date).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                                $('#party-list').append(`
+                                var daysLeft = Math.floor((new Date(party.start_date) - new Date()) / 86400000); // คำนวณวัน
+
+                                // สร้าง HTML เพื่อแสดงปาร์ตี้
+                                var partyHtml = `
                                     <div class="party">
                                         <div class="image">
-                                            <img src="/images/ไอคอนคน.png" alt="Event Image">
+                                            <img src="/party_images/${party.img}" alt="Event Image" width="200px">
                                         </div>
                                         <div class="data">
+                                            ${daysLeft > 0 ? `<p style="color:red;"><b>เหลือเวลาอีก : </b> ${daysLeft} วัน</p>` : `<p style="color:red;"><b>หมดเวลารับสมัคร</b></p>`}
                                             <h2>${party.party_name}</h2>
-                                            <p><b>สถานที่:</b> ${party.location}</p>
-                                            <p><b>วันที่:</b> ${formattedDate}</p>
+                                            <p><b>สถานที่ :</b> ${party.location}</p>
+                                            <p><b>เวลา :</b> ${new Date(party.start_date).toLocaleDateString('th-TH', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                                            ${daysLeft > 0 ? `
+                                            <div class="buttons">
+                                                @auth
+                                                    <button class="join">เข้าร่วม</button>
+                                                @endauth
+                                                <a href="/party/${party.id}/details" class="more">ข้อมูลเพิ่มเติม</a>
+                                            </div>` : ''}
                                         </div>
                                     </div>
-                                `);
+                                `;
+                                $('#party-list').append(partyHtml);
                             });
                         } else {
                             // แสดงข้อความเมื่อไม่พบปาร์ตี้
@@ -253,19 +268,30 @@
                     success: function(data) {
                         $('#party-list').empty(); // ล้างข้อมูลปาร์ตี้เดิมออก
                         $.each(data, function(index, party) {
-                            var formattedDate = new Date(party.start_date).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                            $('#party-list').append(`
+                            var daysLeft = Math.floor((new Date(party.start_date) - new Date()) / 86400000); // คำนวณวัน
+
+                            // สร้าง HTML เพื่อแสดงปาร์ตี้ทั้งหมด
+                            var partyHtml = `
                                 <div class="party">
                                     <div class="image">
-                                        <img src="/images/ไอคอนคน.png" alt="Event Image">
+                                        <img src="/party_images/${party.img}" alt="Event Image" width="200px">
                                     </div>
                                     <div class="data">
+                                        ${daysLeft > 0 ? `<p style="color:red;"><b>เหลือเวลาอีก : </b> ${daysLeft} วัน</p>` : `<p style="color:red;"><b>หมดเวลารับสมัคร</b></p>`}
                                         <h2>${party.party_name}</h2>
-                                        <p><b>สถานที่:</b> ${party.location}</p>
-                                        <p><b>วันที่:</b> ${formattedDate}</p>
+                                        <p><b>สถานที่ :</b> ${party.location}</p>
+                                        <p><b>เวลา :</b> ${new Date(party.start_date).toLocaleDateString('th-TH', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                                        ${daysLeft > 0 ? `
+                                        <div class="buttons">
+                                            @auth
+                                                <button class="join">เข้าร่วม</button>
+                                            @endauth
+                                            <a href="/party/${party.id}/details" class="more">ข้อมูลเพิ่มเติม</a>
+                                        </div>` : ''}
                                     </div>
                                 </div>
-                            `);
+                            `;
+                            $('#party-list').append(partyHtml);
                         });
                     }
                 });

@@ -19,7 +19,7 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-       
+
         if (!Auth::check()) { // ตรวจสอบการเข้าสู่ระบบ
             return redirect()->route('error');
         }

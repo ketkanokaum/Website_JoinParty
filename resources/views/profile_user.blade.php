@@ -16,7 +16,7 @@
 <div class="bg">
     <div class="profile-card">
     <h3 class="bold"><b>โปรไฟล์ของฉัน</b></h3>
-        <img src="{{$user->images ? asset('storage/' . $user->images) : asset('images/user-default.png')}}" class="profile-image">
+    <img src="{{ $user->images ? asset('storage/users_images/' . $user->images) : asset('images/user-default.png') }}" class="profile-image" alt="User Profile Image">
         <div class="profile-info">
             <h2>{{$user->username}}</h2>
             <p><b>{{ $user->fristname . ' ' . $user->lastname }}</b></p>
@@ -71,17 +71,13 @@
 
       <div class="form-group">
         <label for="gender">เพศ :</label><br>
-        <input type="radio" id="male" name="gender" value="ชาย">
+        <input type="radio" id="male" name="gender" value="ชาย"{{ $user->gender == 'ชาย' ? 'checked' : '' }}>
         <label for="male">ชาย</label><br>
-        <input type="radio" id="female" name="gender" value="หญิง">
+        <input type="radio" id="female" name="gender" value="หญิง" {{ $user->gender == 'หญิง' ? 'checked' : '' }}>
         <label for="female">หญิง</label><br>
-        <input type="radio" id="other" name="gender" value="ไม่ระบุ">
+        <input type="radio" id="other" name="gender" value="ไม่ระบุ" {{ $user->gender == 'ไม่ระบุ' ? 'checked' : '' }}>
         <label for="other">ไม่ระบุ</label><br>
       </div>
-
-      <!-- <div class="form-buttons">
-        <button type="submit">ยืนยัน</button>
-      </div> -->
 
     </div>
 
@@ -104,20 +100,32 @@
 
       <div class="form-img">
         <label for="images">เพิ่มรูปโปรไฟล์ :</label><br>
-        <input type="file" id="images" name="images">
-      </div>
+    <!-- @if($user->images) -->
+        <img src="{{ asset('storage/users_images/' . $user->images) }}" alt="User Profile Image" class="profile-image">
+    <!-- @else
+        <img src="{{ asset('images/user-default.png') }}" alt="Default Profile Image" class="profile-image">
+    @endif -->
+
+    <input type="file" id="images" name="images">
+    </div>
 
       <div class="form-buttons">
-        <button type="submit">ยืนยัน</button>
+        <button type="submit"onclick="success()" >ยืนยัน</button>
       </div>
 
     </div>
   </form>
 </div>
-
   </div>
 
-    
+<script>
+
+function success(){
+  alert("แก้ไขโปรไฟล์เรียบร้อยแล้ว")
+}
+
+        
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 

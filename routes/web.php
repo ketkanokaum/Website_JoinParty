@@ -6,7 +6,7 @@ use App\Http\Middleware\CheckAdmin;
 use App\Http\Controllers\ManageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FavoriteController;
-
+use App\Http\Controllers\MypartyController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,6 +44,8 @@ Route::match(['get', 'post'],'/admin/dashboard', [AdminController::class, 'showU
 Route::get('/admin/showUser', [AdminController::class, 'showUser'])->name('showUser.users');
 Route::get('/admin/edit/', [AdminController::class, 'showEditPage']);
 Route::post('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
+Route::get('/admin/delete/{id}',[AdminController::class, 'delete']);
+Route::get('/admin/review', [AdminController::class, 'showReview']);
 });
 
 
@@ -54,5 +56,12 @@ Route::get('/user/profile', [ManageController::class, 'showProfile'])->name('pro
 Route::get('/user/editProfile/', [ManageController::class, 'showEditProfile']);
 Route::post('/user/edit-profile/{id}', [ManageController::class, 'updateProfile'])->name('profile.update');
 Route::post('/add-to-favorite', [FavoriteController::class, 'addToFavorite'])->name('add.favorite');
-Route::post('/remove-favorite{id}', [FavoriteController::class, 'addToFavorite'])->name('remove.favorite');
+Route::post('/remove-favorite/{id}', [FavoriteController::class, 'removeFavorite'])->name('remove.favorite');
 Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites');
+Route::get('/myparty', [MypartyController::class, 'index'])->name('myparty');
+Route::get('/join/{id}', [MypartyController::class, 'joinAttendance'])->name('join');
+// Route::get('/people', [ManageController::class, 'countJoin']);
+Route::post('/reviews', [MypartyController::class, 'reviews'])->name('reviews.store');
+
+
+

@@ -13,9 +13,7 @@ class Party extends Model
 
     protected $table = 'parties';
 
-    public function attendances(){
-        return $this->hasMany(Attendance::class);
-    }
+
 
     public function attendees(){  //ปาร์ตี้กับuser
         return $this->belongsToMany(User::class, 'attendances')

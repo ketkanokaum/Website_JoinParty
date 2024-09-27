@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Party;
-use App\Models\Favorite;
+use App\Models\Attendance;
+use Illuminate\Support\Facades\DB;
 class ManageController extends Controller
 {
     public function showProfile()
@@ -44,9 +46,19 @@ class ManageController extends Controller
     if ($request->has('Introduction')) {
         $users->Introduction = $request->Introduction;
     }
-    if ($request->has('images')) {
-        $users->images = $request->images;
+    if ($request->hasFile('img')) {
+        // ตรวจสอบว่าผู้ใช้มีรูปภาพเดิมอยู่หรือไม่ และลบรูปภาพเดิมหากมี
+        if ($users->img && Storage::exists('public/users_images/' . $users->img)) {
+            Storage::delete('public/users_images/' . $users->img);
+        }
+        // สร้างชื่อไฟล์ใหม่โดยใช้เวลาปัจจุบันและนามสกุลของไฟล์
+        $imageName = time() . '.' . $request->img->extension();
+        // จัดเก็บไฟล์ไปยังโฟลเดอร์ที่ต้องการ โดยใช้ Storage::putFile
+        $path = $request->file('img')->storeAs('public/users_images', $imageName);
+        $users->img = $imageName;
+        $users->save();
     }
+    
     $users->save();
     return redirect()->route('profile.show');
 }
@@ -58,10 +70,12 @@ public function showParty()
     $activeParties = Party::where('start_date', '>', date('Y-m-d H:i:s', $time))->get();
     // ดึงปาร์ตี้ที่หมดเวลารับสมัครแล้ว (วันที่อยู่ในอดีต)
     $pastParties = Party::where('start_date', '<=', date('Y-m-d H:i:s', $time))->get();
+    $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
 
     return view('dashboard', [
         'activeParties' => $activeParties,
-        'pastParties' => $pastParties
+        'pastParties' => $pastParties,
+        'joinAttendances' =>$joinAttendances
     ]);
 }
 
@@ -93,12 +107,29 @@ public function searchParty(Request $request)
 
 
 public function viewPartyDetails($id){
-    $party = Party::find($id);
-    $isFavorite = Favorite::where('user_id', Auth::id())
-                            ->where('party_id', $id)
-                            ->exists(); //ตรวจสอบว่ามีรายการโปรดนี้หรือไม่
-    return view('detailparty', compact('party','isFavorite'));
+    $party = Party::findOrFail($id);
+    $isFavorite = DB::table('favorites')
+                ->where('user_id', Auth::id())
+                ->where('party_id', $id)
+                ->exists(); //ตรวจสอบว่ามีรายการโปรดนี้หรือไม่
+    $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
+
+    return view('detailparty', compact('party','isFavorite','joinAttendances'));
 }
+
+// public function countJoin()
+// {
+//     $activeParties = Party::all();
+//     $partiesCount = [];
+//     foreach ($activeParties as $party) {
+//         $partiesCount[$party->id] =  $partiesCount[$party->id] = $party->attendees()->count();
+
+//     }
+//     return view('dashboard', compact('activeParties', 'partiesCount'));
+// }
+
+
+
 
     }
 

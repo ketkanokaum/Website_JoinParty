@@ -30,6 +30,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('favorites');
+        Schema::dropIfExists('favorites', function (Blueprint $table) {
+        $table->dropSoftDeletes();
+    });
     }
 };

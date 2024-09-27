@@ -21,11 +21,13 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->string('location');
-            $table->string('detail');
+            $table->string('detail',2000);
             $table->string('province');
             $table->integer('numpeople');
             $table->string('img');
             $table->foreignId('party_type_id')->constrained()->onDelete('cascade');
+            $table->string('contact',1000);
+            $table->string('img_contact');
             $table->timestamps();
             $table->softDeletes();
         });

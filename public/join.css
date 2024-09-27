@@ -19,6 +19,9 @@ nav {
     position: relative;
 }
 
+.join {
+    background-color: #ffd28c;
+}
 
 .card {
     background: #fff;
@@ -79,6 +82,21 @@ ul li {
 .shadow {
     align-items: center;
     margin-top: 5em;
+}
+
+
+.joined {
+    color: green;
+    cursor: default;
+}
+
+.join2{
+    
+    background-color: #8fc193;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+
 }
 
 

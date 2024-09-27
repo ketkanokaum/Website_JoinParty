@@ -85,3 +85,11 @@ ul li {
 .card {
     border-radius: 100px;
 }
+section span {
+    font-size: 4rem;
+    padding: 10px;
+    margin-top: 150px;
+    margin-left: 300px;
+    border-radius: 10px;
+    color: #999;
+}

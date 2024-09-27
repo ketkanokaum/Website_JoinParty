@@ -30,10 +30,6 @@ class User extends Authenticatable
         return $this->usertype === 'admin';
     }
 
-    public function attendances(){
-        return $this->hasMany(Attendance::class);
-    }
-
     public function attendedParties(){  //กำหนดความสัมพันธ์attendedกับParties
         return $this->belongsToMany(Party::class, 'attendances')
                     ->withTimestamps();

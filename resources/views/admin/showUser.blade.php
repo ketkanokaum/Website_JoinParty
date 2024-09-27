@@ -26,7 +26,7 @@
     <h1>User</h1>
     <div class="search">
     <input id="search-input" type="text" placeholder="Search by first or last name" class="d-inline-flex focus-ring focus-ring-danger py-1 px-2 text-decoration-none border rounded-2">
-    <button id="search-btn" class="btn btn-primary">GO</button>
+    <input id="submit-input" type="submit" value="ค้นหา">
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -121,7 +121,7 @@
             <td>{{$user->id}} </td>
             <td>{{ $user->fristname . ' ' . $user->lastname }}</td>
             <td>{{$user->email}} </td>
-            <td>{{ strftime('%d %B %Y', strtotime($user->created_at)) }}</td>
+            <td> {{ date('d F', strtotime($user->created_at)) }} {{ date('Y', strtotime($user->created_at)) + 543 }}</td>
             </tr>
         @endforeach
         </tbody>

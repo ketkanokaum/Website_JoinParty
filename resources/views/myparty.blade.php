@@ -3,6 +3,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,290 +17,120 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/style_myparty.css">
 </head>
-<body>
-<div class="container mt-5">
 
-    <div class="container mt-5">
-        <div class="row">
-        @foreach($favorites as $favorite)
-            <div class="col-md-4">
-                <div class="card party-card">
-                    <img src="img-join-to-party/t8db9k4_home-decor-650_625x300_10_August_21.jpg" class="card-img-top party-img" alt="Party Image">
-                    <div class="card-body">
-                        <h5 class="card-title">{{$favorite->party->party_name }}</h5>
-                        <p class="card-text">{{$favorite->party->date }}</p>
+<body>
+
+<div class="row">
+    
+        @if(isset($myparty) && $myparty->count() > 0)
+            @php
+                $sortParties = $myparty->sortBy(function($attendance) {
+                    return strtotime($attendance->party->start_date);
+                });
+            @endphp
+
+            @foreach($sortParties as $attendance)
+            <div class="col col-lg-4">
+            <div class="card">
+                    <img src="{{ asset('party_images/' . $attendance->party->img) }}" alt="Event Image" class="card-img-top" style="width: 100%; object-fit: cover;">
+                </div>
+                <div class="centent">
+                    <h5 class="card-title" style="font-weight: bold; color: #333;">{{ $attendance->party->party_name }}</h5>
+                    <ul class="list-unstyled">
+                        <li>วันที่จัดกิจกรรม : <br>
+                            @if (date('Y-m-d', strtotime($attendance->party->start_date)) == date('Y-m-d', strtotime($attendance->party->end_date)))
+                                {{ date('d F', strtotime($attendance->party->start_date)) }} {{ date('Y', strtotime($attendance->party->start_date)) + 543 }}
+                            @else
+                                {{ date('d F', strtotime($attendance->party->start_date)) }} {{ date('Y', strtotime($attendance->party->start_date)) + 543 }} - 
+                                {{ date('d F', strtotime($attendance->party->end_date)) }} {{ date('Y', strtotime($attendance->party->end_date)) + 543 }}
+                            @endif
+                        </li>
                         @php
-                                $daysLeft = floor((strtotime($favorite->party->date) - time()) / 86400);
-                                @endphp
-                                @if($daysLeft > 0)
-                                    <p style="color:red;"><b>เหลือเวลาอีก : </b> {{ $daysLeft }} วัน</p>
-                                @else
-                                    <p style="color:red;"><b>หมดเวลารับสมัคร</b></p>
-                                @endif
-                        <p class="card-text">สถานที่:{{$favorite->party->location }}</p>
-                        <p class="card-text">เวลา: ตั้งแต่เวลา{{$favorite->party->start_time}} ถึง {{$favorite->party->end_time}}.</p>
-                        <div class="d-flex justify-content-between">
-                            <i id="favorite-icon" class="favorite-icon bi bi-heart" style="font-size: 1.5rem; cursor: pointer;"></i>
-                            <div class="d-flex">
-                                <!-- review-btn ต้องเขียนเพิ่มตามจำนวน card -->
-                                <button class="btn btn-secondary review-btn" id="review-btn-1">รีวิว</button>
-                                <button class="btn btn-warning data-btn me-2" data-bs-toggle="modal" data-bs-target="#dataModal1">ข้อมูลเพิ่มเติม</button>
-                                <button class="btn btn-success">เข้าร่วม</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-            <!-- Modal สำหรับการ์ด 1 -->
-            <!-- ต้องกำหนด id, aria-labelledby จะได้เปิดหน้าต่างย่อยของแต่ละ card -->
-            <div class="modal fade" id="reviewModal1" tabindex="-1" aria-labelledby="reviewModalLabel1" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <!-- ต้องกำหนด id -->
-                            <h3 class="modal-title" id="reviewModalLabel1">รีวิวกิจกรรม</h3>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container mt-3">
-                                <div class="row g-4">
-                                    <div class="col-md-6">
-                                        <img src="img-join-to-party/t8db9k4_home-decor-650_625x300_10_August_21.jpg" class="img-fluid rounded" alt="Party Image">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h2 class="mb-3">มาสิ มาปาร์ตี้</h2>
-                                        <p class="text-muted">วันพฤหัสบดี ที่ 5 ธันวาคม 2567</p>
-                                        <div class="mb-3">
-                                            <!-- ต้องกำหนด rating ของแต่ละ card -->
-                                            <label for="rating1" class="form-label">คะแนน</label>
-                                            <select id="rating1" class="form-select">
-                                                <option value="" disabled selected>เลือกคะแนน</option>
-                                                <option value="5">5 - ดีเยี่ยม</option>
-                                                <option value="4">4 - ดี</option>
-                                                <option value="3">3 - พอใช้</option>
-                                                <option value="2">2 - ไม่ดี</option>
-                                                <option value="1">1 - แย่</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="review-text1" class="form-label">ความคิดเห็น</label>
-                                            <textarea id="review-text1" class="form-control" rows="4" placeholder="เขียนความคิดเห็นของคุณที่นี่..."></textarea>
-                                        </div>
-                                        <button type="submit" id="submit-btn1" class="btn btn-primary btn-disabled">ส่งรีวิว</button>
-                                    </div>
+                            $daysLeft = floor((strtotime($attendance->party->start_date) - time()) / 86400);
+                        @endphp
+                        @if($daysLeft > 0)
+                            <li style="color: #ff4b4b;">กิจกรรมจะเริ่มอีก: {{ $daysLeft }} วัน</li>
+                        @else
+                            <li style="color: #888;">กิจกรรมสิ้นสุดแล้ว</li>
+                        @endif
+                    </ul>
+
+                    <!-- ปุ่มแสดงป๊อปอัพข้อมูลการติดต่อ -->
+                    <button type="button" class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#contactModal{{ $attendance->party->id }}">
+                        ข้อมูลการติดต่อ
+                    </button>
+
+                    <!-- Modal ข้อมูลการติดต่อ -->
+                    <div class="modal fade" id="contactModal{{ $attendance->party->id }}" tabindex="-1" aria-labelledby="contactModalLabel{{ $attendance->party->id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="contactModalLabel{{ $attendance->party->id }}">ข้อมูลการติดต่อ</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{ $attendance->party->contact }}</p>
+                                    <p>แอดเข้ากลุ่มไลน์:</p>
+                                    <img src="{{ asset('contact_images/' . $attendance->party->img_contact) }}" alt="Contact Image" class="img-fluid" style="border-radius: 8px;">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!-- End Card 1 -->
-            <!-- Card 2 -->
-            <div class="col-md-4">
-                <div class="card party-card">
-                    <img src="img-join-to-party/three-hands-holding-young-plant-planting.jpg" class="card-img-top party-img" alt="Party Image">
-                    <div class="card-body">
-                        <h5 class="card-title">ปลูกต้นไม้</h5>
-                        <p class="card-text">วันพฤหัสบดี ที่ 5 ธันวาคม 2567</p>
-                        <p class="countdown text-danger">เวลาคงเหลือ: ... วัน</p>
-                        <p class="card-text">สถานที่: ป่าชายเลนบางปู</p>
-                        <p class="card-text">เวลา: 8:30 น.</p>
-                        <div class="d-flex justify-content-between">
-                            <i id="favorite-icon" class="favorite-icon bi bi-heart" style="font-size: 1.5rem; cursor: pointer;"></i>
-                            <div class="d-flex">
-                                <!-- review-btn ต้องเขียนเพิ่มตามจำนวน card -->
-                                <button class="btn btn-secondary review-btn" id="review-btn-2">รีวิว</button>
-                                <button class="btn btn-warning me-2">ข้อมูลเพิ่มเติม</button>
-                                <button class="btn btn-success">เข้าร่วม</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Modal สำหรับการ์ด 2 -->
-            <!-- ต้องกำหนด id, aria-labelledby จะได้เปิดหน้าต่างย่อยของแต่ละ card -->
-            <div class="modal fade" id="reviewModal2" tabindex="-1" aria-labelledby="reviewModalLabel2" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <!-- ต้องกำหนด id -->
-                            <h3 class="modal-title" id="reviewModalLabel2">รีวิวกิจกรรม</h3>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container mt-3">
-                                <div class="row g-4">
-                                    <div class="col-md-6">
-                                        <img src="img-join-to-party/three-hands-holding-young-plant-planting.jpg" class="img-fluid rounded" alt="Party Image">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h2 class="mb-3">ปลูกต้นไม้</h2>
-                                        <p class="text-muted">วันพฤหัสบดี ที่ 5 ธันวาคม 2567</p>
-                                        <div class="mb-3">
-                                            <!-- ต้องกำหนด rating ของแต่ละ card -->
-                                            <label for="rating2" class="form-label">คะแนน</label>
-                                            <select id="rating2" class="form-select">
-                                                <option value="" disabled selected>เลือกคะแนน</option>
-                                                <option value="5">5 - ดีเยี่ยม</option>
-                                                <option value="4">4 - ดี</option>
-                                                <option value="3">3 - พอใช้</option>
-                                                <option value="2">2 - ไม่ดี</option>
-                                                <option value="1">1 - แย่</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="review-text2" class="form-label">ความคิดเห็น</label>
-                                            <textarea id="review-text2" class="form-control" rows="4" placeholder="เขียนความคิดเห็นของคุณที่นี่..."></textarea>
-                                        </div>
-                                        <button type="submit" id="submit-btn2" class="btn btn-primary btn-disabled">ส่งรีวิว</button>
-                                    </div>
+
+                    <!-- ปุ่มแสดงป๊อปอัพรีวิว -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal{{ $attendance->party->id }}">
+                        รีวิว
+                    </button>
+
+                    <!-- Modal รีวิว -->
+                    <div class="modal fade" id="reviewModal{{ $attendance->party->id }}" tabindex="-1" aria-labelledby="reviewModalLabel{{ $attendance->party->id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="reviewModalLabel{{ $attendance->party->id }}">รีวิวกิจกรรม</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End Card 2 -->
-            <!-- Card 3 -->
-            <div class="col-md-4">
-                <div class="card party-card">
-                    <img src="img-join-to-party/iq451e01af0c5fcbf2e4457c9a8166179e.jpg" class="card-img-top party-img" alt="Party Image">
-                    <div class="card-body">
-                        <h5 class="card-title">จิตอาสาเก็บขยะหาดดงตาล</h5>
-                        <p class="card-text">วันพุธ ที่ 31 สิงหาคม 2567</p>
-                        <p class="countdown text-danger">เวลาคงเหลือ: ... วัน</p>
-                        <p class="card-text">สถานที่: เกาะยอ สัตหีบ</p>
-                        <p class="card-text">เวลา: 9:00 น.</p>
-                        <div class="d-flex justify-content-between">
-                            <i id="favorite-icon" class="favorite-icon bi bi-heart" style="font-size: 1.5rem; cursor: pointer;"></i>
-                            <div class="d-flex">
-                                <!-- review-btn ต้องเขียนเพิ่มตามจำนวน card -->
-                                <button class="btn btn-secondary review-btn" id="review-btn-3">รีวิว</button>
-                                <button class="btn btn-warning me-2">ข้อมูลเพิ่มเติม</button>
-                                <button class="btn btn-success">เข้าร่วม</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Modal สำหรับการ์ด 3 -->
-            <!-- ต้องกำหนด id, aria-labelledby จะได้เปิดหน้าต่างย่อยของแต่ละ card -->
-            <div class="modal fade" id="reviewModal3" tabindex="-1" aria-labelledby="reviewModalLabel3" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <!-- ต้องกำหนด id -->
-                            <h3 class="modal-title" id="reviewModalLabel3">รีวิวกิจกรรม</h3>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container mt-3">
-                                <div class="row g-4">
-                                    <div class="col-md-6">
-                                        <img src="img-join-to-party/iq451e01af0c5fcbf2e4457c9a8166179e.jpg" class="img-fluid rounded" alt="Party Image">
+                                <div class="modal-body">
+                                    <h2 class="mb-3">{{ $attendance->party->party_name }}</h2>
+                                    <form action="{{ route('reviews.store') }}" method="POST">
+                                    @csrf 
+                                    <input type="hidden" name="party_id" value="{{ $attendance->party->id }}">
+                                    <div class="mb-3">
+                                        <label for="rating{{ $attendance->party->id }}" class="form-label">คะแนน</label>
+                                        <select id="rating{{ $attendance->party->id }}" class="form-select" require>
+                                            <option value="" disabled selected>เลือกคะแนน</option>
+                                            <option value="5">5 - ดีเยี่ยม</option>
+                                            <option value="4">4 - ดี</option>
+                                            <option value="3">3 - พอใช้</option>
+                                            <option value="2">2 - ไม่ดี</option>
+                                            <option value="1">1 - แย่</option>
+                                        </select>
                                     </div>
-                                    <div class="col-md-6">
-                                        <h2 class="mb-3">จิตอาสาเก็บขยะหาดดงตาล</h2>
-                                        <p class="text-muted">วันพุธ ที่ 31 สิงหาคม 2567</p>
-                                        <div class="mb-3">
-                                            <!-- ต้องกำหนด rating ของแต่ละ card -->
-                                            <label for="rating3" class="form-label">คะแนน</label>
-                                            <select id="rating3" class="form-select">
-                                                <option value="" disabled selected>เลือกคะแนน</option>
-                                                <option value="5">5 - ดีเยี่ยม</option>
-                                                <option value="4">4 - ดี</option>
-                                                <option value="3">3 - พอใช้</option>
-                                                <option value="2">2 - ไม่ดี</option>
-                                                <option value="1">1 - แย่</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="review-text3" class="form-label">ความคิดเห็น</label>
-                                            <textarea id="review-text3" class="form-control" rows="4" placeholder="เขียนความคิดเห็นของคุณที่นี่..."></textarea>
-                                        </div>
-                                        <button type="submit" id="submit-btn3" class="btn btn-primary btn-disabled">ส่งรีวิว</button>
+                                    <div class="mb-3">
+                                        <label for="review-text{{ $attendance->party->id }}" class="form-label">ความคิดเห็น</label>
+                                        <textarea id="review-text{{ $attendance->party->id }}" class="form-control" rows="4" placeholder="เขียนความคิดเห็นของคุณที่นี่..."></textarea>
                                     </div>
+                                    <button type="submit" class="btn btn-primary">ส่งรีวิว</button>
                                 </div>
+                                <!-- <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- End Card 3 -->
-            
-            <!-- Card 4 -->
-            <div class="col-md-4">
-                <div class="card party-card">
-                    <img src="img-join-to-party/gettyimages-1183414292-1-_slide-30784f99ac10f059c242d37e91d05ead475854f4.jpg" class="card-img-top party-img" alt="Party Image">
-                    <div class="card-body">
-                        <h5 class="card-title">test</h5>
-                        <p class="card-text">วันพุธ ที่ 31 ธันวาคม 2566</p>
-                        <p class="countdown text-danger">เวลาคงเหลือ: ... วัน</p>
-                        <p class="card-text">สถานที่: มหาวิทยาลัยขอนแก่น</p>
-                        <p class="card-text">เวลา: 8:00 น.</p>
-                        <div class="d-flex justify-content-between">
-                            <i id="favorite-icon" class="favorite-icon bi bi-heart" style="font-size: 1.5rem; cursor: pointer;"></i>
-                            <div class="d-flex">
-                                <!-- review-btn ต้องเขียนเพิ่มตามจำนวน card -->
-                                <button class="btn btn-secondary review-btn" id="review-btn-4">รีวิว</button>
-                                <button class="btn btn-warning me-2">ข้อมูลเพิ่มเติม</button>
-                                <button class="btn btn-success">เข้าร่วม</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Modal สำหรับการ์ด 4 -->
-            <!-- ต้องกำหนด id, aria-labelledby จะได้เปิดหน้าต่างย่อยของแต่ละ card -->
-            <div class="modal fade" id="reviewModal4" tabindex="-1" aria-labelledby="reviewModalLabel4" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <!-- ต้องกำหนด id -->
-                            <h3 class="modal-title" id="reviewModalLabel4">รีวิวกิจกรรม</h3>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container mt-3">
-                                <div class="row g-4">
-                                    <div class="col-md-6">
-                                        <img src="img-join-to-party/gettyimages-1183414292-1-_slide-30784f99ac10f059c242d37e91d05ead475854f4.jpg" class="img-fluid rounded" alt="Party Image">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h2 class="mb-3">test</h2>
-                                        <p class="text-muted">วันพุธ ที่ 31 ธันวาคม 2566</p>
-                                        <div class="mb-3">
-                                            <!-- ต้องกำหนด rating ของแต่ละ card -->
-                                            <label for="rating4" class="form-label">คะแนน</label>
-                                            <select id="rating4" class="form-select">
-                                                <option value="" disabled selected>เลือกคะแนน</option>
-                                                <option value="5">5 - ดีเยี่ยม</option>
-                                                <option value="4">4 - ดี</option>
-                                                <option value="3">3 - พอใช้</option>
-                                                <option value="2">2 - ไม่ดี</option>
-                                                <option value="1">1 - แย่</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="review-text3" class="form-label">ความคิดเห็น</label>
-                                            <textarea id="review-text3" class="form-control" rows="4" placeholder="เขียนความคิดเห็นของคุณที่นี่..."></textarea>
-                                        </div>
-                                        <button type="submit" id="submit-btn3" class="btn btn-primary btn-disabled">ส่งรีวิว</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End Card 4 -->
-            
+        @endforeach
+    @else
+        <div class="col-12 text-center">
+            <p>ไม่มีกิจกรรม</p>
         </div>
-    </div>
+    @endif
 </div>
-    
-    
+
 </body>
 </html>
 @endsection
