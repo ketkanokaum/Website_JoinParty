@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('party_id')->constrained('parties')->onDelete('cascade');
             $table->text('review');
-            $table->integer('rating')->nullable(); // ถ้าคุณต้องการให้มีการให้คะแนน
+            $table->integer('rating')->nullable(); 
             $table->timestamps();
         });
     }

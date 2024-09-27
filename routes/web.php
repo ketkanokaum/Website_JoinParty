@@ -61,7 +61,7 @@ Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites'
 Route::get('/myparty', [MypartyController::class, 'index'])->name('myparty');
 Route::get('/join/{id}', [MypartyController::class, 'joinAttendance'])->name('join');
 // Route::get('/people', [ManageController::class, 'countJoin']);
-Route::post('/reviews', [MypartyController::class, 'reviews'])->name('reviews.store');
+Route::post('/reviews', [AdminController::class, 'store'])->name('reviews.store');
 
 
 

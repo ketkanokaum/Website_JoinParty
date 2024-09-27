@@ -16,35 +16,74 @@
   <div class="wrapper">
 
 
-    <!-- Main content -->
-    <section>
-    <h1>Reviews</h1>
-    @foreach($reviews as $review)
+    <!-- หน้าปาร์ตี้ขึึ้น
+    <div class="card" style="width: 18rem; margin-right: 10px;">
+    <div class="card-body">
+    @if($reviews->isNotEmpty() && $reviews->first()->party)
+            ดึงข้อมูลปาร์ตี้จากรีวิวแรกหากมี -->
+            <!-- <h5 class="card-title">{{ $reviews->first()->party->party_name }}</h5>
+        @else
+            <h5 class="card-title">ยังไม่มีปาร์ตี้</h5>
+        @endif
+        <div>
+    <a href="#" class="btn" id="reviewButton" style="width: 250px; background-color: #999;">Review All</a>
+</div> --> 
+
+<h1>Reviews</h1>
+@if($reviews->isEmpty())
+        <p>ยังไม่มีข้อมูลรีวิว</p>
+@else
+@foreach($reviews as $review)
+    {{ $review->party->party_name }}
+    {{ $review->user->username }}
+    <h5>วันที่รีวิว: {{ date('d F', strtotime($review->created_at)) }} {{ date('Y', strtotime($review->created_at)) + 543 }}</h5>
+    <p>{{ $review->review }}</p>
+    <p>คะแนนรีวิว: {{ $review->rating }}</p>
     
+@endforeach
+@endif
+<!-- <div id="reviewsSection" style="display: none;">
+    @if($reviews->isEmpty())
+        <p>ยังไม่มีข้อมูลรีวิว</p>
+    @else
+        @foreach($reviews as $review)
             <table>
                 <tr>
                     <td class="profile">
-                        <div class="img">
-                            <img src="" alt="">
-                        </div>
-                        <span class="name">{{ $attendance->users->username }}</span><br>
-                        <span class="email">Kaija@kkumail.com</span>
+                        @if($review->users)
+                          
+                            <span class="name">{{ $review->users->username }}</span><br>
+                            <span class="email">{{ $review->users->email }}</span>
+                        @else
+                            <span class="name">ไม่พบข้อมูลผู้ใช้</span><br>
+                        @endif
                     </td>
                     <td class="text">
-                        <h5>15/04/2056</h5>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam voluptas delectus reprehenderit! Quas optio, amet voluptates, molestias nihil eaque numquam nesciunt ratione minus distinctio nam error aspernatur repudiandae odit ullam?
+                
+                        <h5>วันที่รีวิว: {{ date('d F', strtotime($review->created_at)) }} {{ date('Y', strtotime($review->created_at)) + 543 }}</h5>
+                        <p>{{ $review->review }}</p>
+                        <p>คะแนนรีวิว: {{ $review->rating }}</p>
                     </td>
                 </tr>
             </table>
-      @endforeach
+        @endforeach
+    @endif
+</div>
+</div> -->
 
-    <!-- หน้าปาร์ตี้ขึึ้น -->
-    <div class="card" style="width: 18rem; margin-right: 10px;">
-    <img src="./images/a2df086-dd63.jpg" class="card-img-top" alt="รูปการท่องเที่ยว">
-    <div class="card-body">
-        <h5 class="card-title">ชื่อปาร์ตี้</h5>
-        <a href="#" class="btn" style="width: 250px; background-color: #999;">Review All</a>
-    </div>
+<!-- 
+<script>
+    document.getElementById("reviewButton").addEventListener("click", function(event){
+        event.preventDefault();
+        var reviewsSection = document.getElementById("reviewsSection");
+        if (reviewsSection.style.display === "none") {
+            reviewsSection.style.display = "block";
+        } else {
+            reviewsSection.style.display = "none";
+        }
+    });
+</script> -->
+
     </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

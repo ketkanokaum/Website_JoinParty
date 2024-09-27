@@ -53,7 +53,7 @@
 
                     <div class="d-flex justify-content-between">
                         <div class="favorite-button-{{ $favorite->party->id }}">
-                            <form action="{{ $favorite->isFavorite ? route('remove.favorite', $favorite->party->id) : route('add.favorite') }}" method="POST">
+                        <form action="{{ route('remove.favorite', $favorite->party->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="favorite-button {{ $favorite->isFavorite ? 'active' : '' }}">
                                     <i class="bi {{ $favorite->isFavorite ? 'bi-heart-fill' : 'bi-heart' }}"></i>

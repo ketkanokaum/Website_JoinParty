@@ -35,22 +35,7 @@ class MypartyController extends Controller
         return redirect()->route('myparty')->with('info', 'คุณได้เข้าร่วมกิจกรรมนี้แล้ว');
     }
 
-    public function reviews(Request  $request){
-        $request->validate([
-            'party_id' => 'required|exists:parties,id', 
-            'rating' => 'required|integer|min:1|max:5',   // ค่า rating ต้องอยู่ในช่วง 1-5
-            'review' => 'required|string|max:1000',       // ความคิดเห็นต้องไม่เกิน 1000 ตัวอักษร
-        ]);
-        $review = new Review();
-        $review->party_id = $request->party_id;
-        $review->user_id = auth()->id();
-        $review->rating = $request->rating;
-        $review->review = $request->review;
-        $review->save();
     
-        return redirect()->route('myparty')->with('success', 'รีวิวของคุณถูกส่งเรียบร้อยแล้ว');
-
-    }
 
 }
 

@@ -155,7 +155,7 @@
                             @else
                                 @auth
                                     <!-- กรณีผู้ใช้ล็อกอินและยังไม่ได้เข้าร่วม -->
-                                    <a class="join" onclick="join({{ $party->id }})" style="color: blue; cursor: pointer;">เข้าร่วม</a>
+                                    <a class="join" onclick="join({{ $party->id }})">เข้าร่วม</a>
                                 @else
                                     <!-- กรณีผู้ใช้ไม่ได้ล็อกอิน -->
                                     <a class="expired disabled" style="color: gray; cursor: not-allowed;">หมดเขตรับสมัคร</a>
@@ -166,7 +166,7 @@
                             <a class="expired disabled" style="color: gray; cursor: not-allowed;">หมดเขตรับสมัคร</a>
                         @endif
 
-<<<<<<< HEAD
+
                         <!-- ปุ่มข้อมูลเพิ่มเติมที่แสดงเสมอ -->
                         <a href="{{ route('party.details', $party->id) }}" class="more">ข้อมูลเพิ่มเติม</a>
                     </div>
@@ -176,14 +176,7 @@
     @else
         <p>ไม่มีปาร์ตี้ที่เปิดรับสมัครในขณะนี้</p>
     @endif
-=======
-                                @if($daysLeft > 0)
-                                <div class="buttons">
-                                    @auth
-                                        <button class="join">เข้าร่วม</button>
-                                    @endauth
-                                    <a href="/detail-party/${party.id}" class="more">ข้อมูลเพิ่มเติม</a>
->>>>>>> 5762d32dae6ed14149956f14ca489201cc3c94af
+
 
         @if(isset($pastParties) && count($pastParties) > 0)
                     @foreach($pastParties as $party)

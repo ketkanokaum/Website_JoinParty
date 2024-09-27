@@ -131,9 +131,22 @@ public function delete($id){
 }  
 
     public function showReview(){
-        $reviews = Review::all();
+
+        $reviews = Review::with(['party', 'user'])->get();
         return view('admin/review', compact('reviews'));
     }
+
+    public function store(Request $request){
+        $reviews = new Review();
+        $reviews->user_id = $request->user_id;
+        $reviews->party_id = $request->party_id;
+        $reviews->review = $request->review;
+        $reviews->rating = $request->rating;
+        $reviews->save();
+        $reviews = Review::all();
+        return redirect('myparty');
+    }
+
 
     public function showUser(Request $request){
     $query = $request->input('query'); // รับค่าคำค้นหาจาก input
