@@ -21,7 +21,7 @@
   <div class="wrapper">
     <!-- Main content -->
     <section>
-      <h1>Created party</h1>
+      <h1>สร้างกิจกรรม</h1>
       <div class="search">
         <input id="search-input" type="text" placeholder="Search Praty Name" class="d-inline-flex focus-ring focus-ring-danger py-1 px-2 text-decoration-none border rounded-2">
         <input id="submit-input" type="submit" value="ค้นหา">
@@ -86,26 +86,26 @@
         @csrf
           <div class="form-group">
                 <label for="party-name">ชื่อกิจกรรม :</label>
-                <input type="text" id="party-name" name="party_name" placeholder="กรอกชื่อปาร์ตี้" required>
+                <input type="text" id="party-name" name="party_name" placeholder="กรอกชื่อปาร์ตี้" required onchange="checkForm()">
             </div>
 
             <div class="form-group">
                 <label for="party-date">วันที่จัดกิจกรรม :</label>
-                <input type="date" id="party-date" name="start_date" required>
+                <input type="date" id="party-date" name="start_date" required onchange="checkForm()">
             </div>
             <div class="form-group">
                 <label for="party-date">วันที่สิ้นสุดกิจกรรม :</label>
-                <input type="date" id="party-date" name="end_date" required>
+                <input type="date" id="party-end-date" name="end_date" required onchange="checkForm()">
             </div>
 
             <div class="form-group">
                 <label for="party-date">เวลาที่เริ่มทำกิจกรรม :</label>
-                <input type="Time" id="start" name="start_time" required>
+                <input type="Time" id="start" name="start_time" required onchange="checkForm()">
             </div>
 
             <div class="form-group">
                 <label for="party-date">เวลาที่สิ้นสุด :</label>
-                <input type="Time" id="end" name="end_time" required>
+                <input type="Time" id="end" name="end_time" required onchange="checkForm()">
             </div>
             <div class="form-group">
                 <label for="party-type">จังหวัด:</label required>
@@ -194,17 +194,17 @@
 
             <div class="form-group">
                 <label for="party-location">สถานที่จัดกิจกรรม :</label>
-                <input type="text" id="party-location" name="location" placeholder="กรอกสถานที่จัดปาร์ตี้" required>
+                <input type="text" id="party-location" name="location" placeholder="กรอกสถานที่จัดปาร์ตี้" required >
             </div>
 
             <div class="form-group">
                 <label for="party-description">รายละเอียด:</label>
-                <textarea id="party-description" name="detail" placeholder="รายละเอียดเพิ่มเติม"></textarea required>
+                <textarea id="party-description" name="detail" placeholder="รายละเอียดเพิ่มเติม" required ></textarea >
             </div>
 
             <div class="form-group">
                 <label for="party-type">ประเภทของกิจกรรม:</label>
-                <select id="party-type" name="party_type_id" required>
+                <select id="party-type" name="party_type_id" required >
                 @foreach($partyTypes as $partyType)
             <option value="{{ $partyType->id }}">{{ $partyType->type_name }}</option>
               @endforeach
@@ -213,17 +213,17 @@
 
             <div class="form-group">
                 <label for="party-guests">จำนวนผู้เข้าร่วมกิจกรรม :</label>
-                <input type="number" id="party-guests" name="numpeople" placeholder="จำนวนผู้เข้าร่วม" required>
+                <input type="number" id="party-guests" name="numpeople" placeholder="จำนวนผู้เข้าร่วม" required onchange="checkForm()">
             </div>
 
             <div class="form-img">
               <label for="party-guests">รูปภาพกิจกรรม:</label><br>
-              <input type="file" id="party-img" name="img" required>
+              <input type="file" id="party-img" name="img" required onchange="checkForm()">
           </div>
 
           <div class="form-group">
                 <label for="party-contact">ช่องทางการติดต่อ:</label>
-                <textarea id="party-contact" name="contact" placeholder="ช่องทางการติดต่อ" required></textarea>
+                <textarea id="party-contact" name="contact" placeholder="ช่องทางการติดต่อ" required ></textarea>
             </div>
 
             <div class="form-img">
@@ -232,7 +232,7 @@
           </div>
 
             <div class="form-buttons">
-                <button type="submit" onclick="crate()">ยืนยัน</button>
+                <button type="submit" >ยืนยัน</button>
             </div>
         </form>
 
@@ -256,33 +256,33 @@
         @method('POST')
           <div class="form-group">
                 <label for="party-name">ชื่อกิจกรรม :</label>
-                <input type="text" id="party-name" name="party_name"  value="{{$party->party_name}}" placeholder="กรอกชื่อปาร์ตี้" required>
+                <input type="text" id="party-name" name="party_name"  value="{{$party->party_name}}" placeholder="กรอกชื่อปาร์ตี้" required onchange="checkForm()">
             </div>
 
             <div class="form-group">
                 <label for="party-date">วันที่จัดกิจกรรม :</label>
-                <input type="date" id="party-date" name="start_date" value="{{$party->start_date}}"required>
+                <input type="date" id="party-date" name="start_date" value="{{$party->start_date}}"required onchange="checkForm()">
             </div>
 
             <div class="form-group">
                 <label for="party-date">วันที่สิ้นสุดกิจกรรม :</label>
-                <input type="date" id="party-date" name="end_date" value="{{$party->end_date}}" required>
+                <input type="date" id="party-end-date" name="end_date" value="{{$party->end_date}}" required onchange="checkForm()">
             </div>
 
 
             <div class="form-group">
                 <label for="party-date">เวลาที่เริ่มทำกิจกรรม:</label>
-                <input type="Time" id="start" name="start_time" value="{{$party->start_time}}" required>
+                <input type="Time" id="start" name="start_time" value="{{$party->start_time}}" required onchange="checkForm()">
             </div>
 
             <div class="form-group">
                 <label for="party-date">เวลาที่สิ้นสุด:</label>
-                <input type="Time" id="end" name="end_time" value="{{$party->end_time}}" required>
+                <input type="Time" id="end" name="end_time" value="{{$party->end_time}}" required onchange="checkForm()">
             </div>
 
             <div class="form-group">
                 <label for="party-type">จังหวัด:</label>
-                <select id="province" name="province" required>
+                <select id="province" name="province" required >
     <option value="">เลือกจังหวัด</option>
     <option value="กรุงเทพมหานคร" {{ $party->province == 'กรุงเทพมหานคร' ? 'selected' : '' }}>กรุงเทพมหานคร</option>
     <option value="อำนาจเจริญ" {{ $party->province == 'อำนาจเจริญ' ? 'selected' : '' }}>อำนาจเจริญ</option>
@@ -367,17 +367,17 @@
 
             <div class="form-group">
                 <label for="party-location">สถานที่จัดกิจกรรม:</label>
-                <input type="text" id="party-location" name="location" value="{{$party->location}}" placeholder="กรอกสถานที่จัดปาร์ตี้" required>
+                <input type="text" id="party-location" name="location" value="{{$party->location}}" placeholder="กรอกสถานที่จัดปาร์ตี้" required >
             </div>
 
             <div class="form-group">
                 <label for="party-description">รายละเอียด:</label>
-                <textarea id="party-description" name="detail" placeholder="รายละเอียดเพิ่มเติม" required>{{$party->detail}}</textarea>
+                <textarea id="party-description" name="detail" placeholder="รายละเอียดเพิ่มเติม" required >{{$party->detail}}</textarea>
             </div>
 
             <div class="form-group">
                 <label for="party-type">ประเภทของกิจกรรม:</label>
-                <select id="party-type" name="party_type_id" value="{{$party->type_party}}" required>
+                <select id="party-type" name="party_type_id" value="{{$party->type_party}}" required >
                 @foreach($partyTypes as $partyType)
               <option value="{{ $partyType->id }}">{{ $partyType->type_name }}</option>
           @endforeach
@@ -386,7 +386,7 @@
 
             <div class="form-group">
                 <label for="party-guests">จำนวนผู้เข้าร่วมกิจกรรม :</label>
-                <input type="number" id="party-guests" name="numpeople" value="{{$party->numpeople}}" placeholder="จำนวนผู้เข้าร่วม" required>
+                <input type="number" id="party-guests" name="numpeople" value="{{$party->numpeople}}" placeholder="จำนวนผู้เข้าร่วม" required onchange="checkForm()">
             </div>
 
             <div class="form-group">
@@ -397,12 +397,12 @@
         <img src="{{ asset('party_images/' . $party->img) }}" alt="Current Image" width="200px"><br>
     @endif
 
-    <input type="file" id="img" name="img">
+    <input type="file" id="img" name="img" >
     </div>
 
     <div class="form-group">
                 <label for="party-contact">ช่องทางการติดต่อ:</label>
-                <textarea id="party-contact" name="contact " placeholder="ช่องทางการติดต่อ" required>{{ $party->contact }}</textarea>
+                <textarea id="party-contact" name="contact " placeholder="ช่องทางการติดต่อ" required >{{ $party->contact }}</textarea>
             </div>
 
             <div class="form-img">
@@ -430,8 +430,58 @@
 
 <script>
 
-function crate(){
-  alert("สร้างกิจกรรมเรียบร้อยแล้ว!")
+function checkForm() {
+    const requiredFields = [
+        document.getElementById('party-name'),
+        document.getElementById('party-date'),
+        document.getElementById('party-end-date'),
+        document.getElementById('start'),
+        document.getElementById('end'),
+        document.getElementById('province'),
+        document.getElementById('party-location'),
+        document.getElementById('party-description'),
+        document.getElementById('party-type'),
+        document.getElementById('party-guests'),
+        document.getElementById('party-img'),
+        document.getElementById('party-contact'),
+        document.getElementById('party-img_contact')
+    ];
+
+    const allFilled = requiredFields.every(field => field.value.trim() !== '');
+
+    document.getElementById('submit-btn').disabled = !allFilled;
+}
+
+function validateForm() {
+    const numPeople = document.getElementById('party-guests').value;
+    if (numPeople < 1) {
+        alert('กรุณากรอกจำนวนผู้เข้าร่วมที่ถูกต้อง!');
+        return false; // หยุดการส่งข้อมูล
+    }
+
+    const img = document.getElementById('party-img').files[0];
+    const imgContact = document.getElementById('party-img_contact').files[0];
+
+
+    if (img && !img.type.startsWith('image/')) {
+        alert('กรุณาอัปโหลดไฟล์ภาพสำหรับกิจกรรม!');
+        return false;
+    }
+
+    if (imgContact && !imgContact.type.startsWith('image/')) {
+        alert('กรุณาอัปโหลดไฟล์ภาพสำหรับคิวอาร์โค้ด!');
+        return false;
+    }
+
+    const startDate = document.getElementById('party-date').value;
+    const endDate = document.getElementById('party-end-date').value;
+
+    if (new Date(endDate) <= new Date(startDate)) {
+        alert('วันที่สิ้นสุดกิจกรรมต้องมากกว่าหรือเท่ากับวันที่เริ่ม!');
+        return false; 
+    }
+
+    return true; 
 }
 
 

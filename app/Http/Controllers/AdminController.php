@@ -28,6 +28,7 @@ class AdminController extends Controller
 
     public function insert(Request $request)
     {
+    
         $newParty = new Party();
         $newParty->party_name = $request->party_name;
         $newParty->start_date = $request->start_date;
@@ -41,14 +42,12 @@ class AdminController extends Controller
         $newParty->numpeople = $request->numpeople;
         $newParty->contact = $request->contact; // ตั้งค่าการติดต่อ
     
-        // อัปโหลดไฟล์ img
         if ($request->hasFile('img')) {
             $imageName = time() . '.' . $request->img->extension();
             $request->img->move(public_path('party_images'), $imageName);
             $newParty->img = $imageName; // ตั้งค่า img
         }
-    
-        // อัปโหลดไฟล์ img_contact
+
         if ($request->hasFile('img_contact')) {
             $imageName = time() . '.' . $request->img_contact->extension();
             $request->img_contact->move(public_path('contact_images'), $imageName);
@@ -130,11 +129,18 @@ public function delete($id){
     }
 }  
 
-    public function showReview(){
+public function showReview()
+{
+    $reviews = Review::all();
+    $parties = $reviews->groupBy('party_id');
+    $avg_ratings = Review::select('party_id', DB::raw('avg(rating) as average_rating'))
+                        ->groupBy('party_id')
+                        ->get()
+                        ->keyBy('party_id');
 
-        $reviews = Review::with(['party', 'user'])->get();
-        return view('admin/review', compact('reviews'));
-    }
+    return view('admin/review', compact('reviews', 'parties', 'avg_ratings'));
+}
+
 
     public function store(Request $request){
         $reviews = new Review();
@@ -143,7 +149,6 @@ public function delete($id){
         $reviews->review = $request->review;
         $reviews->rating = $request->rating;
         $reviews->save();
-        $reviews = Review::all();
         return redirect('myparty');
     }
 

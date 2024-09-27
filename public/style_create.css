@@ -179,14 +179,14 @@ textarea {
 }
 .form-buttons button{
     width: 100%;
-    background-color: #eae8e8;
+    background-color: #ffd28c;
     padding: 10px 20px;
     border: none;
     margin-top: 30px;
     border-radius: 10px;
 }
 .form-buttons button:hover {
-    background-color: #eae8e8;
+    background-color: #f4b37a;
 }
 
 

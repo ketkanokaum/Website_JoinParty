@@ -23,7 +23,7 @@
    
     <!-- Main content -->
     <section>
-    <h1>User</h1>
+    <h1>ข้อมูลผู้ใช้</h1>
     <div class="search">
     <input id="search-input" type="text" placeholder="Search by first or last name" class="d-inline-flex focus-ring focus-ring-danger py-1 px-2 text-decoration-none border rounded-2">
     <input id="submit-input" type="submit" value="ค้นหา">

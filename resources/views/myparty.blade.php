@@ -100,7 +100,7 @@
                                     <input type="hidden" name="party_id" value="{{ $attendance->party->id }}">
                                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                     <div class="mb-3">
-                                        <label for="rating{{ $attendance->party->id }}" class="form-label">คะแนน</label>
+                                        <label  class="form-label">คะแนน</label>
                                         <!-- เพิ่ม name ให้กับ select -->
                                         <select name="rating" id="rating{{ $attendance->party->id }}" class="form-select" required>
                                             <option value="" disabled selected>เลือกคะแนน</option>
@@ -112,8 +112,7 @@
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="review-text{{ $attendance->party->id }}" class="form-label">ความคิดเห็น</label>
-                                        <!-- เพิ่ม name ให้กับ textarea -->
+                                        <label  class="form-label">ความคิดเห็น</label>
                                         <textarea name="review" id="review-text{{ $attendance->party->id }}" class="form-control" rows="4" placeholder="เขียนความคิดเห็นของคุณที่นี่..." required></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary">ส่งรีวิว</button>
