@@ -162,8 +162,7 @@
                             <img src="{{ asset('party_images/' . $party->img) }}" alt="Event Image" width="200px">
                         </div>
                         <div class="data">
-                            <p style="text-align: right;"><small>จำนวนผู้เข้าร่วมกิจกรรม: {{ $party->joined_count }} / {{$party->numpeople}} คน</small></p>
-
+                            <p style="text-align: right;"><small>จำนวนผู้เข้าร่วมกิจกรรม: {{ $party->joined_count ?? 0}} / {{$party->numpeople}} คน</small></p>
                             @php
                             $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
                             @endphp
@@ -189,7 +188,7 @@
 
                             <div class="buttons">
                                 @if($daysLeft > 0)
-                                @if($party->attendees->count() == $party->numpeople)
+                                @if($party->joined_count == $party->numpeople)
                                 <!-- กรณีผู้เข้าร่วมเต็ม -->
                                 <p style="color: red;">เต็มแล้ว</p>
                                 @else

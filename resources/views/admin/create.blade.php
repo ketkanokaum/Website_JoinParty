@@ -81,7 +81,7 @@
 
             <td style="padding: 0 5px;">
               @if($daysLeft > 0)
-              <button type="button" class="table-bt" data-bs-toggle="modal" data-bs-target="#editModal{{ $party->id }}">
+              <button type="button" class="table-bt" data-bs-toggle="modal" data-bs-target="#exampleModal{{$party->id}}">
                 แก้ไข
               </button>
               @else

@@ -63,12 +63,32 @@ class AdminController extends Controller
 
         $partyTypes = PartyType::all();
 
-        $parties = Party::query();
-
-
-        if ($query) {
-            $parties->where('party_name', 'like', "%$query%");
-        }
+        $parties = Party::query()
+        ->leftJoin('attendances', 'parties.id', '=', 'attendances.party_id') // JOIN กับตาราง attendances
+        ->select('parties.*') // เลือกข้อมูลจากตาราง parties
+        ->selectRaw('COUNT(CASE WHEN attendances.status = "joined" THEN 1 END) as joined_count') // นับจำนวนผู้เข้าร่วมที่มีสถานะ 'joined'
+        ->when($query, function ($queryBuilder) use ($query) {
+            return $queryBuilder->where('party_name', 'like', "%$query%");
+        })
+        ->groupBy(
+            'parties.id',
+            'parties.party_name',
+            'parties.start_date',
+            'parties.end_date',
+            'parties.start_time',
+            'parties.end_time',
+            'parties.location',
+            'parties.detail',
+            'parties.province',
+            'parties.numpeople',
+            'parties.img',
+            'parties.party_type_id',
+            'parties.contact',
+            'parties.img_contact',
+            'parties.created_at',
+            'parties.updated_at',
+            'parties.deleted_at'
+        );
 
         if ($sort == 'asc') {
             $parties->orderBy('start_date', 'asc');
