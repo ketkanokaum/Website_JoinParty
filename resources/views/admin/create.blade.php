@@ -72,7 +72,7 @@
               </button>
             </td>
             <td>{{ thaidate($party->start_date) }}</td>
-            <td>{{ $party->attendees->count() }} / {{ $party->numpeople }}</td>
+            <td>{{ $party->joined_count }} / {{ $party->numpeople }}</td>
 
             @php
             $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
@@ -116,7 +116,7 @@
                 </div>
                 <div class="card mb-3">
                   <div class="card-body">
-                    <p>จำนวนผู้เข้าร่วม: {{ $party->attendees->count() }} / {{ $party->numpeople }} คน</p>
+                    <p>จำนวนผู้เข้าร่วม: {{$party->joined_count}} / {{ $party->numpeople }} คน</p>
 
                     @foreach($party->attendees as $attendee)
                     <div class="card mb-3">

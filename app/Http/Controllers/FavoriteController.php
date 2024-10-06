@@ -20,9 +20,7 @@ class FavoriteController extends Controller
             ->get();
         $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
         $parties = Party::with('attendees')->get();
-        $attendeesCount = Attendance::whereNull('deleted_at')->count();
-        
-        return view('favorite', compact('favorites', 'joinAttendances', 'parties','attendeesCount'));
+        return view('favorite', compact('favorites', 'joinAttendances', 'parties'));
     }
 
 
@@ -30,6 +28,7 @@ class FavoriteController extends Controller
     public function addToFavorite(Request $request)
     {
         $userId = Auth::id();
+
         $existingFavorite = Favorite::withTrashed()
             ->where('user_id', $userId)
             ->where('party_id', $request->party_id)

@@ -162,7 +162,7 @@
                             <img src="{{ asset('party_images/' . $party->img) }}" alt="Event Image" width="200px">
                         </div>
                         <div class="data">
-                            <p style="text-align: right;"><small>จำนวนผู้เข้าร่วมกิจกรรม: {{ $attendeesCount}} / {{$party->numpeople}} คน</small></p>
+                            <p style="text-align: right;"><small>จำนวนผู้เข้าร่วมกิจกรรม: {{ $party->joined_count }} / {{$party->numpeople}} คน</small></p>
 
                             @php
                             $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);

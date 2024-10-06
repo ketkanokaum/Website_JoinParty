@@ -52,24 +52,37 @@ class MypartyController extends Controller
     
     
 
-    public function joinAttendance(Request $request, $id)
-    {
-
-        $party = Party::findOrFail($id);
-        $joinAttendance = Attendance::where('user_id', Auth::id())
-            ->where('party_id', $id)->first();
-
-        if (!$joinAttendance) {
-            $newAttendance = new Attendance();
-            $newAttendance->user_id = Auth::id();
-            $newAttendance->party_id = $id;
-            $newAttendance->joined_at = now();
-            $newAttendance->save();
-
-            return redirect()->route('myparty');
+        public function joinAttendance(Request $request, $id)
+        {
+            $party = Party::findOrFail($id);
+        
+            // ตรวจสอบว่าผู้ใช้เคยเข้าร่วมและยกเลิกหรือไม่
+            $joinAttendance = Attendance::where('user_id', Auth::id())
+                ->where('party_id', $id)
+                ->first();
+        
+            if ($joinAttendance) {
+                
+                if ($joinAttendance->status == 'canceled') {
+                    $joinAttendance->status = 'joined';
+                    $joinAttendance->joined_at = now();  
+                    $joinAttendance->save();
+                }
+        
+                return redirect()->route('myparty')->with('success', 'คุณได้เข้าร่วมกิจกรรมอีกครั้งแล้ว');
+            } else {
+    
+                $newAttendance = new Attendance();
+                $newAttendance->user_id = Auth::id();
+                $newAttendance->party_id = $id;
+                $newAttendance->joined_at = now();
+                $newAttendance->save();
+        
+                return redirect()->route('myparty')->with('success', 'คุณได้เข้าร่วมกิจกรรมเรียบร้อยแล้ว');
+            }
         }
-    }
-
+        
+        
     public function deleteJoin($id)
     {
         $attendance = Attendance::find($id);

@@ -46,51 +46,124 @@ class ManageController extends Controller
             $users->Introduction = $request->Introduction;
         }
         if ($request->hasFile('images') && $request->file('images')->isValid()) {
-            
+
             $imagePath = $request->file('images')->store('users_images', 'public');
             $users->images = $imagePath;
         }
-        
-    
+
+
         $users->save();
         return redirect()->route('profile.show');
     }
 
     public function showParty()
     {
-        $time = time();
-        $activeParties = Party::where('start_date', '>', date('Y-m-d H:i:s', $time))
+        $time = date('Y-m-d H:i:s');
+
+        $activeParties = Party::select('parties.*')
+            ->leftJoin('attendances', 'parties.id', '=', 'attendances.party_id')
+            ->selectRaw('COUNT(CASE WHEN attendances.status = "joined" THEN 1 END) as joined_count')
+            ->where('start_date', '>', $time)
+            ->groupBy(
+                'parties.id',
+                'parties.party_name',
+                'parties.start_date',
+                'parties.end_date',
+                'parties.start_time',
+                'parties.end_time',
+                'parties.location',
+                'parties.detail',
+                'parties.province',
+                'parties.numpeople',
+                'parties.img',
+                'parties.party_type_id',
+                'parties.contact',
+                'parties.img_contact',
+                'parties.created_at',
+                'parties.updated_at',
+                'parties.deleted_at'
+            ) // รวมฟิลด์ทั้งหมด
             ->orderBy('start_date', 'asc')
             ->get();
-        $pastParties = Party::where('start_date', '<=', date('Y-m-d H:i:s', $time))->get();
+
+        // ดึงข้อมูลปาร์ตี้ที่ผ่านไปแล้ว พร้อมนับจำนวนผู้เข้าร่วมที่มีสถานะ 'joined'
+        $pastParties = Party::select('parties.*')
+            ->leftJoin('attendances', 'parties.id', '=', 'attendances.party_id')
+            ->selectRaw('COUNT(CASE WHEN attendances.status = "joined" THEN 1 END) as joined_count')
+            ->where('start_date', '<=', $time)
+            ->groupBy(
+                'parties.id',
+                'parties.party_name',
+                'parties.start_date',
+                'parties.end_date',
+                'parties.start_time',
+                'parties.end_time',
+                'parties.location',
+                'parties.detail',
+                'parties.province',
+                'parties.numpeople',
+                'parties.img',
+                'parties.party_type_id',
+                'parties.contact',
+                'parties.img_contact',
+                'parties.created_at',
+                'parties.updated_at',
+                'parties.deleted_at'
+            ) 
+            ->get();
+
+
         $partyCounts = Party::select('party_type_id', DB::raw('count(*) as total'))
             ->groupBy('party_type_id')
             ->get();
         $joinAttendances = Attendance::where('user_id', Auth::id())
-            ->pluck('party_id')    
+            ->pluck('party_id')
             ->toArray();
-        $attendeesCount = Attendance::whereNull('deleted_at')->count();
+
 
 
         return view('dashboard', [
+
             'activeParties' => $activeParties,
             'pastParties' => $pastParties,
             'partyCounts' => $partyCounts,
             'joinAttendances' => $joinAttendances,
-            'attendeesCount' => $attendeesCount,
+
         ]);
     }
 
 
     public function viewPartyDetails($id)
     {
-        $party = Party::find($id);
+        $party = Party::select('parties.*')
+        ->leftJoin('attendances', 'parties.id', '=', 'attendances.party_id')
+        ->selectRaw('COUNT(CASE WHEN attendances.status = "joined" THEN 1 END) as joined_count')
+        ->where('parties.id', $id)
+        ->groupBy(
+            'parties.id',
+            'parties.party_name',
+            'parties.start_date',
+            'parties.end_date',
+            'parties.start_time',
+            'parties.end_time',
+            'parties.location',
+            'parties.detail',
+            'parties.province',
+            'parties.numpeople',
+            'parties.img',
+            'parties.party_type_id',
+            'parties.contact',
+            'parties.img_contact',
+            'parties.created_at',
+            'parties.updated_at',
+            'parties.deleted_at'
+        )
+        ->first(); 
         $isFavorite = Favorite::where('user_id', Auth::id())
             ->where('party_id', $id)
             ->exists();
         $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
-        $attendeesCount = Attendance::whereNull('deleted_at')->count();
-        return view('detailparty', compact('party', 'isFavorite', 'joinAttendances','attendeesCount'));
+        return view('detailparty', compact('party', 'isFavorite', 'joinAttendances'));
     }
 
 
@@ -103,6 +176,7 @@ class ManageController extends Controller
         $type = $request->input('type');
         $sort = $request->input('sort');
 
+        // กำหนดเงื่อนไขการค้นหาตามค่าที่ได้รับจากฟอร์ม
         $parties = Party::query()
             ->when($query, function ($queryBuilder) use ($query) {
                 return $queryBuilder->where('party_name', 'LIKE', '%' . $query . '%');
@@ -114,14 +188,14 @@ class ManageController extends Controller
                 return $queryBuilder->where('party_type_id', $type);
             })
             ->get();
-        
+
 
         $activeParties = $parties;
 
         $partyTypeCounts = Party::select('party_type_id', DB::raw('count(*) as total'))
             ->groupBy('party_type_id')
             ->get()
-            ->pluck('total', 'party_type_id'); 
+            ->pluck('total', 'party_type_id');
 
         $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
 
@@ -131,7 +205,7 @@ class ManageController extends Controller
             'partyTypeCounts' => $partyTypeCounts,
             'type' => $type ?? '', // ตรวจสอบว่ามีค่า type หรือไม่ ถ้าไม่มีก็ให้เป็นค่าว่าง
             'joinAttendances' => $joinAttendances
-            
+
         ]);
     }
 }

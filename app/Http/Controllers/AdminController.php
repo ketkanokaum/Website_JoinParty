@@ -22,7 +22,33 @@ class AdminController extends Controller
 
     public function createParty()
     {
-        $parties = Party::with('attendees')->paginate(6);
+        $time = date('Y-m-d H:i:s');
+
+
+        $parties = Party::select('parties.*')
+            ->leftJoin('attendances', 'parties.id', '=', 'attendances.party_id')
+            ->selectRaw('COUNT(CASE WHEN attendances.status = "joined" THEN 1 END) as joined_count')
+            ->where('start_date', '>', $time)
+            ->groupBy(
+                'parties.id',
+                'parties.party_name',
+                'parties.start_date',
+                'parties.end_date',
+                'parties.start_time',
+                'parties.end_time',
+                'parties.location',
+                'parties.detail',
+                'parties.province',
+                'parties.numpeople',
+                'parties.img',
+                'parties.party_type_id',
+                'parties.contact',
+                'parties.img_contact',
+                'parties.created_at',
+                'parties.updated_at',
+                'parties.deleted_at'
+            ) 
+            ->paginate(6);
 
         $partyTypes = PartyType::all();
 
