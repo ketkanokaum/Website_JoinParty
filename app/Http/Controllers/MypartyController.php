@@ -18,6 +18,7 @@ class MypartyController extends Controller
 
         $myparty = Attendance::with('party')
             ->where('user_id', Auth::id())
+            ->whereNull('deleted_at') 
             ->get();
 
         $upcomingParties = Attendance::with('party')

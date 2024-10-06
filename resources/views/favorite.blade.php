@@ -66,7 +66,7 @@
                     <div class="buttons">
                         <a href="{{ route('party.details', $favorite->party->id) }}" class="btn btn-warning data-btn me-2">ข้อมูลเพิ่มเติม</a>
                         @if($daysLeft > 0)
-                        @if($favorite->party->attendees->count() == $favorite->party->numpeople)
+                        @if($attendeesCount == $favorite->party->numpeople)
                         <!-- กรณีผู้เข้าร่วมเต็ม -->
                         <p style="color: red;">เต็มแล้ว</p>
                         @else

@@ -69,12 +69,15 @@ class ManageController extends Controller
         $joinAttendances = Attendance::where('user_id', Auth::id())
             ->pluck('party_id')    
             ->toArray();
+        $attendeesCount = Attendance::whereNull('deleted_at')->count();
+
 
         return view('dashboard', [
             'activeParties' => $activeParties,
             'pastParties' => $pastParties,
             'partyCounts' => $partyCounts,
             'joinAttendances' => $joinAttendances,
+            'attendeesCount' => $attendeesCount,
         ]);
     }
 
@@ -86,7 +89,8 @@ class ManageController extends Controller
             ->where('party_id', $id)
             ->exists();
         $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
-        return view('detailparty', compact('party', 'isFavorite', 'joinAttendances'));
+        $attendeesCount = Attendance::whereNull('deleted_at')->count();
+        return view('detailparty', compact('party', 'isFavorite', 'joinAttendances','attendeesCount'));
     }
 
 
@@ -99,7 +103,6 @@ class ManageController extends Controller
         $type = $request->input('type');
         $sort = $request->input('sort');
 
-        // กำหนดเงื่อนไขการค้นหาตามค่าที่ได้รับจากฟอร์ม
         $parties = Party::query()
             ->when($query, function ($queryBuilder) use ($query) {
                 return $queryBuilder->where('party_name', 'LIKE', '%' . $query . '%');

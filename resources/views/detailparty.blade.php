@@ -30,7 +30,7 @@
 
                 <div class="col-md-6">
                     <h2 class="mb-6">{{$party->party_name }}</h2>
-                    <p>จำนวนผู้เข้าร่วมกิจกรรม : <span class="text-muted">{{ $party->attendees->count() }} / {{$party->numpeople}} คน</span></p>
+                    <p>จำนวนผู้เข้าร่วมกิจกรรม : <span class="text-muted">{{ $attendeesCount }} / {{$party->numpeople}} คน</span></p>
                     @php
                     $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
                     @endphp
@@ -61,7 +61,7 @@
                     <div class="button-container">
                         <div class="join mt-4">
                             @if($daysLeft > 0)
-                            @if($party->attendees->count() == $party->numpeople)
+                            @if($attendeesCount == $party->numpeople)
                             <!-- กรณีผู้เข้าร่วมเต็ม -->
                             <p style="color: red;">เต็มแล้ว</p>
                             @else
