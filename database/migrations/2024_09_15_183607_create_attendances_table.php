@@ -18,8 +18,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('party_id')->constrained('parties')->onDelete('cascade');
             $table->timestamp('joined_at')->nullable();
+            $table->string('status')->default('joined');
             $table->timestamps();
-            $table->unique(['user_id', 'party_id']); ;//ตรวจสอบว่าuserจะไม่เข้าร่วมกิจกรรมเดียวหลายครั้ง
+            $table->unique(['user_id', 'party_id']); ;
             $table->softDeletes();
         });
     }
@@ -31,6 +32,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attendances'); 
+        
+        Schema::dropIfExists('attendances');
     }
 };

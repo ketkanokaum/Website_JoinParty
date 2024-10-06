@@ -55,7 +55,7 @@ class MypartyController extends Controller
     {
 
         $party = Party::findOrFail($id);
-        $joinAttendance = attendance::where('user_id', Auth::id())
+        $joinAttendance = Attendance::where('user_id', Auth::id())
             ->where('party_id', $id)->first();
 
         if (!$joinAttendance) {
@@ -71,9 +71,9 @@ class MypartyController extends Controller
 
     public function deleteJoin($id)
     {
-        $attendance = Attendance::find($id); 
+        $attendance = Attendance::find($id);
         if ($attendance) {
-            
+            $attendance->delete(); 
             $attendance->status = 'canceled';
             $attendance->save();  
             return redirect('/myparty')->with('success', 'คุณได้ยกเลิกการเข้าร่วมกิจกรรมเรียบร้อยแล้ว');
