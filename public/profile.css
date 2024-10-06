@@ -179,13 +179,13 @@ button.btn {
 
     
 .buttons .confirm-btn, .buttons .cancel-btn {
-    padding: 10px 20px; /* ระยะห่างภายในปุ่ม */
-    border: none; /* ลบเส้นขอบปุ่ม */
-    border-radius: 25px; /* ทำให้ปุ่มมีมุมโค้ง */
-    color: rgb(93, 92, 92); /* สีตัวอักษร */
-    font-size: 16px; /* ขนาดของตัวอักษร */
-    cursor: pointer; /* เปลี่ยนรูปแบบเมาส์เมื่อ hover */
-    transition: background-color 0.3s; /* ทำให้การเปลี่ยนสีมีความลื่นไหล */
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 25px;
+    color: rgb(93, 92, 92); 
+    font-size: 16px;
+    cursor: pointer; 
+    transition: background-color 0.3s; 
 }  
 .error-message {
     color: rgb(194, 100, 100);

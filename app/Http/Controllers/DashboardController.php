@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PartyType;
+use Illuminate\Support\Facades\DB;
 class DashboardController extends Controller
 {
     function index(){
@@ -18,4 +20,6 @@ class DashboardController extends Controller
             return redirect('error');
         }
     }
+
+
 }

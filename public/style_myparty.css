@@ -1,7 +1,4 @@
-@font-face {
-    font-family: fontwin;
-    src: url(font/Mitr/Mitr-Light.ttf);
-}
+
 * {
     padding: 0;
     margin: 0;
@@ -25,19 +22,19 @@ body {
     background: #ffd28c;
     color: #333;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 .btn-warning, .btn-secondary{
     background: #cbb7b5;
     color: #333;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 .btn-disabled, #submit-btn {
     background-color: #ffd28c;
     border: none;
     padding: 10px 20px;
-    border-radius: 20px;
+    border-radius: 10px;
     color: #000000;
     font-size: 1rem;
 }
@@ -85,7 +82,7 @@ body {
     background: #ffd28c;
     color: #333;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .btn-primary:hover {
@@ -98,23 +95,20 @@ h2 {
     font-weight: bold;
 }
 
-ul li {
-    margin-bottom: 25px;
-    font-size: 1.1rem;
-}
-
 .btn-success,.btn-warning, .btn-secondary{
     background: #ffd28c;
     color: #333;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
+    font-size: 15px;
 }
+
 
 .btn-disabled, #submit-btn {
     background-color: #ffd28c;
     border: none;
     padding: 10px 20px;
-    border-radius: 20px;
+    border-radius: 10px;
     color: #000000;
     font-size: 1rem;
 }
@@ -142,15 +136,18 @@ div.col{
     display: flex;
 }
 .card{
-    width: 60%;
+    width: 50%;
     margin-right: 20px;
+    border: none;
 }
 div.col img{
-    width: 100px;
+    width: 100%;
     margin-left: 5px;
+    border-radius: 10px;
 }
-div.col .content{
-    width: 40%;
+
+.centent {
+    width: 60%;
 }
 
 
@@ -159,6 +156,7 @@ div.col .content{
     font-size: 1.5rem;
     cursor: pointer;
     transition: transform 0.3s ease;
+    padding: 0;
 }
 
 .favorite-button:hover {
@@ -174,4 +172,58 @@ div.col .content{
 .buttons {
     display: flex;
     gap: 10px;
+}
+
+.btn-delete{
+    background-color: rgb(177, 173, 173);
+    border: none;
+    border-radius: 10px;
+}
+
+.btn-delete:hover{
+    background-color:  rgb(145, 141, 141);
+}
+
+
+.button-head {
+    display: flex;
+    width: 30%;
+    height: 100px;
+    position: relative;
+    top: 130px;
+    margin-left: 10px;
+    gap: 20px;
+    left: 980px;
+}
+.but {
+    height: 50px;
+}
+.btn-secondary, .btn-delete {
+    border-radius: 10px;
+}
+#not-1 {
+    margin-top: 150px;
+    font-size: 30px;
+}
+
+a.join {
+    background-color: #ffd28c;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: inherit;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+}
+
+.allreview {
+    background-color: #e4d3d1da;
+}
+.allreview:hover {
+    background-color: #cbb7b5;
 }

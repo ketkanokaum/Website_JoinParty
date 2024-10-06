@@ -9,8 +9,9 @@ class PartyType extends Model
 {
     use HasFactory;
 
-    public function partyType()
+    public function parties()
     {
-        return $this->belongsTo(PartyType::class);
+        return $this->hasMany(Party::class);
     }
+    
 }

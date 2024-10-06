@@ -1,0 +1,141 @@
+
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-image: linear-gradient(to bottom, rgba(243, 218, 195, 0.637) 4%,rgba(98, 64, 190, 0.24) 90%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;  
+    background-size: cover;
+}
+nav {
+    position: relative;
+}
+footer {
+    position: absolute;
+    bottom: 0;
+}
+a.join {
+    background-color: #ffd28c;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1px solid #000000;
+    color: #000000;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+a.join:hover{
+    background-color: #eaba6d;
+}
+
+.card {
+    background: #fff;
+    border-radius: 20px;
+}
+
+h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+ul {
+    margin-top: 30px;
+}
+
+
+.btn-success {
+    background-color: #ffd28c;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #000000;
+    font-size: 1rem;
+}
+
+.btn-outline-secondary {
+    background-color: #ffffff;
+    border: 0.5px solid #dfdfdf;
+    padding: 10px 20px;
+    border-radius: 20px;
+    color: #000000;
+    font-size: 1rem;
+}
+
+.btn-success:hover {
+    background-color: #e67e22;
+    color: white;
+}
+
+#favorite-icon.bi-heart-fill {
+    transform: scale(1.2);
+}
+.shadow {
+    align-items: center;
+    margin-top: 5em;
+}
+
+a.btn-back:hover {
+    background-color: #f0f0f0;
+}
+
+/* จัดการให้ปุ่มใน container แสดงในแนวนอน */
+.button-container {
+    display: flex;
+    justify-content: flex-start; /* จัดปุ่มไว้ด้านซ้าย */
+    align-items: center; /* จัดให้ปุ่มทั้งหมดอยู่กึ่งกลางในแนวตั้ง */
+    gap: 15px; /* กำหนดระยะห่างระหว่างปุ่ม */
+}
+
+.joined {
+    color: green;
+    cursor: default;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+
+a.btn-back {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    background-color: #ffffff;
+    border: 1px solid #0c0b0b;
+    color: #000000;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+a.btn-back:hover {
+    background-color: #f0f0f0;
+}
+
+#favorite-button {
+    display: inline-block;
+}
+
+#favorite-icon {
+    color: #e62222;
+    font-size: 1.5rem; /* ปรับขนาดไอคอน */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#favorite-icon:hover {
+    transform: scale(1.2);
+}
+
+#favorite-icon.bi-heart-fill {
+    transform: scale(1.2);
+}
+

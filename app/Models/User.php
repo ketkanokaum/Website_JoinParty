@@ -30,7 +30,7 @@ class User extends Authenticatable
         return $this->usertype === 'admin';
     }
 
-    public function attendedParties(){  //กำหนดความสัมพันธ์attendedกับParties
+    public function attendedParties(){  //ความสัมพันธ์attendedกับParties
         return $this->belongsToMany(Party::class, 'attendances')
                     ->withTimestamps();
     }
@@ -53,6 +53,7 @@ class User extends Authenticatable
         'Introduction',
         'profile_photo_path',
         'current_team_id',
+        'images',
 
     ];
 

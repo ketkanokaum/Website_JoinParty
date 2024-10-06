@@ -1,54 +1,59 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Favorite;
+use App\Models\Attendance;
+use App\Models\Party;
+use Illuminate\Support\Facades\DB;
 
 class FavoriteController extends Controller
 {
     public function index()
     {
-        $favorites = Favorite::with('party')->where('user_id', Auth::id())->get();
-        foreach ($favorites as $favorite) {
-            $favorite->isFavorite = true; // เนื่องจากนี่คือหน้ารายการโปรด ทุก party จะมี isFavorite เป็น true
-        }
-
-        return view('favorite', compact('favorites'));
+        $favorites = Favorite::with(['party' => function ($query) {
+            $query->whereNull('deleted_at');
+        }])
+            ->where('user_id', Auth::id())
+            ->get();
+        $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
+        $parties = Party::with('attendees')->get();
+        return view('favorite', compact('favorites', 'joinAttendances', 'parties'));
     }
 
-    
-    public function addToFavorite(Request $request) {
-        $userId = Auth::id(); 
-    
-        // ตรวจสอบว่าผู้ใช้คนนี้มี party นี้ในรายการโปรดแล้วหรือไม่ (รวมถึงรายการที่ถูกลบชั่วคราว)
+
+
+    public function addToFavorite(Request $request)
+    {
+        $userId = Auth::id();
         $existingFavorite = Favorite::withTrashed()
             ->where('user_id', $userId)
             ->where('party_id', $request->party_id)
             ->first();
-    
-        $favorite = new Favorite();
-        $favorite->user_id = $userId; // ใช้ user_id ที่ดึงมาจาก Auth::id()
-        $favorite->party_id = $request->party_id; // เก็บ id ของปาร์ตี้จาก request
-        $favorite->save();
-    
-        return redirect()->route('party.details', ['id' => $request->party_id]);
+
+        if (!$existingFavorite) {
+            $favorite = new Favorite();
+            $favorite->user_id = $userId;
+            $favorite->party_id = $request->party_id;
+            $favorite->save();
+        } else {
+            $existingFavorite->restore();
+        }
+
+        return redirect()->back();
     }
-    
 
 
-    public function removeFavorite($id) {
-
+    public function removeFavorite($id)
+    {
         $favorite = Favorite::where('user_id', Auth::id())->where('party_id', $id)->first();
         if ($favorite) {
-            $favorite->delete();
-            return redirect()->route('party.details', ['id' => $id]);
+            $favorite->delete(); // ลบรายการโปรดออกจากฐานข้อมูล
+            return redirect()->route('favorites')->with('success', 'ลบรายการโปรดเรียบร้อยแล้ว');
+        }
+
+        return redirect()->route('favorites')->with('error', 'ไม่พบปาร์ตี้ในรายการโปรด');
     }
-
-    return redirect()->back()->with('error', 'ไม่พบปาร์ตี้ในรายการโปรด');
-
 }
-}
-        
-
-

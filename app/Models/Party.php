@@ -16,7 +16,7 @@ class Party extends Model
 
 
     public function attendees(){  //ปาร์ตี้กับuser
-        return $this->belongsToMany(User::class, 'attendances')
+        return $this->belongsToMany(User::class, 'attendances','party_id', 'user_id')
                     ->withTimestamps();
     }
 
@@ -24,8 +24,9 @@ class Party extends Model
         return $this->hasMany(Review::class);
     }
 
-    public function parties()
-    {
-        return $this->hasMany(Party::class);
-    }
+    public function partyType()
+{
+    return $this->belongsTo(PartyType::class);
+}
+
 }

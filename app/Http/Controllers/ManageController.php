@@ -5,132 +5,130 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Models\Party;
 use App\Models\Attendance;
+use App\Models\Favorite;
 use Illuminate\Support\Facades\DB;
+
 class ManageController extends Controller
 {
     public function showProfile()
     {
         $user = Auth::user();
-        return view('profile_user',compact('user'));
+        return view('profile_user', compact('user'));
     }
 
-    public function showEditProfile()
+
+    public function UpdateProfile(Request $request, $id)
     {
-        $users = User::all();
-        return view('profile_user', compact('users'));
-    }
-
-    public function UpdateProfile(Request $request, $id){
         $users = User::find($id);
-    if ($request->has('username')) {
-        $users->username = $request->username;
-    }
-    if ($request->has('fristname')) {
-        $users->fristname = $request->fristname;
-    }
-    if ($request->has('lastname')) {
-        $users->lastname = $request->lastname;
-    }
-    if ($request->has('gender')) {
-        $users->gender = $request->gender;
-    }
-    if ($request->has('birthday')) {
-        $users->birthday = $request->birthday;
-    }
-    if ($request->has('phone')) {
-        $users->phone = $request->phone;
-    }
-    if ($request->has('Introduction')) {
-        $users->Introduction = $request->Introduction;
-    }
-    if ($request->hasFile('img')) {
-        // ตรวจสอบว่าผู้ใช้มีรูปภาพเดิมอยู่หรือไม่ และลบรูปภาพเดิมหากมี
-        if ($users->img && Storage::exists('public/users_images/' . $users->img)) {
-            Storage::delete('public/users_images/' . $users->img);
+        if ($request->has('username')) {
+            $users->username = $request->username;
         }
-        // สร้างชื่อไฟล์ใหม่โดยใช้เวลาปัจจุบันและนามสกุลของไฟล์
-        $imageName = time() . '.' . $request->img->extension();
-        // จัดเก็บไฟล์ไปยังโฟลเดอร์ที่ต้องการ โดยใช้ Storage::putFile
-        $path = $request->file('img')->storeAs('public/users_images', $imageName);
-        $users->img = $imageName;
-        $users->save();
-    }
+        if ($request->has('fristname')) {
+            $users->fristname = $request->fristname;
+        }
+        if ($request->has('lastname')) {
+            $users->lastname = $request->lastname;
+        }
+        if ($request->has('gender')) {
+            $users->gender = $request->gender;
+        }
+        if ($request->has('birthday')) {
+            $users->birthday = $request->birthday;
+        }
+        if ($request->has('phone')) {
+            $users->phone = $request->phone;
+        }
+        if ($request->has('Introduction')) {
+            $users->Introduction = $request->Introduction;
+        }
+        if ($request->hasFile('images') && $request->file('images')->isValid()) {
+            
+            $imagePath = $request->file('images')->store('users_images', 'public');
+            $users->images = $imagePath;
+        }
+        
     
-    $users->save();
-    return redirect()->route('profile.show');
-}
-
-public function showParty()
-{
-    $time = time();
-    // ดึงปาร์ตี้ที่ยังไม่หมดเวลารับสมัคร (วันที่อยู่ในอนาคต)
-    $activeParties = Party::where('start_date', '>', date('Y-m-d H:i:s', $time))->get();
-    // ดึงปาร์ตี้ที่หมดเวลารับสมัครแล้ว (วันที่อยู่ในอดีต)
-    $pastParties = Party::where('start_date', '<=', date('Y-m-d H:i:s', $time))->get();
-    $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
-
-    return view('dashboard', [
-        'activeParties' => $activeParties,
-        'pastParties' => $pastParties,
-        'joinAttendances' =>$joinAttendances
-    ]);
-}
-
-public function searchParty(Request $request)
-{
-    $searchTerm = $request->input('query');
-    $province = $request->input('province');
-
-    $query = Party::query();
-
-    if ($searchTerm) {
-        $query->where('party_name', 'LIKE', "%{$searchTerm}%")
-            ->orWhere('location', 'LIKE', "%{$searchTerm}%");
+        $users->save();
+        return redirect()->route('profile.show');
     }
 
-    if ($province) {
-        $query->where('location', $province);
-    }
+    public function showParty()
+    {
+        $time = time();
+        $activeParties = Party::where('start_date', '>', date('Y-m-d H:i:s', $time))
+            ->orderBy('start_date', 'asc')
+            ->get();
+        $pastParties = Party::where('start_date', '<=', date('Y-m-d H:i:s', $time))->get();
+        $partyCounts = Party::select('party_type_id', DB::raw('count(*) as total'))
+            ->groupBy('party_type_id')
+            ->get();
+        $joinAttendances = Attendance::where('user_id', Auth::id())
+            ->pluck('party_id')    
+            ->toArray();
 
-    $parties = $query->get();
-
-    // ตรวจสอบว่า $parties มีข้อมูลหรือไม่
-    if ($parties->isEmpty()) {
-        return response()->json([]);
-    } else {
-        return response()->json($parties);
-    }
-}
-
-
-public function viewPartyDetails($id){
-    $party = Party::findOrFail($id);
-    $isFavorite = DB::table('favorites')
-                ->where('user_id', Auth::id())
-                ->where('party_id', $id)
-                ->exists(); //ตรวจสอบว่ามีรายการโปรดนี้หรือไม่
-    $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
-
-    return view('detailparty', compact('party','isFavorite','joinAttendances'));
-}
-
-// public function countJoin()
-// {
-//     $activeParties = Party::all();
-//     $partiesCount = [];
-//     foreach ($activeParties as $party) {
-//         $partiesCount[$party->id] =  $partiesCount[$party->id] = $party->attendees()->count();
-
-//     }
-//     return view('dashboard', compact('activeParties', 'partiesCount'));
-// }
-
-
-
-
+        return view('dashboard', [
+            'activeParties' => $activeParties,
+            'pastParties' => $pastParties,
+            'partyCounts' => $partyCounts,
+            'joinAttendances' => $joinAttendances,
+        ]);
     }
 
 
+    public function viewPartyDetails($id)
+    {
+        $party = Party::find($id);
+        $isFavorite = Favorite::where('user_id', Auth::id())
+            ->where('party_id', $id)
+            ->exists();
+        $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
+        return view('detailparty', compact('party', 'isFavorite', 'joinAttendances'));
+    }
+
+
+
+    public function searchParty(Request $request)
+    {
+        // รับค่าจากฟอร์มค้นหา
+        $query = $request->input('search');
+        $province = $request->input('province');
+        $type = $request->input('type');
+        $sort = $request->input('sort');
+
+        // กำหนดเงื่อนไขการค้นหาตามค่าที่ได้รับจากฟอร์ม
+        $parties = Party::query()
+            ->when($query, function ($queryBuilder) use ($query) {
+                return $queryBuilder->where('party_name', 'LIKE', '%' . $query . '%');
+            })
+            ->when($province, function ($queryBuilder) use ($province) {
+                return $queryBuilder->where('province', $province);
+            })
+            ->when($type, function ($queryBuilder) use ($type) {
+                return $queryBuilder->where('party_type_id', $type);
+            })
+            ->get();
+        
+
+        $activeParties = $parties;
+
+        $partyTypeCounts = Party::select('party_type_id', DB::raw('count(*) as total'))
+            ->groupBy('party_type_id')
+            ->get()
+            ->pluck('total', 'party_type_id'); 
+
+        $joinAttendances = Attendance::where('user_id', Auth::id())->pluck('party_id')->toArray();
+
+        return view('dashboard', [
+            'parties' => $parties,
+            'activeParties' => $activeParties,
+            'partyTypeCounts' => $partyTypeCounts,
+            'type' => $type ?? '', // ตรวจสอบว่ามีค่า type หรือไม่ ถ้าไม่มีก็ให้เป็นค่าว่าง
+            'joinAttendances' => $joinAttendances
+            
+        ]);
+    }
+}

@@ -14,25 +14,23 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/join.css">
+    <link rel="stylesheet" href="/detail.css">
 </head>
 <!-- กดดูข้อมูลเพิ่มเติมกิจกรรม -->
 
 <body>
 
     <div class="container md-5">
-        <!-- Main Content -->
         <div class="card p-4 shadow">
             <div class="row g-4">
-                <!-- Image Section -->
                 <div class="col-md-6">
-                    <img src="{{ asset('party_images/' . $party->img) }}" alt="Even Image" width="600px" height="500px">
+                    <img src="{{ asset('party_images/' . $party->img) }}" alt="Event Image" width="100%" height="auto" class="img-fluid">
                 </div>
 
 
                 <div class="col-md-6">
-                    <h2 class="mb-3">{{$party->party_name }}</h2>
-                    <p>จำนวนผู้เข้าร่วม: <span class="text-muted">22/40 คน</span></p>
+                    <h2 class="mb-6">{{$party->party_name }}</h2>
+                    <p>จำนวนผู้เข้าร่วมกิจกรรม : <span class="text-muted">{{ $party->attendees->count() }} / {{$party->numpeople}} คน</span></p>
                     @php
                     $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
                     @endphp
@@ -43,69 +41,77 @@
                     @endif
                     <ul class="list-unstyled">
                         <p>วันที่จัดกิจกรรม :
-                                @if (date('Y-m-d', strtotime($party->start_date)) == date('Y-m-d', strtotime($party->end_date)))
-                                    <!-- กรณีจัดกิจกรรมวันเดียว -->
-                                    {{ date('d F', strtotime($party->start_date)) }} {{ date('Y', strtotime($party->start_date)) + 543 }}
-                                @else
-                                    <!-- กรณีจัดหลายวัน -->
-                                    {{ date('d F', strtotime($party->start_date)) }} {{ date('Y', strtotime($party->start_date)) + 543 }} - 
-                                    {{ date('d F', strtotime($party->end_date)) }} {{ date('Y', strtotime($party->end_date)) + 543 }}
-                                @endif
+                            @if (thaidate($party->start_date) == thaidate($party->end_date))
+                            <!-- กรณีจัดกิจกรรมวันเดียว -->
+                            {{ thaidate($party->start_date) }}
+                            @else
+                            <!-- กรณีจัดหลายวัน -->
+                            {{ thaidate($party->start_date) }} ถึง {{ thaidate($party->end_date) }}
+                            @endif
+
 
                         </p>
                         <li>ตั้งแต่เวลา : {{ date('H:i', strtotime($party->start_time)) }} ถึง {{ date('H:i', strtotime($party->end_time)) }} น.</li>
                         <li> สถานที่ : {{$party->location }}</li>
-                        <p>จังหวัด :  {{ $party->province }}</p>
+                        <p>จังหวัด : {{ $party->province }}</p>
                         <li>รายละเอียดกิจกรรม : {{$party->detail}}</li>
                     </ul>
 
-                    <div class="d-flex align-items-center mt-4">
-                    @if($daysLeft > 0)
-                    @if(in_array($party->id, $joinAttendances))
-                                <!-- กรณีที่ผู้ใช้เข้าร่วมแล้ว -->
-                                <a class="btn me-2 join2 joined" style="color: green; cursor: default;">เข้าร่วมแล้ว</a>
+                    <!--ลองทำ-->
+                    <div class="button-container">
+                        <div class="join mt-4">
+                            @if($daysLeft > 0)
+                            @if($party->attendees->count() == $party->numpeople)
+                            <!-- กรณีผู้เข้าร่วมเต็ม -->
+                            <p style="color: red;">เต็มแล้ว</p>
                             @else
-                                @auth
-                                    <!-- กรณีผู้ใช้ล็อกอินและยังไม่ได้เข้าร่วม -->
-                                    <a class="join" onclick="join({{ $party->id }})" style="color: blue; cursor: pointer;">เข้าร่วม</a>
-                                @else
-                                    <!-- กรณีผู้ใช้ไม่ได้ล็อกอิน -->
-                                    <a class="expired disabled" style="color: gray; cursor: not-allowed;">หมดเขตรับสมัคร</a>
-                                @endauth
+                            @if(in_array($party->id, $joinAttendances))
+                            <!-- กรณีผู้ใช้เข้าร่วมแล้ว -->
+                            <a class="joined" style="color: green; cursor: default;">เข้าร่วมแล้ว</a>
+                            @else
+                            @auth
+                            <a class="join" onclick="join({{ $party->id }})">เข้าร่วม</a>
+
+                            @endauth
+                            @guest
+                            <!-- ยังไม่เข้าสู่ระบบ -->
+                            @endguest
                             @endif
-                    @else
-                            <!-- กรณีหมดเขตรับสมัครแล้ว -->
-                            <a class="expired disabled" style="color: gray; cursor: not-allowed;">หมดเขตรับสมัคร</a>
-                    @endif
-                            <a href="{{ url('/dashboard') }}" class="btn btn-outline-secondary me-4">ย้อนกลับ</a>
-                            
-        
-                        <div id="favorite-button-{{ $party->id }}">
-                        @if($isFavorite)
-                            <!-- ฟอร์มลบรายการโปรด (หัวใจเต็ม) -->
-                            <form action="{{ route('remove.favorite', ['id' => $party->id]) }}" method="POST">
+                            @endif
+                            @else
+                            <!-- หมดเขตรับสมัครแล้ว -->
+
+                            @endif
+                        </div>
+
+                        <a href="{{ url('/') }}" class="btn-back">ย้อนกลับ</a>
+
+                        <!-- ปุ่มหัวใจ (รายการโปรด) -->
+                        @auth
+                        <div id="favorite-button">
+                            @if($isFavorite)
+                            <form action="{{ route('remove.favorite', ['id' => $party->id]) }}" method="POST" style="display:inline;">
                                 @csrf
-                                <button type="submit" style="background: none; border: none;">
-                                    <i class="bi bi-heart-fill text-danger" style="font-size: 1.5rem;"></i>
+                                <button onClick="alert('ลบออกจากรายการโปรดแล้ว!')" type="submit" style="background: none; border: none;">
+                                    <i id="favorite-icon" class="bi bi-heart-fill text-danger"></i>
                                 </button>
                             </form>
-                        @else
-                            <!-- ฟอร์มเพิ่มรายการโปรด (หัวใจว่าง) -->
-                            <form action="{{ route('add.favorite') }}" method="POST">
+                            @else
+                            <form action="{{ route('add.favorite') }}" method="POST" style="display:inline;">
                                 @csrf
                                 <input type="hidden" name="party_id" value="{{ $party->id }}">
-                                <button type="submit" style="background: none; border: none;">
-                                    <i class="bi bi-heart" style="font-size: 1.5rem;"></i>
+                                <button onClick="alert('เพิ่มลงในรายการโปรดแล้ว!')" type="submit" style="background: none; border: none;">
+                                    <i id="favorite-icon" class="bi bi-heart"></i>
                                 </button>
                             </form>
-                        @endif
+                            @endif
+                        </div>
+                        @endauth
                     </div>
 
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- Bootstrap JS -->
@@ -127,9 +133,9 @@
             this.classList.toggle("text-danger"); // เปลี่ยนสีไอคอนด้วย
         });
 
-          function join(id){
-            if(confirm("คุณต้องการเข้าร่วมกิจกรรมนี้ใช่หรือไม่")){
-                window.location.href="/join/" +id;
+        function join(id) {
+            if (confirm("คุณต้องการเข้าร่วมกิจกรรมนี้ใช่หรือไม่")) {
+                window.location.href = "/join/" + id;
             }
 
         }

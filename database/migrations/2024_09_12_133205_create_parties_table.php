@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('img');
             $table->foreignId('party_type_id')->constrained()->onDelete('cascade');
             $table->string('contact',1000);
-            $table->string('img_contact');
+            $table->string('img_contact')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -40,6 +40,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('parties');
+        Schema::create('parties', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

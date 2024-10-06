@@ -15,7 +15,7 @@
 /* เมนูด้านข้าง */
 aside {
     width: 25%;
-    height: 1000px;
+    height: 200vh;
     background: linear-gradient(180deg, #f7f1f3, #e7d7e7);
 }
 aside ul {
@@ -51,6 +51,7 @@ aside ul .user {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 0;
 }
+
 aside ul .unuser {
     margin: 10px 10px;
     border-radius: 10px;
@@ -87,14 +88,14 @@ section table img{
 .search #submit-input {
     padding: 7px 20px;
     height: 40px;
-    background-color: rgb(26, 129, 255);
+    background-color:#ffd28c;
     border: none;
     border-radius: 5px;
     transition: 0.5s;
-    color: #ffffff;
+    color: #111111;
 }
 .search #submit-input:hover {
-    background-color: rgb(30, 117, 223);
+    background-color: #f4b37a;
 }
 
 /* ตารางข้อมูล */
@@ -144,21 +145,21 @@ table .btn:hover {
 
 .table-bt,.table-bt-t {
     border: none;
-    background-color: #88ea92;
+    background-color:#4e96e88a;
     padding: 10px 12.5px;
     margin-bottom: 20px;
     border-radius: 10px;
     margin-top: 10px;
 }
 .table-bt-t {
-    background-color: #ec8a8a;
+    background-color: rgba(208, 70, 70, 0.706);
     padding: 10px 20px;
 }
 .table-bt:hover {
-    background-color: #81d88a;
+    background-color:#417fc68a;
 }
 .table-bt-t:hover {
-    background-color: #dd7b7b;
+    background-color: rgba(165, 55, 55, 0.706);
 }
 
 /* แบบฟอร์มสร้างปาร์ตี้ */
@@ -173,6 +174,9 @@ select {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+select {
+    appearance: none;  /* ลบสไตล์เริ่มต้น */
 }
 textarea {
     height: 100px;
@@ -189,4 +193,65 @@ textarea {
     background-color: #f4b37a;
 }
 
+.transparent-btn {
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
 
+.transparent-btn:hover {
+    color: rgba(117, 117, 130, 0.133); /* เปลี่ยนสีเมื่อมีการ hover */
+}
+.ceate-bt {
+    display: flex;
+    gap: 5px;
+}
+.ceat {
+    width: 95% !important;
+}
+.fromm {
+    display: flex;
+    gap: 5px;
+    font-size: 10pt;
+}
+.fromm button {
+    border: none;
+    border-radius: 10px;
+    background-color: #999;
+}
+.fromm button:hover {
+    background-color: #8d8a8a;
+}
+
+.active {
+    background-color: #ffffff; 
+    color: #000;
+}
+
+.active a {
+    font-weight: bold;
+
+}
+
+.transparent-btn:hover {
+    color: #000; /* สีปุ่มเมื่อเม้าชี้ */
+    font-weight: 600;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.pagination .active span {
+    background-color: #ffd28c;
+    color: #000;
+    border-color: #ffd28c;
+}
+
+.pagination a, .pagination span {
+    color: #000; /* เปลี่ยนสีข้อความเป็นสีขาว */
+}

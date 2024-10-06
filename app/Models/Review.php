@@ -13,8 +13,10 @@ class Review extends Model
         return $this->belongsTo(Party::class);
     }
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function attendance()
+    {
+        return $this->belongsTo(Attendance::class, 'attendance_id','id');
     }
+    
 
 }

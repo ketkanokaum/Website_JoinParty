@@ -14,6 +14,7 @@ nav {
     top: 0;
     z-index: 99;
     padding-bottom: 10px;
+    box-shadow: 3px 3px 15px rgba(182, 180, 180, 0.688);
 }
 
 .container-nav {
@@ -71,8 +72,18 @@ footer {
     text-align: center;
     padding: 30px;
     background-color: #e4d3d1da;
-    position: absolute;
     bottom: 0;
+}
+
+.active {
+    background-color: #e4d3d1da;
+    color: #000;
+    border-radius: 10px;
+}
+
+.active a {
+    font-weight: 500;
+
 }
 
 @font-face {
