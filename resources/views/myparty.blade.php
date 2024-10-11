@@ -174,11 +174,17 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="AllreviewModal{{ $pastparty->party->id }}">{{ $pastparty->party->party_name }}</h5><br>
-                                    <h6>ค่าเฉลี่ยคะแนน: {{ number_format($avg_ratings[$pastparty->party->id]->average_rating, 2) }}/5.00</h6>
+                                    <h6> ค่าเฉลี่ยคะแนน:
+                                        @if(isset($avg_ratings[$pastparty->party->id]))
+                                        {{ number_format($avg_ratings[$pastparty->party->id]->average_rating, 2) }}/5.00
+                                        @else
+                                        
+                                        @endif
+                                    </h6>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    
+
                                     @foreach($reviews->where('party_id', $pastparty->party->id) as $review)
                                     <div class="card mb-3" style="border: 2px solid #ddd; padding: 20px; width: 100%; border-radius: 8px;">
                                         <div class="card-body">
@@ -195,7 +201,23 @@
                         </div>
                     </div>
                     @else
-                    <p class="text-center">ยังไม่มีข้อมูลรีวิว</p>
+                    <button type="button" class="btn allreview" data-bs-toggle="modal" data-bs-target="#AllreviewModal{{ $pastparty->party->id }}">
+                        รีวิวทั้งหมด
+                    </button>
+                    <div class="modal fade" id="AllreviewModal{{ $pastparty->party->id }}" tabindex="-1" aria-labelledby="AllreviewModal{{ $pastparty->party->id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="AllreviewModal{{ $pastparty->party->id }}">{{ $pastparty->party->party_name }}</h5><br>
+
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="center"> ยังไม่มีข้อมูลการรีวิว</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     @endif
 
             </div>
@@ -230,7 +252,7 @@
                                 <label class="form-label">ความคิดเห็น</label>
                                 <textarea name="review" id="review-text{{ $pastparty->party->id }}" class="form-control" rows="4" placeholder="เขียนความคิดเห็นของคุณที่นี่..." required></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">ส่งรีวิว</button>
+                            <button onClick="alert('รีวิวเรียบร้อยแล้ว!')" type="submit" class="btn btn-primary">ส่งรีวิว</button>
                         </form>
                     </div>
                 </div>

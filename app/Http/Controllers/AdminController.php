@@ -18,43 +18,48 @@ class AdminController extends Controller
     public function index()
     {
         return view('admin.dashboard');
+        
     }
 
     public function createParty()
-    {
-        $time = date('Y-m-d H:i:s');
+{
+    $time = date('Y-m-d H:i:s');
+    $parties = Party::select('parties.*')
+        ->leftJoin('attendances', 'parties.id', '=', 'attendances.party_id')
+        ->selectRaw('COUNT(CASE WHEN attendances.status = "joined" THEN 1 END) as joined_count')
+        ->groupBy(
+            'parties.id',
+            'parties.party_name',
+            'parties.start_date',
+            'parties.end_date',
+            'parties.start_time',
+            'parties.end_time',
+            'parties.location',
+            'parties.detail',
+            'parties.province',
+            'parties.numpeople',
+            'parties.img',
+            'parties.party_type_id',
+            'parties.contact',
+            'parties.img_contact',
+            'parties.created_at',
+            'parties.updated_at',
+            'parties.deleted_at'
+        )
+        ->orderByRaw("
+            CASE
+                WHEN end_date >= CURDATE() THEN 0
+                ELSE 1
+            END,
+            created_at DESC
+        ")
+        ->paginate(6);
 
+    $partyTypes = PartyType::all();
 
-        $parties = Party::select('parties.*')
-            ->leftJoin('attendances', 'parties.id', '=', 'attendances.party_id')
-            ->selectRaw('COUNT(CASE WHEN attendances.status = "joined" THEN 1 END) as joined_count')
-            ->where('start_date', '>', $time)
-            ->groupBy(
-                'parties.id',
-                'parties.party_name',
-                'parties.start_date',
-                'parties.end_date',
-                'parties.start_time',
-                'parties.end_time',
-                'parties.location',
-                'parties.detail',
-                'parties.province',
-                'parties.numpeople',
-                'parties.img',
-                'parties.party_type_id',
-                'parties.contact',
-                'parties.img_contact',
-                'parties.created_at',
-                'parties.updated_at',
-                'parties.deleted_at'
-            ) 
-            ->paginate(6);
+    return view('admin/create', compact('parties', 'partyTypes'));
+}
 
-        $partyTypes = PartyType::all();
-
-
-        return view('admin/create', compact('parties', 'partyTypes'));
-    }
 
     public function searchparty(Request $request)
     {
@@ -88,23 +93,28 @@ class AdminController extends Controller
             'parties.created_at',
             'parties.updated_at',
             'parties.deleted_at'
-        );
+        )
 
-        if ($sort == 'asc') {
-            $parties->orderBy('start_date', 'asc');
-        } else {
-            $parties->orderBy('start_date', 'desc');
-        }
-        $parties = $parties->paginate(6);
+        ->orderByRaw("
+            CASE
+                WHEN end_date >= CURDATE() THEN 0
+                ELSE 1
+            END,
+            created_at DESC
+        ");
 
-        if ($parties->total() == 0) {
-            $message = "ไม่พบกิจกรรม";
-        } else {
-            $message = null;
-        }
-
-        return view('admin/create', compact('parties', 'partyTypes'));
+    if ($sort == 'asc') {
+        $parties->orderBy('start_date', 'asc');
+    } else {
+        $parties->orderBy('start_date', 'desc');
     }
+
+    $parties = $parties->paginate(6);
+
+    $message = $parties->total() == 0 ? "ไม่พบกิจกรรม" : null;
+
+    return view('admin/create', compact('parties', 'partyTypes', 'message'));
+}
 
 
 

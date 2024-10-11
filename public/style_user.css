@@ -126,20 +126,20 @@ background-color: rgb(242,199,199);
 
 /* ตารางป๊อปอัพขึ้น */
 #exampleModal table tr td {
-  padding: 15px;
+padding: 15px;
     text-align: left;
 }
 .modal table tr th{
-  padding: 15px;
-  text-align: left;
-  border-radius: 10px;
+padding: 15px;
+text-align: left;
+border-radius: 10px;
 }
 .modal table tr td{
     padding: 15px;
     text-align: left;
     background-color: #e2dfdf70;
     border-radius: 10px;
-  }
+}
 
 .modal table th {
     background-color: #ffffff;
@@ -188,4 +188,10 @@ background-color: rgb(242,199,199);
 
 .pagination a, .pagination span {
     color: #000; /* เปลี่ยนสีข้อความเป็นสีขาว */
+}
+
+.headtd {
+    background-color: #ffffff !important;
+    font-size: 14px;
+    font-weight: bold;
 }

@@ -98,9 +98,9 @@
                     <table style="border-radius: 10px;">
                         <thead>
                             <tr>
-                                <th style="border-radius: 10px;">อีเมลของผู้ใช้</th>
-                                <th style="width: 10px; background-color: white;"></th>
-                                <th style="border-radius: 10px;">เบอร์โทรศัพท์</th>
+                                <td style="border-radius: 10px;" class="headtd">อีเมลของผู้ใช้</td>
+                                <td style="width: 10px; background-color: white;"></td>
+                                <td style="border-radius: 10px;" class="headtd">เบอร์โทรศัพท์</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -116,9 +116,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th style="border-radius: 10px;">ชื่อ</th>
+                                <th style="border-radius: 10px; class="headtd"">ชื่อ</th>
                                 <th style="width: 10px; background-color: white;"></th>
-                                <th style="border-radius: 10px;">นามสกุล</th>
+                                <th style="border-radius: 10px;" class="headtd">นามสกุล</th>
                             </tr>
                             <tr>
                                 <td>{{$user->fristname}}</td>
@@ -127,13 +127,13 @@
                             </tr>
                             <tr>
                             <tr>
-                                <th>วันเกิด</th>
+                                <th class="headtd">วันเกิด</th>
                                 <th style="width: 10px; background-color: white;"></th>
-                                <th>เพศ</th>
+                                <th class="headtd">เพศ</th>
                             </tr>
                             <tr>
                                 <td> @if(isset($user->birthday) && !empty($user->birthday))
-                                    {{$user->birthday}}
+                                    {{ thaidate($user->birthday)}}
                                     @else
                                     -
                                     @endif
@@ -147,7 +147,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th colspan="3" style="text-align: center;">เกี่ยวกับฉัน</th>
+                                <th colspan="3" style="text-align: center;" class="headtd">เกี่ยวกับฉัน</th>
                             </tr>
                             <tr>
                             <tr>

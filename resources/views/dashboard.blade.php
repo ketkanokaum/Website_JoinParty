@@ -36,83 +36,92 @@
                     <input type="text" id="search-input" name="search" placeholder="ค้นหากิจกรรม ..." value="{{ request()->get('search') }}">
                     <select id="province" name="province">
                         <option value="">จังหวัด</option>
-                        <option value="กระบี่" {{ request()->get('province') == 'กระบี่' ? 'selected' : '' }}>กระบี่</option>
-                        <option value="กรุงเทพมหานคร" {{ request()->get('province') == 'กรุงเทพมหานคร' ? 'selected' : '' }}>กรุงเทพมหานคร</option>
-                        <option value="กาญจนบุรี" {{ request()->get('province') == 'กาญจนบุรี' ? 'selected' : '' }}>กาญจนบุรี</option>
-                        <option value="กาฬสินธุ์" {{ request()->get('province') == 'กาฬสินธุ์' ? 'selected' : '' }}>กาฬสินธุ์</option>
-                        <option value="กำแพงเพชร" {{ request()->get('province') == 'กำแพงเพชร' ? 'selected' : '' }}>กำแพงเพชร</option>
-                        <option value="ขอนแก่น" {{ request()->get('province') == 'ขอนแก่น' ? 'selected' : '' }}>ขอนแก่น</option>
-                        <option value="จันทบุรี" {{ request()->get('province') == 'จันทบุรี' ? 'selected' : '' }}>จันทบุรี</option>
-                        <option value="ฉะเชิงเทรา" {{ request()->get('province') == 'ฉะเชิงเทรา' ? 'selected' : '' }}>ฉะเชิงเทรา</option>
-                        <option value="ชลบุรี" {{ request()->get('province') == 'ชลบุรี' ? 'selected' : '' }}>ชลบุรี</option>
-                        <option value="ชัยนาท" {{ request()->get('province') == 'ชัยนาท' ? 'selected' : '' }}>ชัยนาท</option>
-                        <option value="ชัยภูมิ" {{ request()->get('province') == 'ชัยภูมิ' ? 'selected' : '' }}>ชัยภูมิ</option>
-                        <option value="ชุมพร" {{ request()->get('province') == 'ชุมพร' ? 'selected' : '' }}>ชุมพร</option>
-                        <option value="เชียงราย" {{ request()->get('province') == 'เชียงราย' ? 'selected' : '' }}>เชียงราย</option>
-                        <option value="เชียงใหม่" {{ request()->get('province') == 'เชียงใหม่' ? 'selected' : '' }}>เชียงใหม่</option>
-                        <option value="ตรัง" {{ request()->get('province') == 'ตรัง' ? 'selected' : '' }}>ตรัง</option>
-                        <option value="ตราด" {{ request()->get('province') == 'ตราด' ? 'selected' : '' }}>ตราด</option>
-                        <option value="ตาก" {{ request()->get('province') == 'ตาก' ? 'selected' : '' }}>ตาก</option>
-                        <option value="นครนายก" {{ request()->get('province') == 'นครนายก' ? 'selected' : '' }}>นครนายก</option>
-                        <option value="นครปฐม" {{ request()->get('province') == 'นครปฐม' ? 'selected' : '' }}>นครปฐม</option>
-                        <option value="นครพนม" {{ request()->get('province') == 'นครพนม' ? 'selected' : '' }}>นครพนม</option>
-                        <option value="นครราชสีมา" {{ request()->get('province') == 'นครราชสีมา' ? 'selected' : '' }}>นครราชสีมา</option>
-                        <option value="นครศรีธรรมราช" {{ request()->get('province') == 'นครศรีธรรมราช' ? 'selected' : '' }}>นครศรีธรรมราช</option>
-                        <option value="นครสวรรค์" {{ request()->get('province') == 'นครสวรรค์' ? 'selected' : '' }}>นครสวรรค์</option>
-                        <option value="นนทบุรี" {{ request()->get('province') == 'นนทบุรี' ? 'selected' : '' }}>นนทบุรี</option>
-                        <option value="นราธิวาส" {{ request()->get('province') == 'นราธิวาส' ? 'selected' : '' }}>นราธิวาส</option>
-                        <option value="น่าน" {{ request()->get('province') == 'น่าน' ? 'selected' : '' }}>น่าน</option>
-                        <option value="บึงกาฬ" {{ request()->get('province') == 'บึงกาฬ' ? 'selected' : '' }}>บึงกาฬ</option>
-                        <option value="บุรีรัมย์" {{ request()->get('province') == 'บุรีรัมย์' ? 'selected' : '' }}>บุรีรัมย์</option>
-                        <option value="ปทุมธานี" {{ request()->get('province') == 'ปทุมธานี' ? 'selected' : '' }}>ปทุมธานี</option>
-                        <option value="ประจวบคีรีขันธ์" {{ request()->get('province') == 'ประจวบคีรีขันธ์' ? 'selected' : '' }}>ประจวบคีรีขันธ์</option>
-                        <option value="ปราจีนบุรี" {{ request()->get('province') == 'ปราจีนบุรี' ? 'selected' : '' }}>ปราจีนบุรี</option>
-                        <option value="ปัตตานี" {{ request()->get('province') == 'ปัตตานี' ? 'selected' : '' }}>ปัตตานี</option>
-                        <option value="พระนครศรีอยุธยา" {{ request()->get('province') == 'พระนครศรีอยุธยา' ? 'selected' : '' }}>พระนครศรีอยุธยา</option>
-                        <option value="พะเยา" {{ request()->get('province') == 'พะเยา' ? 'selected' : '' }}>พะเยา</option>
-                        <option value="พังงา" {{ request()->get('province') == 'พังงา' ? 'selected' : '' }}>พังงา</option>
-                        <option value="พัทลุง" {{ request()->get('province') == 'พัทลุง' ? 'selected' : '' }}>พัทลุง</option>
-                        <option value="พิจิตร" {{ request()->get('province') == 'พิจิตร' ? 'selected' : '' }}>พิจิตร</option>
-                        <option value="พิษณุโลก" {{ request()->get('province') == 'พิษณุโลก' ? 'selected' : '' }}>พิษณุโลก</option>
-                        <option value="เพชรบุรี" {{ request()->get('province') == 'เพชรบุรี' ? 'selected' : '' }}>เพชรบุรี</option>
-                        <option value="เพชรบูรณ์" {{ request()->get('province') == 'เพชรบูรณ์' ? 'selected' : '' }}>เพชรบูรณ์</option>
-                        <option value="แพร่" {{ request()->get('province') == 'แพร่' ? 'selected' : '' }}>แพร่</option>
-                        <option value="ภูเก็ต" {{ request()->get('province') == 'ภูเก็ต' ? 'selected' : '' }}>ภูเก็ต</option>
-                        <option value="มหาสารคาม" {{ request()->get('province') == 'มหาสารคาม' ? 'selected' : '' }}>มหาสารคาม</option>
-                        <option value="มุกดาหาร" {{ request()->get('province') == 'มุกดาหาร' ? 'selected' : '' }}>มุกดาหาร</option>
-                        <option value="แม่ฮ่องสอน" {{ request()->get('province') == 'แม่ฮ่องสอน' ? 'selected' : '' }}>แม่ฮ่องสอน</option>
-                        <option value="ยโสธร" {{ request()->get('province') == 'ยโสธร' ? 'selected' : '' }}>ยโสธร</option>
-                        <option value="ยะลา" {{ request()->get('province') == 'ยะลา' ? 'selected' : '' }}>ยะลา</option>
-                        <option value="ร้อยเอ็ด" {{ request()->get('province') == 'ร้อยเอ็ด' ? 'selected' : '' }}>ร้อยเอ็ด</option>
-                        <option value="ระนอง" {{ request()->get('province') == 'ระนอง' ? 'selected' : '' }}>ระนอง</option>
-                        <option value="ระยอง" {{ request()->get('province') == 'ระยอง' ? 'selected' : '' }}>ระยอง</option>
-                        <option value="ราชบุรี" {{ request()->get('province') == 'ราชบุรี' ? 'selected' : '' }}>ราชบุรี</option>
-                        <option value="ลพบุรี" {{ request()->get('province') == 'ลพบุรี' ? 'selected' : '' }}>ลพบุรี</option>
-                        <option value="ลำปาง" {{ request()->get('province') == 'ลำปาง' ? 'selected' : '' }}>ลำปาง</option>
-                        <option value="ลำพูน" {{ request()->get('province') == 'ลำพูน' ? 'selected' : '' }}>ลำพูน</option>
-                        <option value="เลย" {{ request()->get('province') == 'เลย' ? 'selected' : '' }}>เลย</option>
-                        <option value="ศรีสะเกษ" {{ request()->get('province') == 'ศรีสะเกษ' ? 'selected' : '' }}>ศรีสะเกษ</option>
-                        <option value="สกลนคร" {{ request()->get('province') == 'สกลนคร' ? 'selected' : '' }}>สกลนคร</option>
-                        <option value="สงขลา" {{ request()->get('province') == 'สงขลา' ? 'selected' : '' }}>สงขลา</option>
-                        <option value="สตูล" {{ request()->get('province') == 'สตูล' ? 'selected' : '' }}>สตูล</option>
-                        <option value="สมุทรปราการ" {{ request()->get('province') == 'สมุทรปราการ' ? 'selected' : '' }}>สมุทรปราการ</option>
-                        <option value="สมุทรสงคราม" {{ request()->get('province') == 'สมุทรสงคราม' ? 'selected' : '' }}>สมุทรสงคราม</option>
-                        <option value="สมุทรสาคร" {{ request()->get('province') == 'สมุทรสาคร' ? 'selected' : '' }}>สมุทรสาคร</option>
-                        <option value="สระบุรี" {{ request()->get('province') == 'สระบุรี' ? 'selected' : '' }}>สระบุรี</option>
-                        <option value="สระแก้ว" {{ request()->get('province') == 'สระแก้ว' ? 'selected' : '' }}>สระแก้ว</option>
-                        <option value="สิงห์บุรี" {{ request()->get('province') == 'สิงห์บุรี' ? 'selected' : '' }}>สิงห์บุรี</option>
-                        <option value="สุโขทัย" {{ request()->get('province') == 'สุโขทัย' ? 'selected' : '' }}>สุโขทัย</option>
-                        <option value="สุพรรณบุรี" {{ request()->get('province') == 'สุพรรณบุรี' ? 'selected' : '' }}>สุพรรณบุรี</option>
-                        <option value="สุราษฎร์ธานี" {{ request()->get('province') == 'สุราษฎร์ธานี' ? 'selected' : '' }}>สุราษฎร์ธานี</option>
-                        <option value="สุรินทร์" {{ request()->get('province') == 'สุรินทร์' ? 'selected' : '' }}>สุรินทร์</option>
-                        <option value="หนองคาย" {{ request()->get('province') == 'หนองคาย' ? 'selected' : '' }}>หนองคาย</option>
-                        <option value="หนองบัวลำภู" {{ request()->get('province') == 'หนองบัวลำภู' ? 'selected' : '' }}>หนองบัวลำภู</option>
-                        <option value="อำนาจเจริญ" {{ request()->get('province') == 'อำนาจเจริญ' ? 'selected' : '' }}>อำนาจเจริญ</option>
-                        <option value="อุดรธานี" {{ request()->get('province') == 'อุดรธานี' ? 'selected' : '' }}>อุดรธานี</option>
-                        <option value="อุตรดิตถ์" {{ request()->get('province') == 'อุตรดิตถ์' ? 'selected' : '' }}>อุตรดิตถ์</option>
-                        <option value="อุทัยธานี" {{ request()->get('province') == 'อุทัยธานี' ? 'selected' : '' }}>อุทัยธานี</option>
-                        <option value="อุบลราชธานี" {{ request()->get('province') == 'อุบลราชธานี' ? 'selected' : '' }}>อุบลราชธานี</option>
-                        <option value="อ่างทอง" {{ request()->get('province') == 'อ่างทอง' ? 'selected' : '' }}>อ่างทอง</option>
+                        <optgroup label="ภาคเหนือ">
+                            <option value="เชียงราย" {{ request()->get('province') == 'เชียงราย' ? 'selected' : '' }}>เชียงราย</option>
+                            <option value="เชียงใหม่" {{ request()->get('province') == 'เชียงใหม่' ? 'selected' : '' }}>เชียงใหม่</option>
+                            <option value="ลำพูน" {{ request()->get('province') == 'ลำพูน' ? 'selected' : '' }}>ลำพูน</option>
+                            <option value="ลำปาง" {{ request()->get('province') == 'ลำปาง' ? 'selected' : '' }}>ลำปาง</option>
+                            <option value="แม่ฮ่องสอน" {{ request()->get('province') == 'แม่ฮ่องสอน' ? 'selected' : '' }}>แม่ฮ่องสอน</option>
+                            <option value="แพร่" {{ request()->get('province') == 'แพร่' ? 'selected' : '' }}>แพร่</option>
+                            <option value="น่าน" {{ request()->get('province') == 'น่าน' ? 'selected' : '' }}>น่าน</option>
+                            <option value="อุตรดิตถ์" {{ request()->get('province') == 'อุตรดิตถ์' ? 'selected' : '' }}>อุตรดิตถ์</option>
+                            <option value="พิษณุโลก" {{ request()->get('province') == 'พิษณุโลก' ? 'selected' : '' }}>พิษณุโลก</option>
+                            <option value="พิจิตร" {{ request()->get('province') == 'พิจิตร' ? 'selected' : '' }}>พิจิตร</option>
+                            <option value="สุโขทัย" {{ request()->get('province') == 'สุโขทัย' ? 'selected' : '' }}>สุโขทัย</option>
+                        </optgroup>
+                        <optgroup label="ภาคตะวันออกเฉียงเหนือ">
+                            <option value="กาฬสินธุ์" {{ request()->get('province') == 'กาฬสินธุ์' ? 'selected' : '' }}>กาฬสินธุ์</option>
+                            <option value="ขอนแก่น" {{ request()->get('province') == 'ขอนแก่น' ? 'selected' : '' }}>ขอนแก่น</option>
+                            <option value="ชัยภูมิ" {{ request()->get('province') == 'ชัยภูมิ' ? 'selected' : '' }}>ชัยภูมิ</option>
+                            <option value="นครพนม" {{ request()->get('province') == 'นครพนม' ? 'selected' : '' }}>นครพนม</option>
+                            <option value="นครราชสีมา" {{ request()->get('province') == 'นครราชสีมา' ? 'selected' : '' }}>นครราชสีมา</option>
+                            <option value="บึงกาฬ" {{ request()->get('province') == 'บึงกาฬ' ? 'selected' : '' }}>บึงกาฬ</option>
+                            <option value="บุรีรัมย์" {{ request()->get('province') == 'บุรีรัมย์' ? 'selected' : '' }}>บุรีรัมย์</option>
+                            <option value="มหาสารคาม" {{ request()->get('province') == 'มหาสารคาม' ? 'selected' : '' }}>มหาสารคาม</option>
+                            <option value="มุกดาหาร" {{ request()->get('province') == 'มุกดาหาร' ? 'selected' : '' }}>มุกดาหาร</option>
+                            <option value="ยโสธร" {{ request()->get('province') == 'ยโสธร' ? 'selected' : '' }}>ยโสธร</option>
+                            <option value="ร้อยเอ็ด" {{ request()->get('province') == 'ร้อยเอ็ด' ? 'selected' : '' }}>ร้อยเอ็ด</option>
+                            <option value="ศรีสะเกษ" {{ request()->get('province') == 'ศรีสะเกษ' ? 'selected' : '' }}>ศรีสะเกษ</option>
+                            <option value="สกลนคร" {{ request()->get('province') == 'สกลนคร' ? 'selected' : '' }}>สกลนคร</option>
+                            <option value="สุรินทร์" {{ request()->get('province') == 'สุรินทร์' ? 'selected' : '' }}>สุรินทร์</option>
+                            <option value="หนองคาย" {{ request()->get('province') == 'หนองคาย' ? 'selected' : '' }}>หนองคาย</option>
+                            <option value="หนองบัวลำภู" {{ request()->get('province') == 'หนองบัวลำภู' ? 'selected' : '' }}>หนองบัวลำภู</option>
+                            <option value="อำนาจเจริญ" {{ request()->get('province') == 'อำนาจเจริญ' ? 'selected' : '' }}>อำนาจเจริญ</option>
+                            <option value="อุดรธานี" {{ request()->get('province') == 'อุดรธานี' ? 'selected' : '' }}>อุดรธานี</option>
+                            <option value="อุบลราชธานี" {{ request()->get('province') == 'อุบลราชธานี' ? 'selected' : '' }}>อุบลราชธานี</option>
+                        </optgroup>
+                        <optgroup label="ภาคกลาง">
+                            <option value="กรุงเทพมหานคร" {{ request()->get('province') == 'กรุงเทพมหานคร' ? 'selected' : '' }}>กรุงเทพมหานคร</option>
+                            <option value="กำแพงเพชร" {{ request()->get('province') == 'กำแพงเพชร' ? 'selected' : '' }}>กำแพงเพชร</option>
+                            <option value="ชัยนาท" {{ request()->get('province') == 'ชัยนาท' ? 'selected' : '' }}>ชัยนาท</option>
+                            <option value="นครนายก" {{ request()->get('province') == 'นครนายก' ? 'selected' : '' }}>นครนายก</option>
+                            <option value="นครปฐม" {{ request()->get('province') == 'นครปฐม' ? 'selected' : '' }}>นครปฐม</option>
+                            <option value="นครสวรรค์" {{ request()->get('province') == 'นครสวรรค์' ? 'selected' : '' }}>นครสวรรค์</option>
+                            <option value="นนทบุรี" {{ request()->get('province') == 'นนทบุรี' ? 'selected' : '' }}>นนทบุรี</option>
+                            <option value="ปทุมธานี" {{ request()->get('province') == 'ปทุมธานี' ? 'selected' : '' }}>ปทุมธานี</option>
+                            <option value="พระนครศรีอยุธยา" {{ request()->get('province') == 'พระนครศรีอยุธยา' ? 'selected' : '' }}>พระนครศรีอยุธยา</option>
+                            <option value="พิจิตร" {{ request()->get('province') == 'พิจิตร' ? 'selected' : '' }}>พิจิตร</option>
+                            <option value="พิษณุโลก" {{ request()->get('province') == 'พิษณุโลก' ? 'selected' : '' }}>พิษณุโลก</option>
+                            <option value="ลพบุรี" {{ request()->get('province') == 'ลพบุรี' ? 'selected' : '' }}>ลพบุรี</option>
+                            <option value="สมุทรปราการ" {{ request()->get('province') == 'สมุทรปราการ' ? 'selected' : '' }}>สมุทรปราการ</option>
+                            <option value="สมุทรสงคราม" {{ request()->get('province') == 'สมุทรสงคราม' ? 'selected' : '' }}>สมุทรสงคราม</option>
+                            <option value="สมุทรสาคร" {{ request()->get('province') == 'สมุทรสาคร' ? 'selected' : '' }}>สมุทรสาคร</option>
+                            <option value="สระบุรี" {{ request()->get('province') == 'สระบุรี' ? 'selected' : '' }}>สระบุรี</option>
+                            <option value="อ่างทอง" {{ request()->get('province') == 'อ่างทอง' ? 'selected' : '' }}>อ่างทอง</option>
+                            <option value="อุทัยธานี" {{ request()->get('province') == 'อุทัยธานี' ? 'selected' : '' }}>อุทัยธานี</option>
+                        </optgroup>
+                        <optgroup label="ภาคตะวันออก">
+                            <option value="จันทบุรี" {{ request()->get('province') == 'จันทบุรี' ? 'selected' : '' }}>จันทบุรี</option>
+                            <option value="ฉะเชิงเทรา" {{ request()->get('province') == 'ฉะเชิงเทรา' ? 'selected' : '' }}>ฉะเชิงเทรา</option>
+                            <option value="ชลบุรี" {{ request()->get('province') == 'ชลบุรี' ? 'selected' : '' }}>ชลบุรี</option>
+                            <option value="ตราด" {{ request()->get('province') == 'ตราด' ? 'selected' : '' }}>ตราด</option>
+                            <option value="ปราจีนบุรี" {{ request()->get('province') == 'ปราจีนบุรี' ? 'selected' : '' }}>ปราจีนบุรี</option>
+                            <option value="ระยอง" {{ request()->get('province') == 'ระยอง' ? 'selected' : '' }}>ระยอง</option>
+                            <option value="สระแก้ว" {{ request()->get('province') == 'สระแก้ว' ? 'selected' : '' }}>สระแก้ว</option>
+                        </optgroup>
+                        <optgroup label="ภาคใต้">
+                            <option value="กระบี่" {{ request()->get('province') == 'กระบี่' ? 'selected' : '' }}>กระบี่</option>
+                            <option value="ชุมพร" {{ request()->get('province') == 'ชุมพร' ? 'selected' : '' }}>ชุมพร</option>
+                            <option value="ตรัง" {{ request()->get('province') == 'ตรัง' ? 'selected' : '' }}>ตรัง</option>
+                            <option value="นครศรีธรรมราช" {{ request()->get('province') == 'นครศรีธรรมราช' ? 'selected' : '' }}>นครศรีธรรมราช</option>
+                            <option value="นราธิวาส" {{ request()->get('province') == 'นราธิวาส' ? 'selected' : '' }}>นราธิวาส</option>
+                            <option value="ปัตตานี" {{ request()->get('province') == 'ปัตตานี' ? 'selected' : '' }}>ปัตตานี</option>
+                            <option value="พังงา" {{ request()->get('province') == 'พังงา' ? 'selected' : '' }}>พังงา</option>
+                            <option value="พัทลุง" {{ request()->get('province') == 'พัทลุง' ? 'selected' : '' }}>พัทลุง</option>
+                            <option value="ภูเก็ต" {{ request()->get('province') == 'ภูเก็ต' ? 'selected' : '' }}>ภูเก็ต</option>
+                            <option value="ยะลา" {{ request()->get('province') == 'ยะลา' ? 'selected' : '' }}>ยะลา</option>
+                            <option value="ระนอง" {{ request()->get('province') == 'ระนอง' ? 'selected' : '' }}>ระนอง</option>
+                            <option value="สงขลา" {{ request()->get('province') == 'สงขลา' ? 'selected' : '' }}>สงขลา</option>
+                            <option value="สตูล" {{ request()->get('province') == 'สตูล' ? 'selected' : '' }}>สตูล</option>
+                            <option value="สุราษฎร์ธานี" {{ request()->get('province') == 'สุราษฎร์ธานี' ? 'selected' : '' }}>สุราษฎร์ธานี</option>
+                        </optgroup>
+                        <optgroup label="ภาคตะวันตก">
+                            <option value="กาญจนบุรี" {{ request()->get('province') == 'กาญจนบุรี' ? 'selected' : '' }}>กาญจนบุรี</option>
+                            <option value="ตาก" {{ request()->get('province') == 'ตาก' ? 'selected' : '' }}>ตาก</option>
+                            <option value="ประจวบคีรีขันธ์" {{ request()->get('province') == 'ประจวบคีรีขันธ์' ? 'selected' : '' }}>ประจวบคีรีขันธ์</option>
+                            <option value="เพชรบุรี" {{ request()->get('province') == 'เพชรบุรี' ? 'selected' : '' }}>เพชรบุรี</option>
+                            <option value="ราชบุรี" {{ request()->get('province') == 'ราชบุรี' ? 'selected' : '' }}>ราชบุรี</option>
+                        </optgroup>
                     </select>
                     <input type="submit" value="ค้นหา">
                 </form>
@@ -155,87 +164,107 @@
                     </div>
                 </td>
                 <td class="partys" id="party-list">
-                    @if(isset($activeParties) && count($activeParties) > 0)
-                    @foreach($activeParties as $party)
-                    <div class="party">
-                        <div class="image">
-                            <img src="{{ asset('party_images/' . $party->img) }}" alt="Event Image" width="200px">
-                        </div>
-                        <div class="data">
-                            <p style="text-align: right;"><small>จำนวนผู้เข้าร่วมกิจกรรม: {{ $party->joined_count ?? 0}} / {{$party->numpeople}} คน</small></p>
-                            @php
-                            $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
-                            @endphp
+    <!-- แสดงกิจกรรมที่ยังเปิดรับสมัคร -->
+    @if(isset($activeParties) && count($activeParties) > 0)
+        @foreach($activeParties as $party)
+            @php
+                $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
+            @endphp
 
-                            @if($daysLeft > 0)
-                            <p style="color: #ee6464; text-align: right;"><small>เหลือเวลารับสมัครอีก : {{ $daysLeft }} วัน</small></p>
-                            @else
-                            <p style="color: #ee6464;">หมดเวลารับสมัคร</p>
-                            @endif
-
-                            <h2>{{ $party->party_name }}</h2>
-                            <p>วันที่จัดกิจกรรม :
-                                @if (thaidate($party->start_date) == thaidate($party->end_date))
+            @if($daysLeft > 0 && $party->joined_count < $party->numpeople)
+                <div class="party">
+                    <div class="image">
+                        <img src="{{ asset('party_images/' . $party->img) }}" alt="Event Image" width="200px">
+                    </div>
+                    <div class="data">
+                        <p style="text-align: right;"><small>จำนวนผู้เข้าร่วมกิจกรรม: {{ $party->joined_count ?? 0 }} / {{ $party->numpeople }} คน</small></p>
+                        <p style="color: #ee6464; text-align: right;"><small>เหลือเวลารับสมัครอีก : {{ $daysLeft }} วัน</small></p>
+                        <h2>{{ $party->party_name }}</h2>
+                        <p>วันที่จัดกิจกรรม:
+                            @if(thaidate($party->start_date) == thaidate($party->end_date))
                                 <!-- กรณีจัดกิจกรรมวันเดียว -->
                                 {{ thaidate($party->start_date) }}
-                                @else
+                            @else
                                 <!-- กรณีจัดหลายวัน -->
                                 {{ thaidate($party->start_date) }} ถึง {{ thaidate($party->end_date) }}
-                                @endif
-
-                            <p>สถานที่: {{ $party->location }}</p>
-                            <p>จังหวัด: {{ $party->province }}</p>
-
-                            <div class="buttons">
-                                @if($daysLeft > 0)
+                            @endif
+                        </p>
+                        <p>สถานที่: {{ $party->location }}</p>
+                        <p>จังหวัด: {{ $party->province }}</p>
+                        <div class="buttons">
+                            @if($daysLeft > 0)
                                 @if($party->joined_count == $party->numpeople)
-                                <!-- กรณีผู้เข้าร่วมเต็ม -->
-                                <p style="color: red;">เต็มแล้ว</p>
+                                    <!-- กรณีผู้เข้าร่วมเต็ม -->
+                                    <p style="color: red;">เต็มแล้ว</p>
                                 @else
-                                @if(in_array($party->id, $joinAttendances))
-                                <!-- กรณีผู้ใช้เข้าร่วมแล้ว -->
-                                <p class="join2 joined" style="color: green; cursor: default;">เข้าร่วมแล้ว</p>
-                                @else
-                                @auth
-                                <a class="join" onclick="join({{ $party->id }})">เข้าร่วม</a>
-                                @endauth
-                                @guest
-                                <!-- ยังไม่เข้าสู่ระบบ -->
-                                @endguest
+                                    @if(in_array($party->id, $joinAttendances))
+                                        <!-- กรณีผู้ใช้เข้าร่วมแล้ว -->
+                                        <p class="join2 joined" style="color: green; cursor: default;">เข้าร่วมแล้ว</p>
+                                    @else
+                                        @auth
+                                            <a class="join" onclick="join({{ $party->id }})">เข้าร่วม</a>
+                                        @endauth
+                                        @guest
+                                            <!-- ยังไม่เข้าสู่ระบบ -->
+                                        @endguest
+                                    @endif
                                 @endif
-                                @endif
-                                @else
+                            @else
                                 <!-- หมดเขตรับสมัครแล้ว -->
-
-                                @endif
-                                <!-- แสดงเสมอ -->
-                                <a href="{{ route('party.details', $party->id) }}" class="more">ข้อมูลเพิ่มเติม</a>
-                            </div>
+                                <p style="color: #ee6464;">หมดเวลารับสมัคร</p>
+                            @endif
+                            <!-- แสดงเสมอ -->
+                            <a href="{{ route('party.details', $party->id) }}" class="more">ข้อมูลเพิ่มเติม</a>
                         </div>
                     </div>
-                    @endforeach
-                    @else
-                    <p id="not-search">ไม่พบกิจกรรมที่ค้นหา</p>
-                    @endif
+                </div>
+            @endif
+        @endforeach
+    @else
+        <p id="not-search">ไม่พบกิจกรรมที่ค้นหา</p>
+    @endif
 
+    <!-- แสดงกิจกรรมที่คนเข้าเต็มแล้วหรือหมดเวลารับสมัคร -->
+    @if(isset($activeParties) && count($activeParties) > 0)
+        @foreach($activeParties as $party)
+            @php
+                $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
+            @endphp
 
-                    @if(isset($pastParties) && count($pastParties) > 0)
-                    @foreach($pastParties as $party)
-                    <div class="party">
-                        <div class="image">
-                            <img src="{{ asset('party_images/' . $party->img) }}" alt="Even Image" width="200px">
-                        </div>
-                        <div class="data">
-                            <p style="color: #ee6464;">หมดเวลารับสมัคร</p>
-                            <h2>{{ $party->party_name }}</h2>
-                            <p>วันที่จัดกิจกรรม : {{ thaidate($party->start_date) }} ถึง {{ thaidate($party->end_date)}}</p>
-                            <p>สถานที่ : {{ $party->location }}</p>
-                            <p>จังหวัด : {{ $party->province }}</p>
-                        </div>
+            @if($daysLeft <= 0 || $party->joined_count >= $party->numpeople)
+                <div class="party">
+                    <div class="image">
+                        <img src="{{ asset('party_images/' . $party->img) }}" alt="Event Image" width="200px">
                     </div>
-                    @endforeach
-                    @endif
-                </td>
+                    <div class="data">
+                        <p style="color: #ee6464;">{{ $daysLeft <= 0 ? 'หมดเวลารับสมัคร' : 'เต็มแล้ว' }}</p>
+                        <h2>{{ $party->party_name }}</h2>
+                        <p>วันที่จัดกิจกรรม: {{ thaidate($party->start_date) }} ถึง {{ thaidate($party->end_date) }}</p>
+                        <p>สถานที่: {{ $party->location }}</p>
+                        <p>จังหวัด: {{ $party->province }}</p>
+                        <a href="{{ route('party.details', $party->id) }}" class="more">ข้อมูลเพิ่มเติม</a>
+                    </div>
+                </div>
+            @endif
+        @endforeach
+    @endif
+    @if(isset($pastParties) && count($pastParties) > 0)
+        @foreach($pastParties as $party)
+            <div class="party">
+                <div class="image">
+                    <img src="{{ asset('party_images/' . $party->img) }}" alt="Event Image" width="200px">
+                </div>
+                <div class="data">
+                    <p style="color: #ee6464;">หมดเวลารับสมัคร</p>
+                    <h2>{{ $party->party_name }}</h2>
+                    <p>วันที่จัดกิจกรรม: {{ thaidate($party->start_date) }} ถึง {{ thaidate($party->end_date) }}</p>
+                    <p>สถานที่: {{ $party->location }}</p>
+                    <p>จังหวัด: {{ $party->province }}</p>
+                </div>
+            </div>
+        @endforeach
+    @endif
+</td>
             </tr>
         </table>
 

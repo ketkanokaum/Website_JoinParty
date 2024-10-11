@@ -49,21 +49,25 @@
       </div>
 
       @if($parties->count())
-      <table style=" border-top-left-radius: 10px; border-top-right-radius: 10px;">
+      <table style="border-top-left-radius: 10px; border-top-right-radius: 10px;">
         <thead>
           <tr>
-            <th style=" border-top-left-radius: 10px;">ID</th>
+            <th style="border-top-left-radius: 10px;">ID</th>
             <th>ชื่อกิจกรรม</th>
             <th>วันที่จัดกิจกรรม</th>
             <th>จำนวนผู้เข้าร่วม</th>
             <th></th>
             <th></th>
-            <th style=" border-top-right-radius: 10px;"></th>
+            <th style="border-top-right-radius: 10px;"></th>
           </tr>
         </thead>
         <tbody>
-          <!-- กิจกรรมที่กำลังจะมาถึง -->
+          <!-- แสดงผลตามลำดับที่กำหนดในคิวรี -->
           @foreach($parties as $party)
+          @php
+          $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
+          $daysEnd = floor((strtotime($party->end_date) - time()) / 86400);
+          @endphp
           <tr>
             <td>{{ $party->id }}</td>
             <td>
@@ -73,40 +77,45 @@
             </td>
             <td>{{ thaidate($party->start_date) }}</td>
             <td>{{ $party->joined_count }} / {{ $party->numpeople }}</td>
-
-            @php
-            $daysLeft = floor((strtotime($party->start_date) - time()) / 86400);
-            $daysEnd = floor((strtotime($party->end_date) - time()) / 86400);
-            @endphp
-
+            
+            @if($daysLeft > 0)
             <td style="padding: 0 5px;">
-              @if($daysLeft > 0)
-              <button type="button" class="table-bt" data-bs-toggle="modal" data-bs-target="#exampleModal{{$party->id}}">
+              <button type="button" class="table-bt" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $party->id }}">
                 แก้ไข
               </button>
-              @else
-              <button type="button" class="table-bt" disabled>แก้ไข</button>
-              @endif
             </td>
             <td style="padding: 0 5px;">
-              @if($daysLeft > 0)
               <button type="button" class="table-bt-t" onclick="confirmDelete({{ $party->id }})">ลบ</button>
+            </td>
+            <td><p style="color: #008000; text-align: right;">อยู่ระหว่างการรับสมัคร</p></td>
+            @elseif($daysLeft <= 0 && $daysEnd>= 0)
+              <td style="padding: 0 5px;">
+                <button type="button" class="table-bt" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $party->id }}" disabled>
+                  แก้ไข
+                </button>
+              </td>
+              <td style="padding: 0 5px;">
+                <button type="button" class="table-bt-t" onclick="confirmDelete({{ $party->id }})" disabled>ลบ</button>
+              </td>
+              <td><p style="color: #ffa500; text-align: right;">อยู่ระหว่างการจัดกิจกรรม</p></td>
+             
               @else
-              <button type="button" class="table-bt-t" disabled>ลบ</button>
+              <td style="padding: 0 5px;">
+                <button type="button" class="table-bt" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $party->id }}" disabled>
+                  แก้ไข
+                </button>
+              </td>
+              <td style="padding: 0 5px;">
+                <button type="button" class="table-bt-t" onclick="confirmDelete({{ $party->id }})" disabled>ลบ</button>
+              </td>
+              <td><p style="color: #ee6464;">หมดเวลารับสมัคร</p></td>
               @endif
-            </td>
-            <td>
-              @if($daysLeft > 0)
-              <p style="color: #008000; text-align: right;">อยู่ระหว่างการรับสมัคร</p>
-              @elseif($daysLeft <= 0 && $daysEnd>= 0)
-                <p style="color: #ffa500; text-align: right;">อยู่ระหว่างการจัดกิจกรรม</p>
-                @else
-                <p style="color: #ee6464;">หมดเวลารับสมัคร</p>
-                @endif
-            </td>
+              </td>
           </tr>
+          @endforeach
 
           <!-- Modal สำหรับแต่ละกิจกรรม -->
+          @foreach($parties as $party)
           <div class="modal fade" id="partyModal{{ $party->id }}" tabindex="-1" aria-labelledby="partyModalLabel{{ $party->id }}" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -114,20 +123,18 @@
                   <h5 class="modal-title" id="partyModalLabel{{ $party->id }}">{{ $party->party_name }}</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <p>จำนวนผู้เข้าร่วม: {{$party->joined_count}} / {{ $party->numpeople }} คน</p>
+                <div class="modal-body">
+                  <p>จำนวนผู้เข้าร่วม: {{$party->joined_count}} / {{ $party->numpeople }} คน</p>
 
-                    @foreach($party->attendees as $attendee)
-                    <div class="card mb-3">
-                      <div class="card-body">
-                        <h5 class="card-title">ชื่อผู้ใช้: {{ $attendee->username }}</h5>
-                        <p class="card-text">ชื่อ - นามสกุล: {{ $attendee->firstname }} {{ $attendee->lastname }}</p>
-                        <p class="card-text">อีเมล: {{ $attendee->email }}</p>
-                      </div>
+                  @foreach($party->attendees as $attendee)
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <h5 class="card-title">ชื่อผู้ใช้: {{ $attendee->username }}</h5>
+                      <p class="card-text">ชื่อ - นามสกุล: {{ $attendee->firstname }} {{ $attendee->lastname }}</p>
+                      <p class="card-text">อีเมล: {{ $attendee->email }}</p>
                     </div>
-                    @endforeach
                   </div>
+                  @endforeach
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
@@ -136,11 +143,8 @@
             </div>
           </div>
           @endforeach
-    
         </tbody>
       </table>
-
-
     </section>
   </div>
 
@@ -179,84 +183,103 @@
               <label for="party-date">เวลาที่สิ้นสุด :</label>
               <input type="Time" id="end-time" name="end_time" required>
             </div>
-
             <div class="form-group">
-              <label for="party-type">จังหวัด:</label required>
-              <select id="province" name="province">
-                <option value="">จังหวัด</option>
-                <option value="กระบี่">กระบี่</option>
-                <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
-                <option value="กาญจนบุรี">กาญจนบุรี</option>
+            <select id="province" name="province" required>
+              <label for="party-type">จังหวัด:</label >
+              <option value="">จังหวัด</option>
+              <optgroup label="ภาคเหนือ">
+                <option value="เชียงราย">เชียงราย</option>
+                <option value="เชียงใหม่">เชียงใหม่</option>
+                <option value="ลำพูน">ลำพูน</option>
+                <option value="ลำปาง">ลำปาง</option>
+                <option value="แม่ฮ่องสอน">แม่ฮ่องสอน</option>
+                <option value="แพร่">แพร่</option>
+                <option value="น่าน">น่าน</option>
+                <option value="อุตรดิตถ์">อุตรดิตถ์</option>
+                <option value="พิษณุโลก">พิษณุโลก</option>
+                <option value="พิจิตร">พิจิตร</option>
+                <option value="สุโขทัย">สุโขทัย</option>
+              </optgroup>
+              <optgroup label="ภาคตะวันออกเฉียงเหนือ">
                 <option value="กาฬสินธุ์">กาฬสินธุ์</option>
-                <option value="กำแพงเพชร">กำแพงเพชร</option>
                 <option value="ขอนแก่น">ขอนแก่น</option>
-                <option value="จันทบุรี">จันทบุรี</option>
-                <option value="ฉะเชิงเทรา">ฉะเชิงเทรา</option>
-                <option value="ชลบุรี">ชลบุรี</option>
-                <option value="ชัยนาท">ชัยนาท</option>
                 <option value="ชัยภูมิ">ชัยภูมิ</option>
-                <option value="ชุมพร">ชุมพร</option>
-                <option value="ตรัง">ตรัง</option>
-                <option value="ตราด">ตราด</option>
-                <option value="ตาก">ตาก</option>
-                <option value="นครนายก">นครนายก</option>
-                <option value="นครปฐม">นครปฐม</option>
                 <option value="นครพนม">นครพนม</option>
                 <option value="นครราชสีมา">นครราชสีมา</option>
-                <option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
-                <option value="นครสวรรค์">นครสวรรค์</option>
-                <option value="นนทบุรี">นนทบุรี</option>
-                <option value="นราธิวาส">นราธิวาส</option>
-                <option value="น่าน">น่าน</option>
                 <option value="บึงกาฬ">บึงกาฬ</option>
                 <option value="บุรีรัมย์">บุรีรัมย์</option>
-                <option value="ปทุมธานี">ปทุมธานี</option>
-                <option value="ปราจีนบุรี">ปราจีนบุรี</option>
-                <option value="ประจวบคีรีขันธ์">ประจวบคีรีขันธ์</option>
-                <option value="ปัตตานี">ปัตตานี</option>
-                <option value="พะเยา">พะเยา</option>
-                <option value="พังงา">พังงา</option>
-                <option value="พัทลุง">พัทลุง</option>
-                <option value="พิจิตร">พิจิตร</option>
-                <option value="พิษณุโลก">พิษณุโลก</option>
-                <option value="เพชรบุรี">เพชรบุรี</option>
-                <option value="เพชรบูรณ์">เพชรบูรณ์</option>
-                <option value="แพร่">แพร่</option>
-                <option value="ภูเก็ต">ภูเก็ต</option>
                 <option value="มหาสารคาม">มหาสารคาม</option>
                 <option value="มุกดาหาร">มุกดาหาร</option>
-                <option value="แม่ฮ่องสอน">แม่ฮ่องสอน</option>
                 <option value="ยโสธร">ยโสธร</option>
-                <option value="ยะลา">ยะลา</option>
                 <option value="ร้อยเอ็ด">ร้อยเอ็ด</option>
-                <option value="ระนอง">ระนอง</option>
-                <option value="ระยอง">ระยอง</option>
-                <option value="ราชบุรี">ราชบุรี</option>
-                <option value="ลพบุรี">ลพบุรี</option>
-                <option value="ลำปาง">ลำปาง</option>
-                <option value="ลำพูน">ลำพูน</option>
-                <option value="เลย">เลย</option>
                 <option value="ศรีสะเกษ">ศรีสะเกษ</option>
                 <option value="สกลนคร">สกลนคร</option>
-                <option value="สงขลา">สงขลา</option>
-                <option value="สตูล">สตูล</option>
-                <option value="สมุทรปราการ">สมุทรปราการ</option>
-                <option value="สมุทรสงคราม">สมุทรสงคราม</option>
-                <option value="สมุทรสาคร">สมุทรสาคร</option>
-                <option value="สระแก้ว">สระแก้ว</option>
-                <option value="สระบุรี">สระบุรี</option>
-                <option value="สิงห์บุรี">สิงห์บุรี</option>
-                <option value="สุโขทัย">สุโขทัย</option>
-                <option value="สุพรรณบุรี">สุพรรณบุรี</option>
-                <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
                 <option value="สุรินทร์">สุรินทร์</option>
                 <option value="หนองคาย">หนองคาย</option>
                 <option value="หนองบัวลำภู">หนองบัวลำภู</option>
                 <option value="อำนาจเจริญ">อำนาจเจริญ</option>
                 <option value="อุดรธานี">อุดรธานี</option>
-                <option value="อุตรดิตถ์">อุตรดิตถ์</option>
-                <option value="อุทัยธานี">อุทัยธานี</option>
                 <option value="อุบลราชธานี">อุบลราชธานี</option>
+                <option value="เลย">เลย</option>
+              </optgroup>
+              <optgroup label="ภาคกลาง">
+                <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+                <option value="กำแพงเพชร">กำแพงเพชร</option>
+                <option value="ชัยนาท">ชัยนาท</option>
+                <option value="นครนายก">นครนายก</option>
+                <option value="นครปฐม">นครปฐม</option>
+                <option value="นครสวรรค์">นครสวรรค์</option>
+                <option value="นนทบุรี">นนทบุรี</option>
+                <option value="ปทุมธานี">ปทุมธานี</option>
+                <option value="พระนครศรีอยุธยา">พระนครศรีอยุธยา</option>
+                <option value="พิจิตร">พิจิตร</option>
+                <option value="พิษณุโลก">พิษณุโลก</option>
+                <option value="ลพบุรี">ลพบุรี</option>
+                <option value="สมุทรปราการ">สมุทรปราการ</option>
+                <option value="สมุทรสงคราม">สมุทรสงคราม</option>
+                <option value="สมุทรสาคร">สมุทรสาคร</option>
+                <option value="สระบุรี">สระบุรี</option>
+                <option value="สิงห์บุรี">สิงห์บุรี</option>
+                <option value="สุโขทัย">สุโขทัย</option>
+                <option value="สุพรรณบุรี">สุพรรณบุรี</option>
+                <option value="อ่างทอง">อ่างทอง</option>
+                <option value="อุทัยธานี">อุทัยธานี</option>
+              </optgroup>
+
+              <optgroup label="ภาคตะวันออก">
+                <option value="จันทบุรี">จันทบุรี</option>
+                <option value="ฉะเชิงเทรา">ฉะเชิงเทรา</option>
+                <option value="ชลบุรี">ชลบุรี</option>
+                <option value="ตราด">ตราด</option>
+                <option value="ปราจีนบุรี">ปราจีนบุรี</option>
+                <option value="ระยอง">ระยอง</option>
+                <option value="สระแก้ว">สระแก้ว</option>
+              </optgroup>
+
+              <optgroup label="ภาคใต้">
+                <option value="กระบี่">กระบี่</option>
+                <option value="ชุมพร">ชุมพร</option>
+                <option value="ตรัง">ตรัง</option>
+                <option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
+                <option value="นราธิวาส">นราธิวาส</option>
+                <option value="ปัตตานี">ปัตตานี</option>
+                <option value="พังงา">พังงา</option>
+                <option value="พัทลุง">พัทลุง</option>
+                <option value="ภูเก็ต">ภูเก็ต</option>
+                <option value="ระนอง">ระนอง</option>
+                <option value="สงขลา">สงขลา</option>
+                <option value="สตูล">สตูล</option>
+                <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
+                <option value="ยะลา">ยะลา</option>
+              </optgroup>
+
+              <optgroup label="ภาคตะวันตก">
+                <option value="กาญจนบุรี">กาญจนบุรี</option>
+                <option value="ตาก">ตาก</option>
+                <option value="ประจวบคีรีขันธ์">ประจวบคีรีขันธ์</option>
+                <option value="เพชรบุรี">เพชรบุรี</option>
+                <option value="ราชบุรี">ราชบุรี</option>
+              </optgroup>
               </select>
             </div>
 
@@ -353,81 +376,100 @@
               <label for="party-type">จังหวัด:</label>
               <select id="province" name="province" required>
                 <option value="">เลือกจังหวัด</option>
-                <option value="กระบี่" {{ $party->province == 'กระบี่' ? 'selected' : '' }}>กระบี่</option>
-                <option value="กรุงเทพมหานคร" {{ $party->province == 'กรุงเทพมหานคร' ? 'selected' : '' }}>กรุงเทพมหานคร</option>
-                <option value="กาญจนบุรี" {{ $party->province == 'กาญจนบุรี' ? 'selected' : '' }}>กาญจนบุรี</option>
-                <option value="กาฬสินธุ์" {{ $party->province == 'กาฬสินธุ์' ? 'selected' : '' }}>กาฬสินธุ์</option>
-                <option value="กำแพงเพชร" {{ $party->province == 'กำแพงเพชร' ? 'selected' : '' }}>กำแพงเพชร</option>
-                <option value="ขอนแก่น" {{ $party->province == 'ขอนแก่น' ? 'selected' : '' }}>ขอนแก่น</option>
-                <option value="จันทบุรี" {{ $party->province == 'จันทบุรี' ? 'selected' : '' }}>จันทบุรี</option>
-                <option value="ฉะเชิงเทรา" {{ $party->province == 'ฉะเชิงเทรา' ? 'selected' : '' }}>ฉะเชิงเทรา</option>
-                <option value="ชลบุรี" {{ $party->province == 'ชลบุรี' ? 'selected' : '' }}>ชลบุรี</option>
-                <option value="ชัยนาท" {{ $party->province == 'ชัยนาท' ? 'selected' : '' }}>ชัยนาท</option>
-                <option value="ชัยภูมิ" {{ $party->province == 'ชัยภูมิ' ? 'selected' : '' }}>ชัยภูมิ</option>
-                <option value="ชุมพร" {{ $party->province == 'ชุมพร' ? 'selected' : '' }}>ชุมพร</option>
-                <option value="ตรัง" {{ $party->province == 'ตรัง' ? 'selected' : '' }}>ตรัง</option>
-                <option value="ตราด" {{ $party->province == 'ตราด' ? 'selected' : '' }}>ตราด</option>
-                <option value="ตาก" {{ $party->province == 'ตาก' ? 'selected' : '' }}>ตาก</option>
-                <option value="นครนายก" {{ $party->province == 'นครนายก' ? 'selected' : '' }}>นครนายก</option>
-                <option value="นครปฐม" {{ $party->province == 'นครปฐม' ? 'selected' : '' }}>นครปฐม</option>
-                <option value="นครพนม" {{ $party->province == 'นครพนม' ? 'selected' : '' }}>นครพนม</option>
-                <option value="นครราชสีมา" {{ $party->province == 'นครราชสีมา' ? 'selected' : '' }}>นครราชสีมา</option>
-                <option value="นครศรีธรรมราช" {{ $party->province == 'นครศรีธรรมราช' ? 'selected' : '' }}>นครศรีธรรมราช</option>
-                <option value="นครสวรรค์" {{ $party->province == 'นครสวรรค์' ? 'selected' : '' }}>นครสวรรค์</option>
-                <option value="นนทบุรี" {{ $party->province == 'นนทบุรี' ? 'selected' : '' }}>นนทบุรี</option>
-                <option value="นราธิวาส" {{ $party->province == 'นราธิวาส' ? 'selected' : '' }}>นราธิวาส</option>
-                <option value="น่าน" {{ $party->province == 'น่าน' ? 'selected' : '' }}>น่าน</option>
-                <option value="บึงกาฬ" {{ $party->province == 'บึงกาฬ' ? 'selected' : '' }}>บึงกาฬ</option>
-                <option value="บุรีรัมย์" {{ $party->province == 'บุรีรัมย์' ? 'selected' : '' }}>บุรีรัมย์</option>
-                <option value="ปทุมธานี" {{ $party->province == 'ปทุมธานี' ? 'selected' : '' }}>ปทุมธานี</option>
-                <option value="ปราจีนบุรี" {{ $party->province == 'ปราจีนบุรี' ? 'selected' : '' }}>ปราจีนบุรี</option>
-                <option value="ประจวบคีรีขันธ์" {{ $party->province == 'ประจวบคีรีขันธ์' ? 'selected' : '' }}>ประจวบคีรีขันธ์</option>
-                <option value="ปัตตานี" {{ $party->province == 'ปัตตานี' ? 'selected' : '' }}>ปัตตานี</option>
-                <option value="พะเยา" {{ $party->province == 'พะเยา' ? 'selected' : '' }}>พะเยา</option>
-                <option value="พังงา" {{ $party->province == 'พังงา' ? 'selected' : '' }}>พังงา</option>
-                <option value="พัทลุง" {{ $party->province == 'พัทลุง' ? 'selected' : '' }}>พัทลุง</option>
-                <option value="พิจิตร" {{ $party->province == 'พิจิตร' ? 'selected' : '' }}>พิจิตร</option>
-                <option value="พิษณุโลก" {{ $party->province == 'พิษณุโลก' ? 'selected' : '' }}>พิษณุโลก</option>
-                <option value="เพชรบุรี" {{ $party->province == 'เพชรบุรี' ? 'selected' : '' }}>เพชรบุรี</option>
-                <option value="เพชรบูรณ์" {{ $party->province == 'เพชรบูรณ์' ? 'selected' : '' }}>เพชรบูรณ์</option>
-                <option value="แพร่" {{ $party->province == 'แพร่' ? 'selected' : '' }}>แพร่</option>
-                <option value="ภูเก็ต" {{ $party->province == 'ภูเก็ต' ? 'selected' : '' }}>ภูเก็ต</option>
-                <option value="มหาสารคาม" {{ $party->province == 'มหาสารคาม' ? 'selected' : '' }}>มหาสารคาม</option>
-                <option value="มุกดาหาร" {{ $party->province == 'มุกดาหาร' ? 'selected' : '' }}>มุกดาหาร</option>
-                <option value="แม่ฮ่องสอน" {{ $party->province == 'แม่ฮ่องสอน' ? 'selected' : '' }}>แม่ฮ่องสอน</option>
-                <option value="ยโสธร" {{ $party->province == 'ยโสธร' ? 'selected' : '' }}>ยโสธร</option>
-                <option value="ยะลา" {{ $party->province == 'ยะลา' ? 'selected' : '' }}>ยะลา</option>
-                <option value="ร้อยเอ็ด" {{ $party->province == 'ร้อยเอ็ด' ? 'selected' : '' }}>ร้อยเอ็ด</option>
-                <option value="ระนอง" {{ $party->province == 'ระนอง' ? 'selected' : '' }}>ระนอง</option>
-                <option value="ระยอง" {{ $party->province == 'ระยอง' ? 'selected' : '' }}>ระยอง</option>
-                <option value="ราชบุรี" {{ $party->province == 'ราชบุรี' ? 'selected' : '' }}>ราชบุรี</option>
-                <option value="ลพบุรี" {{ $party->province == 'ลพบุรี' ? 'selected' : '' }}>ลพบุรี</option>
-                <option value="ลำปาง" {{ $party->province == 'ลำปาง' ? 'selected' : '' }}>ลำปาง</option>
-                <option value="ลำพูน" {{ $party->province == 'ลำพูน' ? 'selected' : '' }}>ลำพูน</option>
-                <option value="เลย" {{ $party->province == 'เลย' ? 'selected' : '' }}>เลย</option>
-                <option value="ศรีสะเกษ" {{ $party->province == 'ศรีสะเกษ' ? 'selected' : '' }}>ศรีสะเกษ</option>
-                <option value="สกลนคร" {{ $party->province == 'สกลนคร' ? 'selected' : '' }}>สกลนคร</option>
-                <option value="สงขลา" {{ $party->province == 'สงขลา' ? 'selected' : '' }}>สงขลา</option>
-                <option value="สตูล" {{ $party->province == 'สตูล' ? 'selected' : '' }}>สตูล</option>
-                <option value="สมุทรปราการ" {{ $party->province == 'สมุทรปราการ' ? 'selected' : '' }}>สมุทรปราการ</option>
-                <option value="สมุทรสงคราม" {{ $party->province == 'สมุทรสงคราม' ? 'selected' : '' }}>สมุทรสงคราม</option>
-                <option value="สมุทรสาคร" {{ $party->province == 'สมุทรสาคร' ? 'selected' : '' }}>สมุทรสาคร</option>
-                <option value="สระแก้ว" {{ $party->province == 'สระแก้ว' ? 'selected' : '' }}>สระแก้ว</option>
-                <option value="สระบุรี" {{ $party->province == 'สระบุรี' ? 'selected' : '' }}>สระบุรี</option>
-                <option value="สิงห์บุรี" {{ $party->province == 'สิงห์บุรี' ? 'selected' : '' }}>สิงห์บุรี</option>
-                <option value="สุโขทัย" {{ $party->province == 'สุโขทัย' ? 'selected' : '' }}>สุโขทัย</option>
-                <option value="สุพรรณบุรี" {{ $party->province == 'สุพรรณบุรี' ? 'selected' : '' }}>สุพรรณบุรี</option>
-                <option value="สุราษฎร์ธานี" {{ $party->province == 'สุราษฎร์ธานี' ? 'selected' : '' }}>สุราษฎร์ธานี</option>
-                <option value="สุรินทร์" {{ $party->province == 'สุรินทร์' ? 'selected' : '' }}>สุรินทร์</option>
-                <option value="หนองคาย" {{ $party->province == 'หนองคาย' ? 'selected' : '' }}>หนองคาย</option>
-                <option value="หนองบัวลำภู" {{ $party->province == 'หนองบัวลำภู' ? 'selected' : '' }}>หนองบัวลำภู</option>
-                <option value="อำนาจเจริญ" {{ $party->province == 'อำนาจเจริญ' ? 'selected' : '' }}>อำนาจเจริญ</option>
-                <option value="อุดรธานี" {{ $party->province == 'อุดรธานี' ? 'selected' : '' }}>อุดรธานี</option>
-                <option value="อุตรดิตถ์" {{ $party->province == 'อุตรดิตถ์' ? 'selected' : '' }}>อุตรดิตถ์</option>
-                <option value="อุทัยธานี" {{ $party->province == 'อุทัยธานี' ? 'selected' : '' }}>อุทัยธานี</option>
-                <option value="อุบลราชธานี" {{ $party->province == 'อุบลราชธานี' ? 'selected' : '' }}>อุบลราชธานี</option>
+                <optgroup label="ภาคเหนือ">
+                  <option value="เชียงราย" {{ $party->province == 'เชียงราย' ? 'selected' : '' }}>เชียงราย</option>
+                  <option value="เชียงใหม่" {{ $party->province == 'เชียงใหม่' ? 'selected' : '' }}>เชียงใหม่</option>
+                  <option value="ลำปาง" {{ $party->province == 'ลำปาง' ? 'selected' : '' }}>ลำปาง</option>
+                  <option value="ลำพูน" {{ $party->province == 'ลำพูน' ? 'selected' : '' }}>ลำพูน</option>
+                  <option value="แพร่" {{ $party->province == 'แพร่' ? 'selected' : '' }}>แพร่</option>
+                  <option value="น่าน" {{ $party->province == 'น่าน' ? 'selected' : '' }}>น่าน</option>
+                  <option value="พะเยา" {{ $party->province == 'พะเยา' ? 'selected' : '' }}>พะเยา</option>
+                  <option value="แม่ฮ่องสอน" {{ $party->province == 'แม่ฮ่องสอน' ? 'selected' : '' }}>แม่ฮ่องสอน</option>
+                  <option value="อุตรดิตถ์" {{ $party->province == 'อุตรดิตถ์' ? 'selected' : '' }}>อุตรดิตถ์</option>
+                  <option value="พิษณุโลก" {{ $party->province == 'พิษณุโลก' ? 'selected' : '' }}>พิษณุโลก</option>
+                  <option value="พิจิตร" {{ $party->province == 'พิจิตร' ? 'selected' : '' }}>พิจิตร</option>
+                  <option value="สุโขทัย" {{ $party->province == 'สุโขทัย' ? 'selected' : '' }}>สุโขทัย</option>
+                </optgroup>
+                <optgroup label="ภาคตะวันออกเฉียงเหนือ">
+                  <option value="กาฬสินธุ์" {{ $party->province == 'กาฬสินธุ์' ? 'selected' : '' }}>กาฬสินธุ์</option>
+                  <option value="ขอนแก่น" {{ $party->province == 'ขอนแก่น' ? 'selected' : '' }}>ขอนแก่น</option>
+                  <option value="ชัยภูมิ" {{ $party->province == 'ชัยภูมิ' ? 'selected' : '' }}>ชัยภูมิ</option>
+                  <option value="นครพนม" {{ $party->province == 'นครพนม' ? 'selected' : '' }}>นครพนม</option>
+                  <option value="นครราชสีมา" {{ $party->province == 'นครราชสีมา' ? 'selected' : '' }}>นครราชสีมา</option>
+                  <option value="บึงกาฬ" {{ $party->province == 'บึงกาฬ' ? 'selected' : '' }}>บึงกาฬ</option>
+                  <option value="บุรีรัมย์" {{ $party->province == 'บุรีรัมย์' ? 'selected' : '' }}>บุรีรัมย์</option>
+                  <option value="มหาสารคาม" {{ $party->province == 'มหาสารคาม' ? 'selected' : '' }}>มหาสารคาม</option>
+                  <option value="มุกดาหาร" {{ $party->province == 'มุกดาหาร' ? 'selected' : '' }}>มุกดาหาร</option>
+                  <option value="ยโสธร" {{ $party->province == 'ยโสธร' ? 'selected' : '' }}>ยโสธร</option>
+                  <option value="ร้อยเอ็ด" {{ $party->province == 'ร้อยเอ็ด' ? 'selected' : '' }}>ร้อยเอ็ด</option>
+                  <option value="ศรีสะเกษ" {{ $party->province == 'ศรีสะเกษ' ? 'selected' : '' }}>ศรีสะเกษ</option>
+                  <option value="สกลนคร" {{ $party->province == 'สกลนคร' ? 'selected' : '' }}>สกลนคร</option>
+                  <option value="สุรินทร์" {{ $party->province == 'สุรินทร์' ? 'selected' : '' }}>สุรินทร์</option>
+                  <option value="หนองคาย" {{ $party->province == 'หนองคาย' ? 'selected' : '' }}>หนองคาย</option>
+                  <option value="หนองบัวลำภู" {{ $party->province == 'หนองบัวลำภู' ? 'selected' : '' }}>หนองบัวลำภู</option>
+                  <option value="อำนาจเจริญ" {{ $party->province == 'อำนาจเจริญ' ? 'selected' : '' }}>อำนาจเจริญ</option>
+                  <option value="อุดรธานี" {{ $party->province == 'อุดรธานี' ? 'selected' : '' }}>อุดรธานี</option>
+                  <option value="อุบลราชธานี" {{ $party->province == 'อุบลราชธานี' ? 'selected' : '' }}>อุบลราชธานี</option>
+                  <option value="เลย" {{ $party->province == 'เลย' ? 'selected' : '' }}>เลย</option>
+                </optgroup>
+                <optgroup label="ภาคกลาง">
+                  <option value="กรุงเทพมหานคร" {{ $party->province == 'กรุงเทพมหานคร' ? 'selected' : '' }}>กรุงเทพมหานคร</option>
+                  <option value="กำแพงเพชร" {{ $party->province == 'กำแพงเพชร' ? 'selected' : '' }}>กำแพงเพชร</option>
+                  <option value="ชัยนาท" {{ $party->province == 'ชัยนาท' ? 'selected' : '' }}>ชัยนาท</option>
+                  <option value="นครนายก" {{ $party->province == 'นครนายก' ? 'selected' : '' }}>นครนายก</option>
+                  <option value="นครปฐม" {{ $party->province == 'นครปฐม' ? 'selected' : '' }}>นครปฐม</option>
+                  <option value="นครสวรรค์" {{ $party->province == 'นครสวรรค์' ? 'selected' : '' }}>นครสวรรค์</option>
+                  <option value="นนทบุรี" {{ $party->province == 'นนทบุรี' ? 'selected' : '' }}>นนทบุรี</option>
+                  <option value="ปทุมธานี" {{ $party->province == 'ปทุมธานี' ? 'selected' : '' }}>ปทุมธานี</option>
+                  <option value="พระนครศรีอยุธยา" {{ $party->province == 'พระนครศรีอยุธยา' ? 'selected' : '' }}>พระนครศรีอยุธยา</option>
+                  <option value="พิจิตร" {{ $party->province == 'พิจิตร' ? 'selected' : '' }}>พิจิตร</option>
+                  <option value="พิษณุโลก" {{ $party->province == 'พิษณุโลก' ? 'selected' : '' }}>พิษณุโลก</option>
+                  <option value="ลพบุรี" {{ $party->province == 'ลพบุรี' ? 'selected' : '' }}>ลพบุรี</option>
+                  <option value="สมุทรปราการ" {{ $party->province == 'สมุทรปราการ' ? 'selected' : '' }}>สมุทรปราการ</option>
+                  <option value="สมุทรสงคราม" {{ $party->province == 'สมุทรสงคราม' ? 'selected' : '' }}>สมุทรสงคราม</option>
+                  <option value="สมุทรสาคร" {{ $party->province == 'สมุทรสาคร' ? 'selected' : '' }}>สมุทรสาคร</option>
+                  <option value="สระบุรี" {{ $party->province == 'สระบุรี' ? 'selected' : '' }}>สระบุรี</option>
+                  <option value="สิงห์บุรี" {{ $party->province == 'สิงห์บุรี' ? 'selected' : '' }}>สิงห์บุรี</option>
+                  <option value="สุโขทัย" {{ $party->province == 'สุโขทัย' ? 'selected' : '' }}>สุโขทัย</option>
+                  <option value="สุพรรณบุรี" {{ $party->province == 'สุพรรณบุรี' ? 'selected' : '' }}>สุพรรณบุรี</option>
+                  <option value="อ่างทอง" {{ $party->province == 'อ่างทอง' ? 'selected' : '' }}>อ่างทอง</option>
+                  <option value="อุทัยธานี" {{ $party->province == 'อุทัยธานี' ? 'selected' : '' }}>อุทัยธานี</option>
+                </optgroup>
+                <optgroup label="ภาคตะวันออก">
+                  <option value="จันทบุรี" {{ $party->province == 'จันทบุรี' ? 'selected' : '' }}>จันทบุรี</option>
+                  <option value="ฉะเชิงเทรา" {{ $party->province == 'ฉะเชิงเทรา' ? 'selected' : '' }}>ฉะเชิงเทรา</option>
+                  <option value="ชลบุรี" {{ $party->province == 'ชลบุรี' ? 'selected' : '' }}>ชลบุรี</option>
+                  <option value="ตราด" {{ $party->province == 'ตราด' ? 'selected' : '' }}>ตราด</option>
+                  <option value="ปราจีนบุรี" {{ $party->province == 'ปราจีนบุรี' ? 'selected' : '' }}>ปราจีนบุรี</option>
+                  <option value="ระยอง" {{ $party->province == 'ระยอง' ? 'selected' : '' }}>ระยอง</option>
+                  <option value="สระแก้ว" {{ $party->province == 'สระแก้ว' ? 'selected' : '' }}>สระแก้ว</option>
+                </optgroup>
+                <optgroup label="ภาคใต้">
+                  <option value="กระบี่" {{ $party->province == 'กระบี่' ? 'selected' : '' }}>กระบี่</option>
+                  <option value="ชุมพร" {{ $party->province == 'ชุมพร' ? 'selected' : '' }}>ชุมพร</option>
+                  <option value="ตรัง" {{ $party->province == 'ตรัง' ? 'selected' : '' }}>ตรัง</option>
+                  <option value="นครศรีธรรมราช" {{ $party->province == 'นครศรีธรรมราช' ? 'selected' : '' }}>นครศรีธรรมราช</option>
+                  <option value="นราธิวาส" {{ $party->province == 'นราธิวาส' ? 'selected' : '' }}>นราธิวาส</option>
+                  <option value="ปัตตานี" {{ $party->province == 'ปัตตานี' ? 'selected' : '' }}>ปัตตานี</option>
+                  <option value="พังงา" {{ $party->province == 'พังงา' ? 'selected' : '' }}>พังงา</option>
+                  <option value="พัทลุง" {{ $party->province == 'พัทลุง' ? 'selected' : '' }}>พัทลุง</option>
+                  <option value="ภูเก็ต" {{ $party->province == 'ภูเก็ต' ? 'selected' : '' }}>ภูเก็ต</option>
+                  <option value="ระนอง" {{ $party->province == 'ระนอง' ? 'selected' : '' }}>ระนอง</option>
+                  <option value="สงขลา" {{ $party->province == 'สงขลา' ? 'selected' : '' }}>สงขลา</option>
+                  <option value="สตูล" {{ $party->province == 'สตูล' ? 'selected' : '' }}>สตูล</option>
+                  <option value="สุราษฎร์ธานี" {{ $party->province == 'สุราษฎร์ธานี' ? 'selected' : '' }}>สุราษฎร์ธานี</option>
+                  <option value="ยะลา" {{ $party->province == 'ยะลา' ? 'selected' : '' }}>ยะลา</option>
+                </optgroup>
+                <optgroup label="ภาคตะวันตก">
+                  <option value="กาญจนบุรี" {{ $party->province == 'กาญจนบุรี' ? 'selected' : '' }}>กาญจนบุรี</option>
+                  <option value="ตาก" {{ $party->province == 'ตาก' ? 'selected' : '' }}>ตาก</option>
+                  <option value="ประจวบคีรีขันธ์" {{ $party->province == 'ประจวบคีรีขันธ์' ? 'selected' : '' }}>ประจวบคีรีขันธ์</option>
+                  <option value="เพชรบุรี" {{ $party->province == 'เพชรบุรี' ? 'selected' : '' }}>เพชรบุรี</option>
+                  <option value="ราชบุรี" {{ $party->province == 'ราชบุรี' ? 'selected' : '' }}>ราชบุรี</option>
+                </optgroup>
               </select>
             </div>
+
 
             <div class="form-group">
               <label for="party-location">สถานที่จัดกิจกรรม:</label>
@@ -494,7 +536,7 @@
   <div class="pagination">
     {{ $parties->links() }}
   </div>
-  
+
 
   @else
   <p style="text-align: center; font-size: 15pt; margin-top: 40px;">ไม่พบกิจกรรม</p>
